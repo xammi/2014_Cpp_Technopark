@@ -35,3 +35,5 @@ ehthumbs.db
 Thumbs.db
 
 TP_CXX-build-Desktop_Qt_5_0_1_GCC_32bit-_______
+*.pro.user
+*.pro.user*
