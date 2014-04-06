@@ -1,5 +1,13 @@
-#include <QDebug>
+#include "NetManagers/netprocessor.h"
+#include <QApplication>
+
+using NetManagers::NetProcessor;
 
 int main(int argc, char *argv[]) {
-    return 0;
+    QApplication a(argc, argv);
+    
+    NetProcessor::get_self();
+    NetProcessor::del_self();
+
+    return a.exec();
 }

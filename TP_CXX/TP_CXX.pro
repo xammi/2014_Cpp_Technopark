@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2014-02-20T17:59:42
+# Project created by QtCreator 2014-04-07T00:26:33
 #
 #-------------------------------------------------
 
@@ -12,6 +12,14 @@ TARGET = TP_CXX
 TEMPLATE = app
 
 
-SOURCES += main.cpp
+SOURCES +=  main.cpp\
+            NetManagers/neunetui.cpp \
+            NetManagers/netprocessor.cpp \
+            NetManagers/imagestorage.cpp
 
-HEADERS  +=
+HEADERS  += NetManagers/neunetui.h \
+            NetManagers/netprocessor.h \
+            NetManagers/imagestorage.h \
+            includes.h
+
+FORMS    +=   NetManagers/neunetui.ui
