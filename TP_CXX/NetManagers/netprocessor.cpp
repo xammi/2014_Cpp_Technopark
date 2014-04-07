@@ -2,7 +2,6 @@
 
 namespace NetManagers {
 
-NetProcessor *NetProcessor::self = NULL;
 //-------------------------------------------------------------------------------------------------
 NetProcessor::NetProcessor()
     :   gui(new NeuNetUI), imgs(new ImageStorage)
@@ -15,19 +14,9 @@ NetProcessor::~NetProcessor() {
     delete imgs;
 }
 //-------------------------------------------------------------------------------------------------
-NetProcessor * NetProcessor::get_self() {
-    if (! self) {
-        self = new NetProcessor;
-    }
+const NetProcessor & NetProcessor::get_self() {
+    static NetProcessor self;
     return self;
-}
-
-bool NetProcessor::del_self() {
-    if (! self) {
-        delete self;
-        return true;
-    }
-    return false;
 }
 //-------------------------------------------------------------------------------------------------
 } // namespace NetManagers

@@ -9,14 +9,11 @@ namespace NetManagers {
 class NetProcessor
 {
 public:
-    static NetProcessor * get_self();
-    static bool del_self();
+    static const NetProcessor & get_self();
 
 protected:
     NetProcessor();
     virtual ~NetProcessor();
-
-    static NetProcessor *self;
 
     NeuNetUI *gui;
     ImageStorage *imgs;
