@@ -13,13 +13,23 @@ TEMPLATE = app
 
 
 SOURCES +=  main.cpp\
-            NetManagers/neunetui.cpp \
-            NetManagers/netprocessor.cpp \
-            NetManagers/imagestorage.cpp
+    DataProcess/ImageProcessor.cpp \
+    DataProcess/ImageStorage.cpp \
+    NetManagers/NetProcessor.cpp \
+    NetManagers/NeuNetUI.cpp \
+    NetManagers/Tester.cpp \
+    NetTutors/BackPropTutor.cpp
 
-HEADERS  += NetManagers/neunetui.h \
-            NetManagers/netprocessor.h \
-            NetManagers/imagestorage.h \
-            includes.h
+HEADERS  += \
+            includes.h \
+    DataProcess/AbstractProcessor.h \
+    DataProcess/AbstractStorage.h \
+    DataProcess/ImageProcessor.h \
+    DataProcess/ImageStorage.h \
+    NetManagers/NetProcessor.h \
+    NetManagers/NeuNetUI.h \
+    NetManagers/Tester.h \
+    NetTutors/BackPropTutor.h \
+    NetTutors/AbstractTutor.h
 
 FORMS    +=   NetManagers/neunetui.ui

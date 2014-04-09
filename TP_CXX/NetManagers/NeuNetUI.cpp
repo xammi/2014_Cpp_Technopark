@@ -1,4 +1,4 @@
-#include "neunetui.h"
+#include "NeuNetUI.h"
 #include "ui_neunetui.h"
 
 namespace NetManagers {

@@ -1,9 +1,18 @@
-#include "imagestorage.h"
+#ifndef TESTER_H
+#define TESTER_H
+
+#include "../includes.h"
 
 namespace NetManagers {
 
 //-------------------------------------------------------------------------------------------------
-ImageStorage::ImageStorage()
-{}
+class Tester : public QObject {
+    Q_OBJECT
+public:
+    Tester();
+
+private:
+};
 //-------------------------------------------------------------------------------------------------
-} // namespace NetManagers
+} // namespace Tester
+#endif // TESTER_H

@@ -1,19 +1,18 @@
-#ifndef IMAGESTORAGE_H
-#define IMAGESTORAGE_H
+#ifndef ABSTRACTPROCESSOR_H
+#define ABSTRACTPROCESSOR_H
 
 #include "../includes.h"
 
-namespace NetManagers {
+namespace DataProcess {
 
 //-------------------------------------------------------------------------------------------------
-class ImageStorage : public QObject {
+class AbstractProcessor : public QObject {
     Q_OBJECT
 
 public:
-    ImageStorage();
-
 private:
 };
 //-------------------------------------------------------------------------------------------------
-} // namespace NetManagers
-#endif // IMAGESTORAGE_H
+} // namespace DataProcess
+
+#endif // ABSTRACTPROCESSOR_H
