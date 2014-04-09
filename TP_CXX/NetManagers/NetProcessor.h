@@ -44,6 +44,7 @@ protected:
     virtual ~NetProcessor();
 
     void setDefaultConf();
+    void connectUI();
 
 private:
     NeuNetUI *gui;
