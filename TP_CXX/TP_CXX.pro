@@ -12,6 +12,22 @@ TARGET = TP_CXX
 TEMPLATE = app
 
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    Factory/nndestroyer.cpp \
+    Factory/backpropnet.cpp \
+    Factory/backpropfactory.cpp
 
-HEADERS  +=
+HEADERS  += \
+    Factory/nndestroyer.h \
+    Factory/nnabstractdestroyer.h \
+    Factory/BuildInfo.h \
+    Factory/backpropnet.h \
+    Factory/backpropfactory.h \
+    Factory/abstractnetfactory.h \
+    Factory/nndestroyer.h \
+    Factory/nnabstractdestroyer.h \
+    Factory/BuildInfo.h \
+    Factory/backpropnet.h \
+    Factory/backpropfactory.h \
+    Factory/abstractnetfactory.h \
+    Factory/abstractnet.h
