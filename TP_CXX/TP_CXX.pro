@@ -12,6 +12,10 @@ TARGET = TP_CXX
 TEMPLATE = app
 
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    neunet.cpp \
+    neuron.cpp
 
-HEADERS  +=
+HEADERS  += \
+    neunet.h \
+    neuron.h
