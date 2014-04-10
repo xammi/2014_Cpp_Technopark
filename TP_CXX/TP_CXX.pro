@@ -20,7 +20,12 @@ SOURCES += main.cpp \
     NetManagers/NetProcessor.cpp \
     NetManagers/NeuNetUI.cpp \
     NetManagers/Tester.cpp \
-    NetTutors/BackPropTutor.cpp
+    NetTutors/BackPropTutor.cpp \
+    NeuNet/neuron.cpp \
+    NeuNet/neunet.cpp \
+    NeuNet/iterator.cpp \
+    NeuNet/abstrnet.cpp \
+    NeuNet/abstriterator.cpp
 
 HEADERS  += \
     Factory/nndestroyer.h \
@@ -45,6 +50,12 @@ HEADERS  += \
     NetManagers/NeuNetUI.h \
     NetManagers/Tester.h \
     NetTutors/BackPropTutor.h \
-    NetTutors/AbstractTutor.h
+    NetTutors/AbstractTutor.h \
+    NeuNet/neuron.h \
+    NeuNet/neunet.h \
+    NeuNet/iterator.h \
+    NeuNet/abstrnet.h \
+    NeuNet/abstriterator.h
+
 
 FORMS    +=   NetManagers/neunetui.ui
