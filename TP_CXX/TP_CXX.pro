@@ -57,5 +57,4 @@ HEADERS  += \
     NeuNet/abstrnet.h \
     NeuNet/abstriterator.h
 
-
 FORMS    +=   NetManagers/neunetui.ui
