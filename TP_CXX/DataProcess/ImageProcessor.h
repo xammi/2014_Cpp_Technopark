@@ -11,8 +11,15 @@ class ImageProcessor : public AbstractProcessor {
 
 public:
     ImageProcessor();
-
+    InputData PrepareData(int nummer);
 private:
+    Image iniImage;
+    QVector <Image *> segments;
+    void binarize();
+    void segment();
+    void crop();
+    void resize();
+
 };
 //-------------------------------------------------------------------------------------------------
 } // namespace DataProcess

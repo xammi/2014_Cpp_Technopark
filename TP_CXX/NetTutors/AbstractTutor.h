@@ -10,7 +10,11 @@ class AbstractTutor : public QObject {
     Q_OBJECT
 
 public:
+    virtual void initialize();
+    virtual bool start(QVector <TuteData> &Data);
 private:
+    virtual double propagate(); // EG What??
+    virtual void backPropagate();
 };
 //-------------------------------------------------------------------------------------------------
 } // namespace NetTutors
