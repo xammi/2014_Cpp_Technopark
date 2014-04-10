@@ -1,9 +1,12 @@
-#include <QDebug>
+#include "NetManagers/NetProcessor.h"
+#include <QApplication>
 
-
-#include "Factory/backpropfactory.h"
-using namespace Factory;
+using NetManagers::NetProcessor;
 
 int main(int argc, char *argv[]) {
-    return 0;
+    QApplication a(argc, argv);
+    
+    NetProcessor::get_self();
+
+    return a.exec();
 }

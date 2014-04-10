@@ -1,6 +1,6 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2014-02-20T17:59:42
+# Project created by QtCreator 2014-04-07T00:26:33
 #
 #-------------------------------------------------
 
@@ -11,11 +11,16 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = TP_CXX
 TEMPLATE = app
 
-
 SOURCES += main.cpp \
     Factory/nndestroyer.cpp \
     Factory/backpropnet.cpp \
-    Factory/backpropfactory.cpp
+    Factory/backpropfactory.cpp \
+    DataProcess/ImageProcessor.cpp \
+    DataProcess/ImageStorage.cpp \
+    NetManagers/NetProcessor.cpp \
+    NetManagers/NeuNetUI.cpp \
+    NetManagers/Tester.cpp \
+    NetTutors/BackPropTutor.cpp
 
 HEADERS  += \
     Factory/nndestroyer.h \
@@ -30,4 +35,16 @@ HEADERS  += \
     Factory/backpropnet.h \
     Factory/backpropfactory.h \
     Factory/abstractnetfactory.h \
-    Factory/abstractnet.h
+    Factory/abstractnet.h \
+    includes.h \
+    DataProcess/AbstractProcessor.h \
+    DataProcess/AbstractStorage.h \
+    DataProcess/ImageProcessor.h \
+    DataProcess/ImageStorage.h \
+    NetManagers/NetProcessor.h \
+    NetManagers/NeuNetUI.h \
+    NetManagers/Tester.h \
+    NetTutors/BackPropTutor.h \
+    NetTutors/AbstractTutor.h
+
+FORMS    +=   NetManagers/neunetui.ui
