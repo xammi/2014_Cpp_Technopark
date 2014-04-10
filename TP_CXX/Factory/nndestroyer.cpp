@@ -5,7 +5,7 @@ namespace Factory{
 NNDestroyer::NNDestroyer() {
 }
 
-void NNDestroyer::destroy(AbstractNet *nnet) {
+void NNDestroyer::destroy(AbstrNet *) {
 
 }
 

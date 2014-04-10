@@ -2,10 +2,14 @@
 #define BACKPROPNETFACTORY_H
 
 #include "abstractnetfactory.h"
-#include "backpropnet.h"
+#include "../NeuNet/MultiLayerNet.h"
 #include "BuildInfo.h"
 
 namespace Factory{
+
+using NeuNets::Neuron;
+using NeuNets::Synaps;
+using NeuNets::MultiLayerNet;
 
 struct Layer {
     uint neuroCount;
@@ -27,11 +31,11 @@ class BackPropFactory: public AbstractNetFactory
 private:
     GlobalNet bpLayers;
     buildInfo nnInfo;
-    BackPropNet *bpNewNet;
+    MultiLayerNet *bpNewNet;
 
 public:
-    virtual AbstractNet *createNet(FILE *file);
-    virtual void parseFile(FILE *file);
+    //virtual AbstractNet *createNet(FILE *file);
+    //virtual void parseFile(FILE *file);
     void allocMemory() ;
 
     // подключение нейронов. С простановкой весов

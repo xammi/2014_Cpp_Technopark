@@ -2,7 +2,7 @@
 
 namespace Factory{
 
-
+/*
 AbstractNet *BackPropFactory::createNet(FILE *file)  {
     // set nnInfo
     parseFile(file);
@@ -46,4 +46,6 @@ void BackPropFactory::assembly()  {
     }
     return 0;
 }
+
+*/
 } // namespace Factory

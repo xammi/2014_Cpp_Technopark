@@ -19,7 +19,9 @@ namespace NetManagers {
     using NetTutors::BackPropTutor;
 
 //-------------------------------------------------------------------------------------------------
-class NetProcessor {
+class NetProcessor : public QObject {
+
+    Q_OBJECT
 
 private slots:
     void onLoadNet();
@@ -42,7 +44,7 @@ public:
 
 protected:
     NetProcessor();
-    virtual ~NetProcessor();
+    ~NetProcessor();
 
     void setDefaultConf();
     void connectUI();

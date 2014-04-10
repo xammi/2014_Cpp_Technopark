@@ -15,10 +15,11 @@ public:
 private:
     Image iniImage;
     QVector <Image *> segments;
-    void binarize();
-    void segment();
-    void crop();
-    void resize();
+
+    void binarize() {}
+    void segment() {}
+    void crop() {}
+    void resize() {}
 
 };
 //-------------------------------------------------------------------------------------------------

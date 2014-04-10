@@ -1,6 +1,6 @@
 #include "neuron.h"
 namespace NeuNets {
-neuron::neuron()
+Neuron::Neuron()
 {
 }
 }//namespace NeuNets

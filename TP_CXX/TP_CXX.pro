@@ -13,7 +13,6 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     Factory/nndestroyer.cpp \
-    Factory/backpropnet.cpp \
     Factory/backpropfactory.cpp \
     DataProcess/ImageProcessor.cpp \
     DataProcess/ImageStorage.cpp \
@@ -22,10 +21,10 @@ SOURCES += main.cpp \
     NetManagers/Tester.cpp \
     NetTutors/BackPropTutor.cpp \
     NeuNet/neuron.cpp \
-    NeuNet/neunet.cpp \
     NeuNet/iterator.cpp \
     NeuNet/abstrnet.cpp \
-    NeuNet/abstriterator.cpp
+    NeuNet/abstriterator.cpp \
+    NeuNet/MultiLayerNet.cpp
 
 HEADERS  += \
     Factory/nndestroyer.h \
@@ -37,7 +36,6 @@ HEADERS  += \
     Factory/nndestroyer.h \
     Factory/nnabstractdestroyer.h \
     Factory/BuildInfo.h \
-    Factory/backpropnet.h \
     Factory/backpropfactory.h \
     Factory/abstractnetfactory.h \
     Factory/abstractnet.h \
@@ -52,9 +50,9 @@ HEADERS  += \
     NetTutors/BackPropTutor.h \
     NetTutors/AbstractTutor.h \
     NeuNet/neuron.h \
-    NeuNet/neunet.h \
     NeuNet/iterator.h \
     NeuNet/abstrnet.h \
-    NeuNet/abstriterator.h
+    NeuNet/abstriterator.h \
+    NeuNet/MultiLayerNet.h
 
 FORMS    +=   NetManagers/neunetui.ui

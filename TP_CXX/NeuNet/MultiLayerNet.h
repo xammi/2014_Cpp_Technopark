@@ -1,11 +1,12 @@
 #ifndef NEUNET_H
 #define NEUNET_H
 
+#include "../includes.h"
+#include "neuron.h"
+
 namespace NeuNets{
 
-class NeuNet;
-class Neuron;
-struct Synaps;
+struct Image {};
 
 typedef QVector<Neuron *> NeuVec;
 typedef QVector<Image *> InputData;
@@ -16,9 +17,10 @@ typedef char* OutputData ;  //return char at this coding point
 
 class MultiLayerNet {
 public:
-    NeuNet();
-    NeuNet(uint neuNum, uint inNeuNum, uint outNeuNum);
-    ~NeuNet();
+    MultiLayerNet();
+    MultiLayerNet(uint neuNum, uint inNeuNum, uint outNeuNum);
+    ~MultiLayerNet();
+
     int saveToFile(QString fileName);      //save results to file from inside result array
     int loadFromFile(QString fileName);    //load data from file and save results inside
     OutputData getResponse(InputData imgs);

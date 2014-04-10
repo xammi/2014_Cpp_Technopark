@@ -2,7 +2,7 @@
 #define NEUNETFACTORY_H
 
 
-#include "abstractnet.h"
+#include "../NeuNet/abstrnet.h"
 
 namespace Factory{
 
@@ -10,10 +10,8 @@ namespace Factory{
 class AbstractNetFactory
 {
 public:
-    virtual AbstractNet *createNet(FILE *file) = 0;
-    virtual void parseFile(FILE *file) {
-        return 0;
-    }
+    //virtual NeuNets::AbstrNet *createNet(FILE *file) = 0;
+    //virtual void parseFile(FILE *file);
 
 };
 } // namespace Factory

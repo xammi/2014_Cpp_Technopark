@@ -25,7 +25,7 @@ const NetProcessor & NetProcessor::get_self() {
 void NetProcessor::setDefaultConf() {
     tester = new Tester;
     tutor = new BackPropTutor;
-    dataStore = new ImageStore;
+    dataStore = new ImageStorage;
     dataProc = new ImageProcessor;
 }
 

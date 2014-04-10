@@ -12,10 +12,10 @@ class AbstractProcessor : public QObject {
 
 public:
 private:
-    virtual void binarize();
-    virtual void segment();
-    virtual void crop();
-    virtual void resize();
+    virtual void binarize() = 0;
+    virtual void segment() = 0;
+    virtual void crop() = 0;
+    virtual void resize() = 0;
 };
 //-------------------------------------------------------------------------------------------------
 } // namespace DataProcess
