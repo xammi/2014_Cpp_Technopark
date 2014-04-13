@@ -2,8 +2,10 @@
 #define ABSTRACTTUTOR_H
 
 #include "../includes.h"
+#include "TutitionData.h"
 
 namespace NetTutors {
+
 
 //-------------------------------------------------------------------------------------------------
 class AbstractTutor : public QObject {
@@ -11,7 +13,7 @@ class AbstractTutor : public QObject {
 
 public:
     virtual void initialize() = 0;
-    //virtual bool start(QVector <TuteData> &Data);
+    virtual bool start(QVector <TuteData> &Data) = 0;
 private:
     virtual double propagate() = 0; // EG What??
     virtual void backPropagate() = 0;

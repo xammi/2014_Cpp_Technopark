@@ -1,6 +1,6 @@
 #ifndef NNDESTROYER_H
 #define NNDESTROYER_H
-#include "nnabstractdestroyer.h"
+#include "NnAbstractDestroyer.h"
 
 namespace Factory{
 
@@ -8,7 +8,7 @@ class NNDestroyer : public NNAbstractDestroyer
 {
 public:
     NNDestroyer();
-    void destroy(AbstrNet *nnet);
+    void destroy(NeuNets::AbstrNet *nnet);
 };
 
 }// namespace Factory

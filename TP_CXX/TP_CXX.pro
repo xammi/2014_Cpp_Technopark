@@ -12,8 +12,6 @@ TARGET = TP_CXX
 TEMPLATE = app
 
 SOURCES += main.cpp \
-    Factory/nndestroyer.cpp \
-    Factory/backpropfactory.cpp \
     DataProcess/ImageProcessor.cpp \
     DataProcess/ImageStorage.cpp \
     NetManagers/NetProcessor.cpp \
@@ -24,20 +22,14 @@ SOURCES += main.cpp \
     NeuNet/iterator.cpp \
     NeuNet/abstrnet.cpp \
     NeuNet/abstriterator.cpp \
-    NeuNet/MultiLayerNet.cpp
+    NeuNet/MultiLayerNet.cpp \
+    Factory/MultiLayerFactory.cpp \
+    Factory/NnDestroyer.cpp
 
 HEADERS  += \
-    Factory/nndestroyer.h \
-    Factory/nnabstractdestroyer.h \
     Factory/BuildInfo.h \
     Factory/backpropnet.h \
-    Factory/backpropfactory.h \
-    Factory/abstractnetfactory.h \
-    Factory/nndestroyer.h \
-    Factory/nnabstractdestroyer.h \
     Factory/BuildInfo.h \
-    Factory/backpropfactory.h \
-    Factory/abstractnetfactory.h \
     Factory/abstractnet.h \
     includes.h \
     DataProcess/AbstractProcessor.h \
@@ -53,6 +45,11 @@ HEADERS  += \
     NeuNet/iterator.h \
     NeuNet/abstrnet.h \
     NeuNet/abstriterator.h \
-    NeuNet/MultiLayerNet.h
+    NeuNet/MultiLayerNet.h \
+    NetTutors/TutitionData.h \
+    Factory/AbstractNetFactory.h \
+    Factory/MultiLayerFactory.h \
+    Factory/NnAbstractDestroyer.h \
+    Factory/NnDestroyer.h
 
 FORMS    +=   NetManagers/neunetui.ui

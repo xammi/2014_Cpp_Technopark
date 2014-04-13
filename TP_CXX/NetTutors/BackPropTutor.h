@@ -11,7 +11,7 @@ class BackPropTutor : public AbstractTutor {
 public:
     BackPropTutor();
     void initialize() {}
-    //bool start(QVector <TuteData> &Data);
+    bool start(QVector <TuteData> &Data) {return 0;}
 private:
     double propagate() {return 0;} // EG What??
     void backPropagate() {}

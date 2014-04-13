@@ -6,7 +6,7 @@
 #include "../DataProcess/ImageStorage.h"
 #include "../DataProcess/ImageProcessor.h"
 #include "../NetTutors/BackPropTutor.h"
-#include "../Factory/backpropfactory.h"
+#include "../Factory/MultiLayerFactory.h"
 
 namespace NetManagers {
 

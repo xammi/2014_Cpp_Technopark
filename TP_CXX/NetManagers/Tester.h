@@ -3,6 +3,7 @@
 
 #include "../includes.h"
 #include "../NeuNet/abstrnet.h"
+#include "../NetTutors/TutitionData.h"
 
 namespace NetManagers {
 
@@ -11,7 +12,7 @@ class Tester : public QObject {
     Q_OBJECT
 public:
     Tester();
-    //CompRes test(TuteData data);
+    CompResult test(TuteData data);
 private:
     NeuNets::AbstrNet *net;
 };

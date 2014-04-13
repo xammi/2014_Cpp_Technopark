@@ -10,7 +10,7 @@ class NNAbstractDestroyer
 {
 public:
     virtual ~NNAbstractDestroyer() {}
-    virtual void destroy(AbstrNet *nnet) = 0;
+    virtual void destroy(NeuNets::AbstrNet *nnet) = 0;
 };
 
 } // namespace Factory

@@ -1,7 +1,7 @@
 #ifndef NEUNETFACTORY_H
 #define NEUNETFACTORY_H
 
-
+#include <QDataStream>
 #include "../NeuNet/abstrnet.h"
 
 namespace Factory{
@@ -10,8 +10,8 @@ namespace Factory{
 class AbstractNetFactory
 {
 public:
-    //virtual NeuNets::AbstrNet *createNet(FILE *file) = 0;
-    //virtual void parseFile(FILE *file);
+    virtual NeuNets::AbstrNet *createNet(QDataStream stream) = 0;
+    virtual void parseFile(QDataStream stream) = 0;
 
 };
 } // namespace Factory

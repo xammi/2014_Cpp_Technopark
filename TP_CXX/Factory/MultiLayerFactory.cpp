@@ -1,11 +1,12 @@
-#include "backpropfactory.h"
+#include "MultiLayerFactory.h"
 
 namespace Factory{
 
-/*
-AbstractNet *BackPropFactory::createNet(FILE *file)  {
+
+
+NeuNets::AbstrNet *BackPropFactory::createNet(QDataStream stream)  {
     // set nnInfo
-    parseFile(file);
+//    parseFile(stream);
 
     // get momory for bpNewNet
     allocMemory();
@@ -13,19 +14,18 @@ AbstractNet *BackPropFactory::createNet(FILE *file)  {
     // connect neurons
     assembly();
 
-    return bpNewNet;
+//    return bpNewNet;
 }
 
-void BackPropFactory::parseFile(FILE *file) {
+void BackPropFactory::parseFile(QDataStream stream) {
     int magicNumber;
-    fscanf(file, "%d", &magicNumber);
+//    fscanf(file, "%d", &magicNumber);
 
-    return 0;
 }
 
 void BackPropFactory::allocMemory() {
     uint i, j;
-    bpNewNet = new BackPropNet();
+//    bpNewNet = new BackPropNet();
     for(i = 0; i < nnInfo.layersCount; i++){
         bpLayers.append(new Layer);
         for(j = 0; j < nnInfo.neuronsPerLayer[i] - 1; j++){
@@ -38,14 +38,11 @@ void BackPropFactory::allocMemory() {
     bpLayers[i]->is_last = true;
 
     // bpNewNet.append;
-    return 0;
 }
 void BackPropFactory::assembly()  {
     for(uint i = 0; i < nnInfo.layersCount; i++){
 
     }
-    return 0;
 }
 
-*/
 } // namespace Factory

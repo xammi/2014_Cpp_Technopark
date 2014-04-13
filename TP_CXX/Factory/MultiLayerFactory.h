@@ -1,7 +1,7 @@
 #ifndef BACKPROPNETFACTORY_H
 #define BACKPROPNETFACTORY_H
 
-#include "abstractnetfactory.h"
+#include "AbstractNetFactory.h"
 #include "../NeuNet/MultiLayerNet.h"
 #include "BuildInfo.h"
 
@@ -10,10 +10,12 @@ namespace Factory{
 using NeuNets::Neuron;
 using NeuNets::Synaps;
 using NeuNets::MultiLayerNet;
+using NeuNets::AbstrNet;
 
+
+//--------------------------------------
 struct Layer {
     uint neuroCount;
-
     // last layer doesn't have Synapses;
     bool is_last;
     QVector <Neuron *> neuron;
@@ -31,11 +33,11 @@ class BackPropFactory: public AbstractNetFactory
 private:
     GlobalNet bpLayers;
     buildInfo nnInfo;
-    MultiLayerNet *bpNewNet;
+    NeuNets::MultiLayerNet *bpNewNet;
 
 public:
-    //virtual AbstractNet *createNet(FILE *file);
-    //virtual void parseFile(FILE *file);
+    virtual NeuNets::AbstrNet *createNet(QDataStream stream);
+    virtual void parseFile(QDataStream stream);
     void allocMemory() ;
 
     // подключение нейронов. С простановкой весов
