@@ -1,20 +1,31 @@
 #ifndef TESTER_H
 #define TESTER_H
 
-#include "../includes.h"
 #include "../NeuNet/abstrnet.h"
 #include "../NetTutors/TutitionData.h"
 
+#include "../DataProcess/InputData.h"
+#include "../DataProcess/OutputData.h"
+
 namespace NetManagers {
 
+using NeuNets::AbstrNet;
+using DataProcess::InputData;
+using DataProcess::OutputData;
+
+typedef bool CompResult;
 //-------------------------------------------------------------------------------------------------
 class Tester : public QObject {
     Q_OBJECT
 public:
     Tester();
-    CompResult test(TuteData data);
+    Tester(AbstrNet *);
+
+    CompResult test(const InputData &, const OutputData &);
+    void setTarget(AbstrNet *);
+
 private:
-    NeuNets::AbstrNet *net;
+    AbstrNet *target;
 };
 //-------------------------------------------------------------------------------------------------
 } // namespace Tester

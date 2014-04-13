@@ -6,11 +6,7 @@
 namespace DataProcess {
 
 //-------------------------------------------------------------------------------------------------
-class AbstractStorage : public QObject {
-    Q_OBJECT
-
-public:
-private:
+struct AbstractStorage : public QObject {
 };
 //-------------------------------------------------------------------------------------------------
 } // namespace DataProcess

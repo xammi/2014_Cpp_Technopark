@@ -1,21 +1,14 @@
 #ifndef NEUNET_H
 #define NEUNET_H
 
-#include "../includes.h"
+#include "abstrnet.h"
 #include "neuron.h"
 
 namespace NeuNets{
 
-struct Image {};
-
 typedef QVector<Neuron *> NeuVec;
-typedef QVector<Image *> InputData;
-typedef char* OutputData ;  //return char at this coding point
-                            //may change to type which we want
-                            //to return on output layer
-
-
-class MultiLayerNet {
+//-------------------------------------------------------------------------------------------------
+class MultiLayerNet : public AbstrNet {
 public:
     MultiLayerNet();
     MultiLayerNet(uint neuNum, uint inNeuNum, uint outNeuNum);
@@ -23,11 +16,10 @@ public:
 
     int saveToFile(QString fileName);      //save results to file from inside result array
     int loadFromFile(QString fileName);    //load data from file and save results inside
-    OutputData getResponse(InputData imgs);
+    OutputData getResponse(const InputData &) const;
     QVector <Synaps *> getSynaps();         //return all(?) synaps to change their weght during education
                                             //probably better way to return synapses by their level
-    int changeSynaps(double *wieghtArr);
-
+    int initSynaps(double *wieghtArr);
 private:
     OutputData resultArr;
     int arrResize();

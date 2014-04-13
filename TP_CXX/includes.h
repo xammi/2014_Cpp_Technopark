@@ -9,5 +9,6 @@
 #include <QDialog>
 
 #include <QObject>
+#include <QPixmap>
 //-------------------------------------------------------------------------------------------------
 #endif // INCLUDES_H

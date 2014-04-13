@@ -20,11 +20,11 @@ SOURCES += main.cpp \
     NetTutors/BackPropTutor.cpp \
     NeuNet/neuron.cpp \
     NeuNet/iterator.cpp \
-    NeuNet/abstrnet.cpp \
-    NeuNet/abstriterator.cpp \
     NeuNet/MultiLayerNet.cpp \
     Factory/MultiLayerFactory.cpp \
-    Factory/NnDestroyer.cpp
+    Factory/NnDestroyer.cpp \
+    DataProcess/OutputData.cpp \
+    DataProcess/InputData.cpp
 
 HEADERS  += \
     Factory/BuildInfo.h \
@@ -50,6 +50,8 @@ HEADERS  += \
     Factory/AbstractNetFactory.h \
     Factory/MultiLayerFactory.h \
     Factory/NnAbstractDestroyer.h \
-    Factory/NnDestroyer.h
+    Factory/NnDestroyer.h \
+    DataProcess/OutputData.h \
+    DataProcess/InputData.h
 
 FORMS    +=   NetManagers/neunetui.ui

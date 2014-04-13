@@ -4,4 +4,9 @@ namespace NeuNets {
 MultiLayerNet::MultiLayerNet()
 {
 }
-}//namespace NeuNets
+
+OutputData MultiLayerNet::getResponse(const InputData &) const {
+    return OutputData();
+}
+
+} //namespace NeuNets

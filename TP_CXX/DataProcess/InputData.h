@@ -1,14 +1,18 @@
-#include "ImageProcessor.h"
+#ifndef INPUTDATA_H
+#define INPUTDATA_H
+
+#include "../includes.h"
 
 namespace DataProcess {
 
 //-------------------------------------------------------------------------------------------------
-ImageProcessor::ImageProcessor()
-{}
+class InputData
+{
+public:
+    InputData();
 
-InputData * ImageProcessor::prepareData(QPixmap &) {
-    return NULL;
-}
-
+    bool operator == (const InputData &) { return true; }
+};
 //-------------------------------------------------------------------------------------------------
-} // namespace DataProcess
+} // namespace InputData
+#endif // INPUTDATA_H
