@@ -10,6 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = TP_CXX
 TEMPLATE = app
+CONFIG += c++11
 
 SOURCES += main.cpp \
     DataProcess/ImageProcessor.cpp \
@@ -52,6 +53,7 @@ HEADERS  += \
     Factory/NnAbstractDestroyer.h \
     Factory/NnDestroyer.h \
     DataProcess/OutputData.h \
-    DataProcess/InputData.h
+    DataProcess/InputData.h \
+    PtrVector.h
 
 FORMS    +=   NetManagers/neunetui.ui
