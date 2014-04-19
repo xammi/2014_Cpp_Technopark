@@ -14,6 +14,13 @@ using NeuNets::AbstractNet;
 
 
 //-------------------------------------
+struct WrongFileFormat : public Exception {
+    QString toString() { return "Неверный формат файла"; }
+};
+
+struct FileNotFound : public Exception {
+    QString toString() { return "Файл не найден"; }
+};
 //--------------------------------------
 
 

@@ -7,10 +7,13 @@ BackPropTutor::BackPropTutor()
 {}
 
 void BackPropTutor::setNet(NeuNets::MultiLayerNet *net){ // TODO: not NULL
+    if((!net) && (currentNet))
+        throw NetNotFound();
     currentNet = net;
 }
 
 void BackPropTutor::setTester(NetManagers::Tester *test){
+    if((!test) && (currentTester))
     currentTester = test;
 }
 

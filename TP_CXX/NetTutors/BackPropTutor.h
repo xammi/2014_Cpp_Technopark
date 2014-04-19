@@ -6,6 +6,17 @@
 #include "../NetManagers/Tester.h"
 namespace NetTutors {
 
+//-------------------------------------
+struct NetNotFound : public Exception {
+    QString toString() { return "Сеть не задана"; }
+};
+
+struct TesterNotFound : public Exception {
+    QString toString() { return "Не найден тестер"; }
+};
+//--------------------------------------
+
+
 //-------------------------------------------------------------------------------------------------
 class BackPropTutor : public AbstractTutor {
     Q_OBJECT
