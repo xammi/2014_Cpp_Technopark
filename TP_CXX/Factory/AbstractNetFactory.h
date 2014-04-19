@@ -10,8 +10,8 @@ namespace Factory{
 class AbstractNetFactory
 {
 public:
-    virtual NeuNets::AbstrNet *createNet(QDataStream stream) = 0;
-    virtual void parseFile(QDataStream stream) = 0;
+    virtual NeuNets::AbstrNet *createNet(QString filename) = 0;
+    virtual void parseFile(QString filename) = 0;
 
 };
 } // namespace Factory

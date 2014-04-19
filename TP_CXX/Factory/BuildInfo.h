@@ -4,10 +4,10 @@
 
 namespace Factory{
 
-typedef struct {
+struct BuildInfo {
     unsigned int layersCount;
     QVector <unsigned int> neuronsPerLayer;
-}buildInfo;
+};
 
 } // namespace Factory
 #endif // BUILDINFO_H
