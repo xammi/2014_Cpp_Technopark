@@ -1,8 +1,7 @@
 #ifndef ITERATOR_H
 #define ITERATOR_H
 
-
-
+#include "Neuron.h"
 #include "AbstractIterator.h"
 
 namespace NeuNets {

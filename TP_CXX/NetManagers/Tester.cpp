@@ -6,7 +6,7 @@ namespace NetManagers {
 Tester::Tester()
 {}
 
-Tester::Tester(AbstrNet * _target)
+Tester::Tester(AbstractNet * _target)
     :   target(_target)
 {}
 
@@ -15,7 +15,7 @@ CompResult Tester::test(const InputData & in_data, const OutputData & expect) {
     return test_data == expect;
 }
 
-void Tester::setTarget(AbstrNet *new_target) {
+void Tester::setTarget(AbstractNet *new_target) {
     this->target = new_target;
 }
 

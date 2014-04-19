@@ -8,7 +8,7 @@ class NNDestroyer : public NNAbstractDestroyer
 {
 public:
     NNDestroyer();
-    void destroy(NeuNets::AbstrNet *nnet);
+    void destroy(NeuNets::AbstractNet *nnet);
 };
 
 }// namespace Factory

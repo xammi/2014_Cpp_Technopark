@@ -1,16 +1,16 @@
 #ifndef NNABSTRACTDESTROYER_H
 #define NNABSTRACTDESTROYER_H
-#include "../NeuNet/abstrnet.h"
+#include "../NeuNet/AbstractNet.h"
 
 namespace Factory{
 
-using NeuNets::AbstrNet;
+using NeuNets::AbstractNet;
 
 class NNAbstractDestroyer
 {
 public:
     virtual ~NNAbstractDestroyer() {}
-    virtual void destroy(NeuNets::AbstrNet *nnet) = 0;
+    virtual void destroy(NeuNets::AbstractNet *nnet) = 0;
 };
 
 } // namespace Factory

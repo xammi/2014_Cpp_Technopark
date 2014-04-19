@@ -2,19 +2,19 @@
 
 namespace NeuNets {
 Iterator::Iterator(const NeuVec &NV){
-    neuronLayer = *NV;
+    neuronLayer = NV;
     ptrPos = 0;
 }
 
 
 void Iterator::prevLayer(){
-    if(isCorrect()){
+/*    if(isCorrect()){
         //check existance of previous layer
-        if((neuronLayer.at(0)).layer == "input")
+        if((neuronLayer[0]).layer == "input")
             throw("No previous layer");
         else {
             int curLayerSize = neuronLayer.size();
-            Neuron curLayerNeuron = neuronLayer.at(0);
+            Neuron curLayerNeuron = neuronLayer[0];
             int prevLayerSize = (curLayerNeuron.getInSyn())->size() ;
 
             Synaps pathSynaps;
@@ -33,11 +33,11 @@ void Iterator::prevLayer(){
         throw("Iterator not initializated");
     }
 
-
+*/
 }
 
 void Iterator::nextLayer(){
-    if(isCorrect()){
+  /*  if(isCorrect()){
         //check existance of previous layer
         if((neuronLayer.at(0)).layer == "output")
             throw("No next layer");
@@ -60,36 +60,36 @@ void Iterator::nextLayer(){
     }
     else {
         throw("Iterator not initializated");
-    }
+    }*/
 }
 
 const Neuron &Iterator::operator[](int i){
     if(isCorrect()){
         ptrPos = i;
-        return neuronLayer.at(i);
+        return *neuronLayer[i];
+    }
+    else
+        throw ("Iterator not initialized");
+
+}
+
+const Neuron &Iterator::nextNeuron(){
+    if(isCorrect()){
+        ptrPos ++;
+        return *neuronLayer[ptrPos];
     }
     else
         throw("Iterator not initialized");
 
 }
 
-const Neuron &Iterator::nextNeuron(){
-    if(isCorrect()){
-        ptrPos = i + 1;
-        return neuronLayer.at(ptrPos);
-    }
-    else
-        throw("Iterator not initialized")
-
-}
-
 const Neuron &Iterator::prevNeuron(){
     if(isCorrect()){
-        ptrPos = i - 1;
-        return neuronLayer.at(ptrPos);
+        ptrPos --;
+        return *neuronLayer[ptrPos];
     }
     else
-        throw("Iterator not initialized")
+        throw ("Iterator not initialized");
 }
 
 bool Iterator::isCorrect(){

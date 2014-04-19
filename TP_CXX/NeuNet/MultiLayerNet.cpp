@@ -1,47 +1,50 @@
 #include "MultiLayerNet.h"
 
 namespace NeuNets {
+
 MultiLayerNet::MultiLayerNet() {
-    neuronNum = 0;
     inLayerNum = 0;
     outLayerNum = 0;
 
+}
+
+MultiLayerNet::MultiLayerNet (func sigma,
+                              const NeuVec &inNeuVec,
+                              const NeuVec &outNeuVec)
+    : sigmoid(sigma),
+      inNeurons(inNeuVec), outNeurons(outNeuVec)
+{
+    outLayerNum = outNeuVec.size();
+    inLayerNum = inNeuVec.size();
 }
 
 MultiLayerNet::~MultiLayerNet() {
 
 }
 
-OutputData MultiLayerNet::getResponse(const InputData &imgs) const {
-        //check correctivity of Image
+OutputData MultiLayerNet::getResponse(const InputData &imgs) {
+    //check correctivity of Image
 
-        double result = 0;
-        double buf = 0;
-        OutputData answer;
-        Neuron *netNeuron;
-        for (int i = 0; i < neuronNum; i++) {
-            netNeuron = neurons.at(i);
-            if (netNeuron->getLayer() == "output")
-                buf = netNeuron->summup(imgs, sigmoid);
-            if(buf > result) {
-                result = buf;
-                answer = netNeuron->value;
-            }
+    double result = 0;
+    double buf = 0;
+    OutputData answer;
+    Neuron *netNeuron;
+    for (int i = 0; i < outLayerNum; i++) {
+        netNeuron = outNeurons.at(i);
+        buf = netNeuron->summup(imgs, sigmoid);
+        if(buf > result) {
+            result = buf;
+            answer = netNeuron->value;
         }
-        return answer;
     }
-MultiLayerNet::MultiLayerNet (uint neuNum,
-                              func sigma,
-                              NeuVec &inNeuVec,
-                              NeuVec &outNeuVec)
-    :neuronNum (neuNum), sigmoid(sigma),
-      inNeurons(inNeuVec), outNeurons(outNeuVec)
-{}
+    return answer;
+}
 
 Iterator MultiLayerNet::getInLayer() const{
     Iterator inIter(inNeurons);
     return inIter;
 }
+
 Iterator MultiLayerNet::getOutLayer() const{
     Iterator outIter(outNeurons);
     return outIter;

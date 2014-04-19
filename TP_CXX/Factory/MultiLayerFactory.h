@@ -10,7 +10,7 @@ namespace Factory{
 using NeuNets::Neuron;
 using NeuNets::Synaps;
 using NeuNets::MultiLayerNet;
-using NeuNets::AbstrNet;
+using NeuNets::AbstractNet;
 
 
 //-------------------------------------
@@ -39,7 +39,7 @@ private:
     void assembly(Layer &prevLayer, Layer &curLayer);
 
 public:
-    virtual NeuNets::AbstrNet *createNet(const QString &filename);
+    virtual NeuNets::AbstractNet *createNet(const QString &filename);
 
 };
 

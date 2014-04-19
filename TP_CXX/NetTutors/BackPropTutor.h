@@ -22,6 +22,7 @@ public:
 private:
     NeuNets::MultiLayerNet *currentNet;
     NetManagers::Tester *currentTester;
+
     double propagate() {return 0;}
     void backPropagate() {}
 

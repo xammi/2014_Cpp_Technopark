@@ -5,7 +5,7 @@ namespace Factory{
 
 
 
-NeuNets::AbstrNet *MultiLayerFactory::createNet(const QString &filename)  {
+NeuNets::AbstractNet *MultiLayerFactory::createNet(const QString &filename)  {
     // set nnInfo
     parseFile(filename);
 
@@ -28,13 +28,13 @@ void MultiLayerFactory::parseFile(const QString &filename) {
     stream >> magicNumber;
 
     // How to Hardcode this?
-    if(magic != 0xA1B1C1D1)
-        ; // BAD FILE FORMAT
+    if(magicNumber != 0xA1B1C1D1)
+        {} // BAD FILE FORMAT
 
     stream >> nnInfo.layersCount;
 
     // HOW TO MAKE IT PRETTIER?
-    for(int i = 0; i < nnInfo.layersCount; ++i){
+    for(uint i = 0; i < nnInfo.layersCount; ++i){
         stream >> nnInfo.neuronsPerLayer[i];
     }
 }
@@ -55,7 +55,7 @@ void MultiLayerFactory::allocMemory() {
         curLayer->neuroCount = nnInfo.neuronsPerLayer[i];
         for(j = 0; j < curLayer->neuroCount; ++j)
             curLayer->neuron.append(new NeuNets::Neuron);
-        assembly(prevLayer, curLayer);
+        assembly(*prevLayer, *curLayer);
         prevLayer = curLayer;
     }
     prevLayer->isLast = 1;
@@ -66,23 +66,18 @@ void MultiLayerFactory::allocMemory() {
     // bpNewNet.append;
 }
 void MultiLayerFactory::assembly(Layer &prevLayer, Layer &curLayer)  {
-    if((prevLayer) && (curLayer)){
-        for(uint i = 0; i < prevLayer->neuroCount; ++i){
-            for(uint j = 0; j < curLayer->neuroCount; ++j){
+        for(uint i = 0; i < prevLayer.neuroCount; ++i){
+            for(uint j = 0; j < curLayer.neuroCount; ++j){
 
                 NeuNets::Synaps *bufSynaps = new NeuNets::Synaps;
-                bufSynaps->from = prevLayer->neuron[i];
-                bufSynaps->to = curLayer->neuron[j];
+                bufSynaps->from = prevLayer.neuron[i];
+                bufSynaps->to = curLayer.neuron[j];
 
-                prevLayer->synaps.append(bufSynaps);
+                prevLayer.synaps.append(bufSynaps);
 
                 // Задание случайного веса???
             }
         }
-    }
-    else{
-        // Если первый слой
-    }
 }
 
 } // namespace Factory

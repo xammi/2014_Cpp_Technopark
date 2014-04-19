@@ -1,23 +1,20 @@
 #ifndef NEUNET_H
 #define NEUNET_H
 
-#include "../includes.h"
 #include "Neuron.h"
 #include "AbstractNet.h"
 #include "Iterator.h"
 
-namespace NeuNets{
+namespace NeuNets {
 
-
-
-class MultiLayerNet: public AbstractNet {
+class MultiLayerNet : public AbstractNet {
 
 public:
     MultiLayerNet();
     MultiLayerNet(func sigmoid, const NeuVec &inNeu, const NeuVec &outNeu);
     ~MultiLayerNet();
 
-    OutputData getResponse(const InputData &imgs) const;
+    OutputData getResponse(const InputData &imgs);
 
     Iterator getInLayer() const;
     Iterator getOutLayer() const;
@@ -28,5 +25,6 @@ private:
     uint inLayerNum, outLayerNum;
     func sigmoid;
 };
+
 } //namespace NeuNets
 #endif // NEUNET_H

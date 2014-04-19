@@ -1,7 +1,7 @@
 #ifndef TESTER_H
 #define TESTER_H
 
-#include "../NeuNet/abstrnet.h"
+#include "../NeuNet/AbstractNet.h"
 #include "../NetTutors/TutitionData.h"
 
 #include "../DataProcess/InputData.h"
@@ -9,7 +9,7 @@
 
 namespace NetManagers {
 
-using NeuNets::AbstrNet;
+using NeuNets::AbstractNet;
 using DataProcess::InputData;
 using DataProcess::OutputData;
 
@@ -19,13 +19,13 @@ class Tester : public QObject {
     Q_OBJECT
 public:
     Tester();
-    Tester(AbstrNet *);
+    Tester(AbstractNet *);
 
     CompResult test(const InputData &, const OutputData &);
-    void setTarget(AbstrNet *);
+    void setTarget(AbstractNet *);
 
 private:
-    AbstrNet *target;
+    AbstractNet *target;
 };
 //-------------------------------------------------------------------------------------------------
 } // namespace Tester

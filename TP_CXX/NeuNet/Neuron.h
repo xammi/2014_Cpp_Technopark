@@ -2,9 +2,14 @@
 #define NEURON_H
 
 #include "../includes.h"
+#include "../DataProcess/InputData.h"
+#include "../DataProcess/OutputData.h"
 #include <functional>
 
-namespace NeuNets{
+namespace NeuNets {
+
+using DataProcess::InputData;
+using DataProcess::OutputData;
 
 typedef QVector<double> row;
 
@@ -12,10 +17,7 @@ struct NetImage{
     QVector<row *> *rows;
 };
 
-enum neuronPos {input, hidden, output};
-
-typedef char* OutputData;
-typedef NetImage InputData;
+enum neuronPos { INPUT = 0, HIDDEN, OUTPUT };
 
 typedef double (* func)(double);
 //typedef std::function <double (double)> ofunc;
@@ -32,8 +34,10 @@ public:
     OutputData value;
 
     neuronPos getLayer() {return layer;}
-    QVector<Synaps *>* getInSyn() {return &inSyn;}
-    QVector<Synaps *>* getOutSyn() {return &outSyn;}
+    const QVector<Synaps *> &getInSyn() {return inSyn;}
+    const QVector<Synaps *> &getOutSyn() {return outSyn;}
+
+    void changeOutSyn(double *);
 
 private:
     neuronPos layer;

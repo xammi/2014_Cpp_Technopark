@@ -15,7 +15,7 @@ void BackPropTutor::setTester(NetManagers::Tester *test){
 }
 
 bool BackPropTutor::start(const TuteData &Data){
-
+    return true;
 }
 
 //-------------------------------------------------------------------------------------------------
