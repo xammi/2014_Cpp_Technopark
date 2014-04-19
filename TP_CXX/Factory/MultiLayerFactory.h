@@ -13,36 +13,34 @@ using NeuNets::MultiLayerNet;
 using NeuNets::AbstrNet;
 
 
-//--------------------------------------
-struct Layer {
-    uint neuroCount;
-
-    // last layer doesn't have Synapses;
-    // Seems like one needless variable;
-    bool isLast;
-    QVector <NeuNets::Neuron *> neuron;
-    QVector <NeuNets::Synaps *> synaps;
-};
-
-Layer *prevLayer;
-Layer *curLayer;
-
-
+//-------------------------------------
 //--------------------------------------
 
 
 // Concrete Factory
-class BackPropFactory: public AbstractNetFactory
+class MultiLayerFactory: public AbstractNetFactory
 {
+    struct Layer {
+        uint neuroCount;
+
+        // last layer doesn't have Synapses;
+        // Seems like one needless variable;
+        bool isLast;
+        QVector <NeuNets::Neuron *> neuron;
+        QVector <NeuNets::Synaps *> synaps;
+    };
+
 private:
-    buildInfo nnInfo;
+    BuildInfo nnInfo;
     NeuNets::MultiLayerNet *bpNewNet;
 
-public:
-    virtual NeuNets::AbstrNet *createNet(QString filename);
-    virtual void parseFile(QString filename);
+    void parseFile(const QString &filename);
     void allocMemory() ;
-    void assembly(Layer *prevLayer, Layer *curLayer);
+    void assembly(Layer &prevLayer, Layer &curLayer);
+
+public:
+    virtual NeuNets::AbstrNet *createNet(const QString &filename);
+
 };
 
 } // namespace Factory

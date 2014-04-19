@@ -5,7 +5,7 @@ namespace Factory{
 
 
 
-NeuNets::AbstrNet *BackPropFactory::createNet(QString filename)  {
+NeuNets::AbstrNet *MultiLayerFactory::createNet(const QString &filename)  {
     // set nnInfo
     parseFile(filename);
 
@@ -16,14 +16,14 @@ NeuNets::AbstrNet *BackPropFactory::createNet(QString filename)  {
 //    return bpNewNet;
 }
 
-void BackPropFactory::parseFile(QString filename) {
+void MultiLayerFactory::parseFile(const QString &filename) {
 
 
     // WTF??
     QFile file(filename);
 
     file.open(QIODevice::ReadOnly);
-    QDataStream stream(&file);
+    QTextStream stream(&file);
     quint32 magicNumber;
     stream >> magicNumber;
 
@@ -41,8 +41,9 @@ void BackPropFactory::parseFile(QString filename) {
 
 
 
-void BackPropFactory::allocMemory() {
-
+void MultiLayerFactory::allocMemory() {
+    Layer *prevLayer;
+    Layer *curLayer;
     bpNewNet = new NeuNets::MultiLayerNet();
 
 
@@ -51,7 +52,8 @@ void BackPropFactory::allocMemory() {
     prevLayer = 0;
     for(i = 0; i < nnInfo.layersCount; ++i){
         curLayer = new Layer();
-        for(j = 0; j < nnInfo.neuronsPerLayer[i]; ++j)
+        curLayer->neuroCount = nnInfo.neuronsPerLayer[i];
+        for(j = 0; j < curLayer->neuroCount; ++j)
             curLayer->neuron.append(new NeuNets::Neuron);
         assembly(prevLayer, curLayer);
         prevLayer = curLayer;
@@ -63,7 +65,7 @@ void BackPropFactory::allocMemory() {
 
     // bpNewNet.append;
 }
-void BackPropFactory::assembly(Layer *prevLayer, Layer *curLayer)  {
+void MultiLayerFactory::assembly(Layer &prevLayer, Layer &curLayer)  {
     if((prevLayer) && (curLayer)){
         for(uint i = 0; i < prevLayer->neuroCount; ++i){
             for(uint j = 0; j < curLayer->neuroCount; ++j){
