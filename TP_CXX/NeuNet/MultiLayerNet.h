@@ -1,36 +1,32 @@
 #ifndef NEUNET_H
 #define NEUNET_H
 
-#include "abstrnet.h"
-#include "neuron.h"
+#include "../includes.h"
+#include "Neuron.h"
+#include "AbstractNet.h"
+#include "Iterator.h"
 
 namespace NeuNets{
 
-typedef QVector<Neuron *> NeuVec;
-//-------------------------------------------------------------------------------------------------
-class MultiLayerNet : public AbstrNet {
+
+
+class MultiLayerNet: public AbstractNet {
+
 public:
     MultiLayerNet();
-    MultiLayerNet(uint neuNum, uint inNeuNum, uint outNeuNum);
+    MultiLayerNet(func sigmoid, const NeuVec &inNeu, const NeuVec &outNeu);
     ~MultiLayerNet();
 
-    int saveToFile(QString fileName);      //save results to file from inside result array
-    int loadFromFile(QString fileName);    //load data from file and save results inside
-    OutputData getResponse(const InputData &) const;
-    QVector <Synaps *> getSynaps();         //return all(?) synaps to change their weght during education
-                                            //probably better way to return synapses by their level
-    int initSynaps(double *wieghtArr);
+    OutputData getResponse(const InputData &imgs) const;
+
+    Iterator getInLayer() const;
+    Iterator getOutLayer() const;
+
 private:
-    OutputData resultArr;
-    int arrResize();
-    uint bufSize, realSize;
-
-    NeuVec neurons;
-    uint inLayerNum, hidLayerNum,outLayerNum;
+    NeuVec outNeurons;
+    NeuVec inNeurons;
+    uint inLayerNum, outLayerNum;
+    func sigmoid;
 };
-
 } //namespace NeuNets
 #endif // NEUNET_H
-
-
-

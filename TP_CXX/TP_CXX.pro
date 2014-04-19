@@ -25,7 +25,9 @@ SOURCES += main.cpp \
     Factory/MultiLayerFactory.cpp \
     Factory/NnDestroyer.cpp \
     DataProcess/OutputData.cpp \
-    DataProcess/InputData.cpp
+    DataProcess/InputData.cpp \
+    NeuNet/Neuron.cpp \
+    NeuNet/Iterator.cpp
 
 HEADERS  += \
     Factory/BuildInfo.h \
@@ -44,7 +46,6 @@ HEADERS  += \
     NetTutors/AbstractTutor.h \
     NeuNet/neuron.h \
     NeuNet/iterator.h \
-    NeuNet/abstrnet.h \
     NeuNet/abstriterator.h \
     NeuNet/MultiLayerNet.h \
     NetTutors/TutitionData.h \
@@ -54,6 +55,10 @@ HEADERS  += \
     Factory/NnDestroyer.h \
     DataProcess/OutputData.h \
     DataProcess/InputData.h \
-    PtrVector.h
+    PtrVector.h \
+    NeuNet/Neuron.h \
+    NeuNet/Iterator.h \
+    NeuNet/AbstractNet.h \
+    NeuNet/AbstractIterator.h
 
 FORMS    +=   NetManagers/neunetui.ui
