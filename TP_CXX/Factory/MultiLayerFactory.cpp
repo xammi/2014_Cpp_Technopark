@@ -20,18 +20,7 @@ namespace Factory{
 
 void MultiLayerFactory::writeFile(const QString &filename)
 {
-    QFile file(filename);
 
-    // Создаст ли он файл?
-    if(!file.open(QIODevice::WriteOnly))
-        throw FileNotFound();
-
-    QTextStream stream(&file);
-    quint32 magicNumber = 0xA1B1C1D1;
-    stream << magicNumber;
-
-    //-------------------
-    // Использование итератора для записи ??
 }
 
 void MultiLayerFactory::parseFile(const QString &filename) {
@@ -112,7 +101,6 @@ void MultiLayerFactory::assembly(Layer &prevLayer, Layer &curLayer, int layerPos
             bufSynaps->from = prevLayer.neuron[i];
             bufSynaps->to = curLayer.neuron[j];
 
-            // Задание случайного веса???
             if(currentMode)
                 bufSynaps->weight = get_random();
             else{

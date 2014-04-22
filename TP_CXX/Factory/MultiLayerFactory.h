@@ -13,16 +13,6 @@ using NeuNets::MultiLayerNet;
 using NeuNets::AbstractNet;
 
 
-//-------------------------------------
-struct WrongFileFormat : public Exception {
-    QString toString() { return "Неверный формат файла"; }
-};
-
-struct FileNotFound : public Exception {
-    QString toString() { return "Файл не найден"; }
-};
-//--------------------------------------
-
 typedef QVector<int *> SynapsWeights;
 
 // Concrete Factory
@@ -42,18 +32,33 @@ private:
 
     bool currentMode;  // 0 - fromFILE 1 - fromDATA
 
-    void parseFile(const QString &filename);
+
     void allocMemory() ;
     void assembly(Layer &prevLayer, Layer &curLayer, int layerPos);
 
 public:
-
-    virtual NeuNets::AbstractNet *createFromFile(const QString &filename);
-    virtual NeuNets::AbstractNet *createFromInfo(BuildInfo newInfo);
-
+    NeuNets::AbstractNet *createFromFile(const QString &filename);
+    NeuNets::AbstractNet *createFromInfo(BuildInfo newInfo);
+    void parseFile(const QString &filename);
     void writeFile(const QString &filename);
 
 };
+
+
+
+
+
+
+
+//-------------------------------------
+struct WrongFileFormat : public Exception {
+    QString toString() { return "Неверный формат файла"; }
+};
+
+struct FileNotFound : public Exception {
+    QString toString() { return "Файл не найден"; }
+};
+//--------------------------------------
 
 } // namespace Factory
 #endif // BACKPROPNETFACTORY_H
