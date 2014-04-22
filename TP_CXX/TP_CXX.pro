@@ -25,7 +25,7 @@ SOURCES += main.cpp \
     NetTutors/BackPropTutor.cpp \
 \
     Factory/MultiLayerFactory.cpp \
-    Factory/NnDestroyer.cpp \
+    Factory/MultiLayerDestroyer.cpp \
 \
     NeuNet/Neuron.cpp \
     NeuNet/Iterator.cpp \
@@ -52,14 +52,15 @@ HEADERS  += \
 \
     Factory/AbstractNetFactory.h \
     Factory/MultiLayerFactory.h \
-    Factory/NnAbstractDestroyer.h \
-    Factory/NnDestroyer.h \
+    Factory/MultiLayerDestroyer.h \
     Factory/BuildInfo.h \
+    Factory/AbstractNetDestroyer.h \
 \
     NeuNet/Neuron.h \
     NeuNet/Iterator.h \
     NeuNet/MultiLayerNet.h \
     NeuNet/AbstractIterator.h \
     NeuNet/AbstractNet.h
+
 
 FORMS    +=   NetManagers/neunetui.ui

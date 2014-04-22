@@ -23,6 +23,7 @@ struct FileNotFound : public Exception {
 };
 //--------------------------------------
 
+typedef QVector<int *> SynapsWeights;
 
 // Concrete Factory
 class MultiLayerFactory: public AbstractNetFactory
@@ -30,9 +31,6 @@ class MultiLayerFactory: public AbstractNetFactory
     struct Layer {
         uint neuroCount;
 
-        // last layer doesn't have Synapses;
-        // Seems like one needless variable;
-        bool isLast;
         QVector <NeuNets::Neuron *> neuron;
         QVector <NeuNets::Synaps *> synaps;
     };
@@ -40,13 +38,20 @@ class MultiLayerFactory: public AbstractNetFactory
 private:
     BuildInfo nnInfo;
     NeuNets::MultiLayerNet *bpNewNet;
+    SynapsWeights weights;
+
+    bool currentMode;  // 0 - fromFILE 1 - fromDATA
 
     void parseFile(const QString &filename);
     void allocMemory() ;
-    void assembly(Layer &prevLayer, Layer &curLayer);
+    void assembly(Layer &prevLayer, Layer &curLayer, int layerPos);
 
 public:
-    virtual NeuNets::AbstractNet *createNet(const QString &filename);
+
+    virtual NeuNets::AbstractNet *createFromFile(const QString &filename);
+    virtual NeuNets::AbstractNet *createFromInfo(BuildInfo newInfo);
+
+    void writeFile(const QString &filename);
 
 };
 

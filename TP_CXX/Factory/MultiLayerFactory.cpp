@@ -4,26 +4,34 @@
 #include <stdlib.h>
 
 
+// Jawdropping randomness
+//---------------------------------
 const int MAX_SYNAPSE_VAL = 1;
 const int MIN_SYNAPSE_VAL = -1;
-
-//LOOKS AWFUL!
 
 double get_random(void) {
     return abs(qrand()) % ((int)(MAX_SYNAPSE_VAL-MIN_SYNAPSE_VAL + 1)) + MIN_SYNAPSE_VAL + (abs(qrand()) % 1000000) / 1000000.0;
 }
+//---------------------------------
 
 namespace Factory{
 
-NeuNets::AbstractNet *MultiLayerFactory::createNet(const QString &filename)  {
-    // set nnInfo
-    parseFile(filename);
-
-    // get memory for bpNewNet
-    allocMemory();
 
 
-//    return bpNewNet;
+void MultiLayerFactory::writeFile(const QString &filename)
+{
+    QFile file(filename);
+
+    // Создаст ли он файл?
+    if(!file.open(QIODevice::WriteOnly))
+        throw FileNotFound();
+
+    QTextStream stream(&file);
+    quint32 magicNumber = 0xA1B1C1D1;
+    stream << magicNumber;
+
+    //-------------------
+    // Использование итератора для записи ??
 }
 
 void MultiLayerFactory::parseFile(const QString &filename) {
@@ -43,11 +51,28 @@ void MultiLayerFactory::parseFile(const QString &filename) {
 
     stream >> nnInfo.layersCount;
 
-    // HOW TO MAKE IT PRETTIER?
-    for(uint i = 0; i < nnInfo.layersCount; ++i){
+    // Проверка на правильность входных данных??
+
+    stream >> nnInfo.neuronsPerLayer[0];
+    for(uint i = 1; i < nnInfo.layersCount; ++i){
         stream >> nnInfo.neuronsPerLayer[i];
+        //
+        int cur = nnInfo.neuronsPerLayer[i];
+        int prev = nnInfo.neuronsPerLayer[i - 1];
+        weights[i] = new int[cur * prev];
+        for(int j = 0; j < cur * prev; j++){
+            stream >> weights[i][j];
+        }
     }
 }
+
+// INFO
+/*
+ * Вектор весов начинаю не с 0, а с 1. Соответственно есть некоторые коррекции в местах с LABEL1
+ *
+ *
+ *
+ */
 
 
 
@@ -57,10 +82,6 @@ void MultiLayerFactory::allocMemory() {
     Layer *curLayer;
 
     uint i, j;
-
-    //---------------
-    // Seed the timer (seed or not to seed!)
-    qsrand( time(NULL) );
 
     //---------------
     // Creating first Layer(looks bad)
@@ -77,17 +98,13 @@ void MultiLayerFactory::allocMemory() {
         curLayer->neuroCount = nnInfo.neuronsPerLayer[i];
         for(j = 0; j < curLayer->neuroCount; ++j)
             curLayer->neuron.append(new NeuNets::Neuron);
-        assembly(*prevLayer, *curLayer);
+        assembly(*prevLayer, *curLayer, i);
         prevLayer = curLayer;
     }
-    prevLayer->isLast = 1;
-
-//    bpNewNet = new NeuNets::MultiLayerNet();  С передачей слокв
-    // bpNewNet.append;
 }
 
 
-void MultiLayerFactory::assembly(Layer &prevLayer, Layer &curLayer)  {
+void MultiLayerFactory::assembly(Layer &prevLayer, Layer &curLayer, int layerPos)  {
     for(uint i = 0; i < prevLayer.neuroCount; ++i){
         for(uint j = 0; j < curLayer.neuroCount; ++j){
 
@@ -96,10 +113,36 @@ void MultiLayerFactory::assembly(Layer &prevLayer, Layer &curLayer)  {
             bufSynaps->to = curLayer.neuron[j];
 
             // Задание случайного веса???
-            bufSynaps->weight = get_random();
+            if(currentMode)
+                bufSynaps->weight = get_random();
+            else{
+                bufSynaps->weight = weights[layerPos][i + j - 1]; // LABEL1
+            }
             prevLayer.synaps.append(bufSynaps);
         }
     }
+}
+
+NeuNets::AbstractNet *MultiLayerFactory::createFromFile(const QString &filename)
+{
+    currentMode = 0;
+    parseFile(filename);
+    allocMemory();
+    return bpNewNet;
+}
+
+NeuNets::AbstractNet *MultiLayerFactory::createFromInfo(BuildInfo newInfo)
+{
+    currentMode = 1;
+
+    //---------------
+    // Seed the timer (seed or not to seed!)
+    qsrand( time(NULL) );
+
+
+    nnInfo = newInfo;
+    allocMemory();
+    return bpNewNet;
 }
 
 } // namespace Factory
