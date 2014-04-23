@@ -37,18 +37,15 @@ private:
     void assembly(Layer &prevLayer, Layer &curLayer, int layerPos);
 
 public:
+    MultiLayerFactory(bool flag = true);
+    ~MultiLayerFactory();
+
     NeuNets::AbstractNet *createFromFile(const QString &filename);
     NeuNets::AbstractNet *createFromInfo(BuildInfo newInfo);
     void parseFile(const QString &filename);
     void writeFile(const QString &filename);
 
 };
-
-
-
-
-
-
 
 //-------------------------------------
 struct WrongFileFormat : public Exception {

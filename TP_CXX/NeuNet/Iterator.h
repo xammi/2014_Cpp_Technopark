@@ -9,6 +9,7 @@ namespace NeuNets {
 class Iterator : public AbstractIterator
 {
     friend class MultiLayerNet;
+
 public:
 
     void prevLayer();//Set neuron vector in previous layer
@@ -19,13 +20,11 @@ public:
     const Neuron &prevNeuron(); // decrease ptrPos if possible and return pointer to Neuron at ptrPos
 
 
-    // EG changed it!
-    Iterator(const Iterator&);
+    // EG changed it унаследовать итератор !
 
 private:
     Iterator(const NeuVec &);
 
-    Iterator operator = (const Iterator&);
     NeuVec neuronLayer;
     int ptrPos; //contains the position of pointer in vector
 

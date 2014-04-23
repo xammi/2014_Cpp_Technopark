@@ -9,6 +9,10 @@
 const int MAX_SYNAPSE_VAL = 1;
 const int MIN_SYNAPSE_VAL = -1;
 
+double rand(double left, double right) {
+    return ((double) qrand() / (double) RAND_MAX * (right - left) + left);
+}
+
 double get_random(void) {
     return abs(qrand()) % ((int)(MAX_SYNAPSE_VAL-MIN_SYNAPSE_VAL + 1)) + MIN_SYNAPSE_VAL + (abs(qrand()) % 1000000) / 1000000.0;
 }
@@ -16,7 +20,14 @@ double get_random(void) {
 
 namespace Factory{
 
+MultiLayerFactory::MultiLayerFactory(bool flag) {
+    //---------------
+    // Seed the timer (seed or not to seed!)
+    if (flag)
+        qsrand( time(NULL) );
+}
 
+MultiLayerFactory::~MultiLayerFactory() {}
 
 void MultiLayerFactory::writeFile(const QString &filename)
 {
@@ -77,16 +88,20 @@ void MultiLayerFactory::allocMemory() {
     //---------------
     Layer *firstLayer = new Layer();
     firstLayer->neuroCount = nnInfo.neuronsPerLayer[0];
+
     for(j = 0; j < firstLayer->neuroCount; ++j)
         firstLayer->neuron.append(new NeuNets::Neuron);
+
     prevLayer = firstLayer;
     //---------------
 
     for(i = 1; i < nnInfo.layersCount; ++i){
         curLayer = new Layer();
         curLayer->neuroCount = nnInfo.neuronsPerLayer[i];
+
         for(j = 0; j < curLayer->neuroCount; ++j)
             curLayer->neuron.append(new NeuNets::Neuron);
+
         assembly(*prevLayer, *curLayer, i);
         prevLayer = curLayer;
     }
@@ -111,21 +126,15 @@ void MultiLayerFactory::assembly(Layer &prevLayer, Layer &curLayer, int layerPos
     }
 }
 
-NeuNets::AbstractNet *MultiLayerFactory::createFromFile(const QString &filename)
-{
+NeuNets::AbstractNet *MultiLayerFactory::createFromFile(const QString &filename) {
     currentMode = 0;
     parseFile(filename);
     allocMemory();
     return bpNewNet;
 }
 
-NeuNets::AbstractNet *MultiLayerFactory::createFromInfo(BuildInfo newInfo)
-{
+NeuNets::AbstractNet *MultiLayerFactory::createFromInfo(BuildInfo newInfo) {
     currentMode = 1;
-
-    //---------------
-    // Seed the timer (seed or not to seed!)
-    qsrand( time(NULL) );
 
 
     nnInfo = newInfo;

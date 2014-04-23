@@ -60,7 +60,8 @@ HEADERS  += \
     NeuNet/Iterator.h \
     NeuNet/MultiLayerNet.h \
     NeuNet/AbstractIterator.h \
-    NeuNet/AbstractNet.h
+    NeuNet/AbstractNet.h \
+    NetFunction.h
 
 
 FORMS    +=   NetManagers/neunetui.ui
