@@ -6,10 +6,10 @@ namespace Factory{
 
 using NeuNets::AbstractNet;
 
-class NNAbstractDestroyer
+class AbstractNetDestroyer
 {
 public:
-    virtual ~NNAbstractDestroyer() {}
+    virtual ~AbstractNetDestroyer() {}
     virtual void destroy(NeuNets::AbstractNet *nnet) = 0;
 };
 

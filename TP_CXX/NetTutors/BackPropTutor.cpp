@@ -14,7 +14,7 @@ void BackPropTutor::setNet(NeuNets::MultiLayerNet *net){ // TODO: not NULL
 
 void BackPropTutor::setTester(NetManagers::Tester *test){
     if((!test) && (currentTester))
-    currentTester = test;
+        currentTester = test;
 }
 
 bool BackPropTutor::start(const TuteData &Data){

@@ -32,7 +32,6 @@ private:
 
     bool currentMode;  // 0 - fromFILE 1 - fromDATA
 
-
     void allocMemory() ;
     void assembly(Layer &prevLayer, Layer &curLayer, int layerPos);
 
@@ -42,9 +41,9 @@ public:
 
     NeuNets::AbstractNet *createFromFile(const QString &filename);
     NeuNets::AbstractNet *createFromInfo(BuildInfo newInfo);
+
     void parseFile(const QString &filename);
     void writeFile(const QString &filename);
-
 };
 
 //-------------------------------------

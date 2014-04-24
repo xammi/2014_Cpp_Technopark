@@ -2,6 +2,18 @@
 #include <QFile>
 #include <time.h>
 #include <stdlib.h>
+const qint32 fileId = 0xA1B1C1D1;
+
+/* Summary
+ * Файл практически готов. Нужно разобраться с чтением - не нравится массив weights (почему?)
+ * Можно навести косметику. Можно выкинуть это в долг
+ *
+ * Предложение - вынести nnInfo на уровень процессора. Тогда можно будет получать инфу оттуда
+ *
+ * Долг - обработать какое-нибудь стандартное исключение, которое выбрасывается, когда я хочу считать число
+ * А получаю EOF
+ */
+
 
 
 // Jawdropping randomness
@@ -9,30 +21,38 @@
 const int MAX_SYNAPSE_VAL = 1;
 const int MIN_SYNAPSE_VAL = -1;
 
-double rand(double left, double right) {
+double get_random(double left, double right) {
     return ((double) qrand() / (double) RAND_MAX * (right - left) + left);
 }
 
-double get_random(void) {
-    return abs(qrand()) % ((int)(MAX_SYNAPSE_VAL-MIN_SYNAPSE_VAL + 1)) + MIN_SYNAPSE_VAL + (abs(qrand()) % 1000000) / 1000000.0;
-}
+//double get_random(void) {
+//    return abs(qrand()) % ((int)(MAX_SYNAPSE_VAL-MIN_SYNAPSE_VAL + 1)) + MIN_SYNAPSE_VAL + (abs(qrand()) % 1000000) / 1000000.0;
+//}
 //---------------------------------
 
 namespace Factory{
 
 MultiLayerFactory::MultiLayerFactory(bool flag) {
-    //---------------
-    // Seed the timer (seed or not to seed!)
     if (flag)
         qsrand( time(NULL) );
 }
 
 MultiLayerFactory::~MultiLayerFactory() {}
 
-void MultiLayerFactory::writeFile(const QString &filename)
-{
 
-}
+//---------------------------------------------
+// Формат входного файла.
+/* Строка 1: Магическое число
+ * Строка 2: Количество слоев сети
+ * Строка 3: Количество нейронов на 0 слое. Set i = 1;
+ * Строка 4: Количество нейронов на i'ом слое
+ * Строка 5: Веса между i и i-1 слоем:
+ *   Веса нейрона 1
+ *   Веса нейрона 2
+ *   и т.д.
+ */
+//---------------------------------------------
+
 
 void MultiLayerFactory::parseFile(const QString &filename) {
 
@@ -45,8 +65,7 @@ void MultiLayerFactory::parseFile(const QString &filename) {
     quint32 magicNumber;
     stream >> magicNumber;
 
-    // How to Hardcode this?
-    if(magicNumber != 0xA1B1C1D1)
+    if(magicNumber != fileId)
         throw WrongFileFormat();
 
     stream >> nnInfo.layersCount;
@@ -65,15 +84,6 @@ void MultiLayerFactory::parseFile(const QString &filename) {
         }
     }
 }
-
-// INFO
-/*
- * Вектор весов начинаю не с 0, а с 1. Соответственно есть некоторые коррекции в местах с LABEL1
- *
- *
- *
- */
-
 
 
 void MultiLayerFactory::allocMemory() {
@@ -117,9 +127,9 @@ void MultiLayerFactory::assembly(Layer &prevLayer, Layer &curLayer, int layerPos
             bufSynaps->to = curLayer.neuron[j];
 
             if(currentMode)
-                bufSynaps->weight = get_random();
+                bufSynaps->weight = get_random(MIN_SYNAPSE_VAL, MAX_SYNAPSE_VAL);
             else{
-                bufSynaps->weight = weights[layerPos][i + j - 1]; // LABEL1
+                bufSynaps->weight = weights[layerPos][i + j - 1]; //
             }
             prevLayer.synaps.append(bufSynaps);
         }
@@ -135,8 +145,6 @@ NeuNets::AbstractNet *MultiLayerFactory::createFromFile(const QString &filename)
 
 NeuNets::AbstractNet *MultiLayerFactory::createFromInfo(BuildInfo newInfo) {
     currentMode = 1;
-
-
     nnInfo = newInfo;
     allocMemory();
     return bpNewNet;
