@@ -18,6 +18,18 @@ void BackPropTutor::setTester(NetManagers::Tester *test){
 }
 
 bool BackPropTutor::start(const TuteData &Data){
+    /* Algorithm
+     * 1. Send TuteData to Tester. Inside Tester - getResponse
+     * Tute Data contains all necessary info for error counting.
+     * Get Errors for each output drom Tester
+     * Then get iterator from NN and BackPropagate
+     *
+     *
+     *
+     */
+
+
+
     return true;
 }
 

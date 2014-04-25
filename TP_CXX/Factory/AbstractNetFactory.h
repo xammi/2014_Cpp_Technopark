@@ -12,7 +12,6 @@ class AbstractNetFactory
 {
 public:
 //    virtual NeuNets::AbstractNet *createNet(QString filename) = 0;
-    virtual void parseFile(QString filename) = 0;
     virtual NeuNets::AbstractNet *createFromFile(const QString &filename) = 0;
     virtual NeuNets::AbstractNet *createFromInfo(BuildInfo newInfo) = 0;
 };

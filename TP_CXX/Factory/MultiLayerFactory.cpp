@@ -2,6 +2,8 @@
 #include <QFile>
 #include <time.h>
 #include <stdlib.h>
+
+
 const qint32 fileId = 0xA1B1C1D1;
 
 /* Summary
@@ -22,7 +24,7 @@ const int MAX_SYNAPSE_VAL = 1;
 const int MIN_SYNAPSE_VAL = -1;
 
 double get_random(double left, double right) {
-    return ((double) qrand() / (double) RAND_MAX * (right - left) + left);
+    return ((double) qrand() / (double) RAND_MAX * (right - left) + left);// Rand Max is very small, so хаполняются не все значащик юиты мантиссы числа, маленькая точность
 }
 
 //double get_random(void) {
@@ -42,7 +44,8 @@ MultiLayerFactory::~MultiLayerFactory() {}
 
 //---------------------------------------------
 // Формат входного файла.
-/* Строка 1: Магическое число
+/* Строка 0: Фугкция активации
+ * Строка 1: Магическое число
  * Строка 2: Количество слоев сети
  * Строка 3: Количество нейронов на 0 слое. Set i = 1;
  * Строка 4: Количество нейронов на i'ом слое
@@ -67,7 +70,7 @@ void MultiLayerFactory::parseFile(const QString &filename) {
 
     if(magicNumber != fileId)
         throw WrongFileFormat();
-
+    stream >> nnInfo.funcName;
     stream >> nnInfo.layersCount;
 
     // Проверка на правильность входных данных??
@@ -104,6 +107,7 @@ void MultiLayerFactory::allocMemory() {
 
     prevLayer = firstLayer;
     //---------------
+    NeuNets::NeuVec inToSend = firstLayer->neuron;
 
     for(i = 1; i < nnInfo.layersCount; ++i){
         curLayer = new Layer();
@@ -115,6 +119,8 @@ void MultiLayerFactory::allocMemory() {
         assembly(*prevLayer, *curLayer, i);
         prevLayer = curLayer;
     }
+    NeuNets::NeuVec outToSend = curLayer->neuron;
+    bpNewNet = new NeuNets::MultiLayerNet(FuncDisp::func(nnInfo.funcName) , inToSend, outToSend);
 }
 
 

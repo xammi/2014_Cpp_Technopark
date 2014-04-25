@@ -14,12 +14,7 @@ public:
     void writeFile(NeuNets::MultiLayerNet *nNet, const QString &filename);
 };
 
-class DestroyIterator : public NeuNets::Iterator
-{
-public:
-    NeuNets::Neuron *nextNeuron();
-    NeuNets::Neuron *prevNeuron();
-};
+
 
 
 //---------------------------------------------------------

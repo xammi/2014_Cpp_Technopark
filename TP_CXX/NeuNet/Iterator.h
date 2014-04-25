@@ -9,6 +9,7 @@ namespace NeuNets {
 class Iterator : public AbstractIterator
 {
     friend class MultiLayerNet;
+    friend class MultiLayerDestroyer;
 
 public:
 
@@ -19,10 +20,12 @@ public:
     const Neuron &nextNeuron(); // increase ptrPos if possible and return pointer to Neuron at ptrPos
     const Neuron &prevNeuron(); // decrease ptrPos if possible and return pointer to Neuron at ptrPos
 
+    bool operator==(const Iterator &rhs)const { return (neuronLayer == rhs.neuronLayer); }
+    bool operator!=(const Iterator &rhs)const { return (neuronLayer != rhs.neuronLayer); }
 
     // EG changed it унаследовать итератор !
 
-private:
+protected:
     Iterator(const NeuVec &);
 
     NeuVec neuronLayer;

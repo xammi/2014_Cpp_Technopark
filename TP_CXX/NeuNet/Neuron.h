@@ -4,6 +4,7 @@
 #include "../includes.h"
 #include "../DataProcess/InputData.h"
 #include "../DataProcess/OutputData.h"
+#include "../NetFunction.h"
 #include <functional>
 
 namespace NeuNets {
@@ -28,7 +29,7 @@ struct Synaps;
 class Neuron  {
 public:
     Neuron();
-    double summup(InputData imgs, func sigmoid);
+    double summup(InputData imgs, const Func &sigmoid);
     void setSynapse(Neuron *otherNeu, double weight); //Set weight of synapse between this Neuron and otherNeu
 
     OutputData value;

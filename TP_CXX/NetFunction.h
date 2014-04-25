@@ -29,15 +29,12 @@ typedef QVector<Func *> Funcs;
 class FuncDisp
 {
 public:
-    static Func * func(const QString & str);
+    static Func & func(const QString & str);
 
 private:
     FuncDisp() {
-        _REG_(X*X*X, "x^3");
-        _REG_(X*X, "x^2");
-        _REG_(sqrt(X), "SQRT(x)");
-        _REG_(sin(X), "SIN(x)");
-        _REG_(cos(X) - X, "COS(x) - x");
+        _REG_((1 / (1 + exp(-X))), "Sigmoid");
+        _REG_((tanh(X / 1)), "HypTan");
     }
 
     ~FuncDisp();
@@ -49,6 +46,9 @@ private:
     Funcs funcs;
 };
 //-------------------------------------------------------------------------------------------------
+
+
+
 
 
 #endif // NETFUNCTION_H

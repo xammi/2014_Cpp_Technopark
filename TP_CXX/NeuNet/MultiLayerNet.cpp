@@ -2,13 +2,13 @@
 
 namespace NeuNets {
 
-MultiLayerNet::MultiLayerNet() {
+MultiLayerNet::MultiLayerNet() : sigmoid(FuncDisp::func("Sigmoid")) {
     inLayerNum = 0;
     outLayerNum = 0;
 
 }
 
-MultiLayerNet::MultiLayerNet (func sigma,
+MultiLayerNet::MultiLayerNet (const Func &sigma,
                               const NeuVec &inNeuVec,
                               const NeuVec &outNeuVec)
     : sigmoid(sigma),

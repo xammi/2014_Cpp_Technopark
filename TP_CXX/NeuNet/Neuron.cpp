@@ -6,7 +6,7 @@ Neuron::Neuron() {
 
 }
 
-double Neuron::summup(InputData imgs, func sigmoid){
+double Neuron::summup(InputData imgs, const Func &sigmoid){
     double outputValue = 0;
     if(layer == INPUT) {
 

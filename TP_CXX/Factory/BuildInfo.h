@@ -7,6 +7,7 @@ namespace Factory{
 struct BuildInfo {
     unsigned int layersCount;
     QVector <unsigned int> neuronsPerLayer;
+    QString funcName;
 };
 
 } // namespace Factory

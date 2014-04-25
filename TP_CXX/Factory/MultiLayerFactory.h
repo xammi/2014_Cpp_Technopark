@@ -3,6 +3,7 @@
 
 #include "AbstractNetFactory.h"
 #include "../NeuNet/MultiLayerNet.h"
+
 #include "BuildInfo.h"
 
 namespace Factory{
@@ -21,7 +22,7 @@ class MultiLayerFactory: public AbstractNetFactory
     struct Layer {
         uint neuroCount;
 
-        QVector <NeuNets::Neuron *> neuron;
+        NeuNets::NeuVec neuron;
         QVector <NeuNets::Synaps *> synaps;
     };
 
@@ -35,6 +36,7 @@ private:
     void allocMemory() ;
     void assembly(Layer &prevLayer, Layer &curLayer, int layerPos);
 
+
 public:
     MultiLayerFactory(bool flag = true);
     ~MultiLayerFactory();
@@ -45,6 +47,10 @@ public:
     void parseFile(const QString &filename);
     void writeFile(const QString &filename);
 };
+
+
+
+
 
 //-------------------------------------
 struct WrongFileFormat : public Exception {

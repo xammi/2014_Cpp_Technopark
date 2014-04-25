@@ -11,7 +11,7 @@ class MultiLayerNet : public AbstractNet {
 
 public:
     MultiLayerNet();
-    MultiLayerNet(func sigmoid, const NeuVec &inNeu, const NeuVec &outNeu);
+    MultiLayerNet(const Func & sigmoid, const NeuVec &inNeu, const NeuVec &outNeu);
     ~MultiLayerNet();
 
     OutputData getResponse(const InputData &imgs);
@@ -23,7 +23,7 @@ private:
     NeuVec outNeurons;
     NeuVec inNeurons;
     uint inLayerNum, outLayerNum;
-    func sigmoid;
+    Func sigmoid;
 };
 
 } //namespace NeuNets
