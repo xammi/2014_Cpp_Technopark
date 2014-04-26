@@ -10,7 +10,7 @@ class AbstractNetDestroyer
 {
 public:
     virtual ~AbstractNetDestroyer() {}
-    virtual void destroy(NeuNets::AbstractNet *nnet) = 0;
+//    virtual void destroy(NeuNets::AbstractNet *nnet) = 0;
 };
 
 } // namespace Factory

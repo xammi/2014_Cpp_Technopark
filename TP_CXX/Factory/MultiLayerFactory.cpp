@@ -4,7 +4,8 @@
 #include <stdlib.h>
 
 
-const qint32 fileId = 0xA1B1C1D1;
+//const qint32 fileId = 0xA1B1C1D1;
+const qint32 fileId = 10;
 
 /* Summary
  * Файл практически готов. Нужно разобраться с чтением - не нравится массив weights (почему?)
@@ -44,8 +45,9 @@ MultiLayerFactory::~MultiLayerFactory() {}
 
 //---------------------------------------------
 // Формат входного файла.
-/* Строка 0: Фугкция активации
- * Строка 1: Магическое число
+/* Строка 0: Магическое число
+ * Строка 1: Функция активации
+
  * Строка 2: Количество слоев сети
  * Строка 3: Количество нейронов на 0 слое. Set i = 1;
  * Строка 4: Количество нейронов на i'ом слое
@@ -62,7 +64,7 @@ void MultiLayerFactory::parseFile(const QString &filename) {
     QFile file(filename);
 
     if(!file.open(QIODevice::ReadOnly))
-        throw FileNotFound();
+        throw ReadFileNotFound();
 
     QTextStream stream(&file);
     quint32 magicNumber;
@@ -75,16 +77,28 @@ void MultiLayerFactory::parseFile(const QString &filename) {
 
     // Проверка на правильность входных данных??
 
-    stream >> nnInfo.neuronsPerLayer[0];
+
+    unsigned int bufIntVar; // Нельзя напрямую читать в вектор
+
+    stream >> bufIntVar;
+    nnInfo.neuronsPerLayer.append(bufIntVar);
+
     for(uint i = 1; i < nnInfo.layersCount; ++i){
-        stream >> nnInfo.neuronsPerLayer[i];
+        stream >> bufIntVar;
+        nnInfo.neuronsPerLayer.append(bufIntVar);
         //
         int cur = nnInfo.neuronsPerLayer[i];
         int prev = nnInfo.neuronsPerLayer[i - 1];
-        weights[i] = new int[cur * prev];
-        for(int j = 0; j < cur * prev; j++){
-            stream >> weights[i][j];
+
+        double *bufArr = new double[cur * prev];
+
+
+        for(int j = 0; j < cur * prev; ++j){
+            stream >> bufArr[j];
+            if((bufArr[j] > MAX_SYNAPSE_VAL) || (bufArr[j] < MIN_SYNAPSE_VAL))
+                throw WrongData();
         }
+        weights.append(bufArr);
     }
 }
 
@@ -125,6 +139,7 @@ void MultiLayerFactory::allocMemory() {
 
 
 void MultiLayerFactory::assembly(Layer &prevLayer, Layer &curLayer, int layerPos)  {
+    uint offset = 0;
     for(uint i = 0; i < prevLayer.neuroCount; ++i){
         for(uint j = 0; j < curLayer.neuroCount; ++j){
 
@@ -135,21 +150,27 @@ void MultiLayerFactory::assembly(Layer &prevLayer, Layer &curLayer, int layerPos
             if(currentMode)
                 bufSynaps->weight = get_random(MIN_SYNAPSE_VAL, MAX_SYNAPSE_VAL);
             else{
-                bufSynaps->weight = weights[layerPos][i + j - 1]; //
+                bufSynaps->weight = weights[layerPos - 1][i + j + offset]; //
             }
+
+
+            // !
+            // Мои слои никак не связаны с Нейронной сетью. В самой сети нет методов для простановки весов
+
             prevLayer.synaps.append(bufSynaps);
         }
+        offset++;
     }
 }
 
-NeuNets::AbstractNet *MultiLayerFactory::createFromFile(const QString &filename) {
+NeuNets::MultiLayerNet *MultiLayerFactory::createFromFile(const QString &filename) {
     currentMode = 0;
     parseFile(filename);
     allocMemory();
     return bpNewNet;
 }
 
-NeuNets::AbstractNet *MultiLayerFactory::createFromInfo(BuildInfo newInfo) {
+NeuNets::MultiLayerNet *MultiLayerFactory::createFromInfo(BuildInfo newInfo) {
     currentMode = 1;
     nnInfo = newInfo;
     allocMemory();

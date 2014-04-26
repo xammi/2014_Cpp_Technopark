@@ -14,7 +14,7 @@ using NeuNets::MultiLayerNet;
 using NeuNets::AbstractNet;
 
 
-typedef QVector<int *> SynapsWeights;
+typedef QVector<double *> SynapsWeights;
 
 // Concrete Factory
 class MultiLayerFactory: public AbstractNetFactory
@@ -41,8 +41,8 @@ public:
     MultiLayerFactory(bool flag = true);
     ~MultiLayerFactory();
 
-    NeuNets::AbstractNet *createFromFile(const QString &filename);
-    NeuNets::AbstractNet *createFromInfo(BuildInfo newInfo);
+    NeuNets::MultiLayerNet *createFromFile(const QString &filename);
+    NeuNets::MultiLayerNet *createFromInfo(BuildInfo newInfo);
 
     void parseFile(const QString &filename);
     void writeFile(const QString &filename);
@@ -57,8 +57,12 @@ struct WrongFileFormat : public Exception {
     QString toString() { return "Неверный формат файла"; }
 };
 
-struct FileNotFound : public Exception {
-    QString toString() { return "Файл не найден"; }
+struct ReadFileNotFound : public Exception {
+    QString toString() { return "Файл для чтения не найден"; }
+};
+
+struct WrongData : public Exception {
+    QString toString() { return "Неверный формат данных"; }
 };
 //--------------------------------------
 

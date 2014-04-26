@@ -38,9 +38,6 @@ void MultiLayerDestroyer::destroy(NeuNets::MultiLayerNet *nNet) {
      * 4. Not use iterator altogether. Just relation of friendship with MultiLayerNet.
      * 5.
      */
-
-    NeuNets::Neuron *prevNeuron;
-    NeuNets::Neuron *curNeuron;
     for ( ; from != to; from.nextLayer()) {
         from.apply(deleteNeurons);
     }
@@ -48,7 +45,10 @@ void MultiLayerDestroyer::destroy(NeuNets::MultiLayerNet *nNet) {
 
 
 
- /*Пока не дописываю этот кусок - неизвестно, что там с форматом файла
+ /*
+  *Беда такая - куда писать кол-во слоев? Если вначале - то неудобно читать.
+  *Если в конце - то неудобно писать.
+  *И удаление вываливается просто так. Надо подключать веса
   *
   */
 
@@ -57,8 +57,8 @@ void MultiLayerDestroyer::writeFile(NeuNets::MultiLayerNet *nNet, const QString 
     if(!nNet)
         throw NetNotFound();
 
-    NeuNets::Iterator firstIter = nNet->getInLayer();
-    NeuNets::Iterator lastIter = nNet->getOutLayer();
+    NeuNets::Iterator from = nNet->getInLayer();
+    NeuNets::Iterator to = nNet->getOutLayer();
 
     QFile file(filename);
 
@@ -68,6 +68,10 @@ void MultiLayerDestroyer::writeFile(NeuNets::MultiLayerNet *nNet, const QString 
     QTextStream stream(&file);
 
     stream << fileId;
+
+    for ( ; from != to; from.nextLayer()) {
+        from.apply(deleteNeurons);
+    }
 
 //    while(firstIter != lastIter){
 //        NeuNets::Neuron bufNeuron = firstIter.nextNeuron();
