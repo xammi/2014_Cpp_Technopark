@@ -23,8 +23,10 @@ enum neuronPos { INPUT = 0, HIDDEN, OUTPUT };
 typedef double (* func)(double);
 //typedef std::function <double (double)> ofunc;
 
-
 struct Synaps;
+
+typedef std::function<void (Synaps *)> SynapseAction;
+enum SynapseType { IN, OUT, IN_OUT };
 
 class Neuron  {
 public:
@@ -37,6 +39,8 @@ public:
     neuronPos getLayer() {return layer;}
     const QVector<Synaps *> &getInSyn() {return inSyn;}
     const QVector<Synaps *> &getOutSyn() {return outSyn;}
+
+    void apply(SynapseAction action, const SynapseType type);
 
     void changeOutSyn(double *);
 

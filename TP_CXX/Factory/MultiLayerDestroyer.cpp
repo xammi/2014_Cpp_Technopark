@@ -9,6 +9,17 @@ namespace Factory{
 
 
 MultiLayerDestroyer::MultiLayerDestroyer() {
+    deleteSynapses = [] (NeuNets::Synaps * synaps)->void {
+        if (synaps)
+            delete synaps;
+    };
+
+    deleteNeurons = [ this ] (NeuNets::Neuron * neuron)->void {
+        if (neuron) {
+            neuron->apply(deleteSynapses, NeuNets::IN_OUT);
+            delete neuron;
+        }
+    };
 }
 
 void MultiLayerDestroyer::destroy(NeuNets::MultiLayerNet *nNet) {
@@ -30,26 +41,9 @@ void MultiLayerDestroyer::destroy(NeuNets::MultiLayerNet *nNet) {
 
     NeuNets::Neuron *prevNeuron;
     NeuNets::Neuron *curNeuron;
-//    while(from != to){
-//        curNeuron = from[0];
-//        do{
-//            prevNeuron = curNeuron;
-//            if(!prevNeuron)
-//                throw NeuronNotFound();
-//            curNeuron = from.nextNeuron();
-
-//            for(int i = 0; i < prevNeuron->getInSyn().count(); ++i){
-//                delete prevNeuron->getInSyn()[i];
-//            }
-//            for(int i = 0; i < prevNeuron->getOutSyn().count(); ++i){
-//                delete prevNeuron->getOutSyn()[i];
-//            }
-//            delete prevNeuron;
-
-//        }
-//        while(curNeuron);
-//        from.nextLayer();
-//    }
+    for ( ; from != to; from.nextLayer()) {
+        from.apply(deleteNeurons);
+    }
 }
 
 

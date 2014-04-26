@@ -6,6 +6,8 @@
 
 namespace NeuNets {
 
+typedef std::function< void(Neuron *) > NeuronAction;
+
 class Iterator : public AbstractIterator
 {
     friend class MultiLayerNet;
@@ -22,6 +24,8 @@ public:
 
     bool operator==(const Iterator &rhs)const { return (neuronLayer == rhs.neuronLayer); }
     bool operator!=(const Iterator &rhs)const { return (neuronLayer != rhs.neuronLayer); }
+
+    void apply(NeuronAction action);
 
     // EG changed it унаследовать итератор !
 

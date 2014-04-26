@@ -12,6 +12,11 @@ public:
     MultiLayerDestroyer();
     void destroy(NeuNets::MultiLayerNet *nNet);
     void writeFile(NeuNets::MultiLayerNet *nNet, const QString &filename);
+
+private:
+    NeuNets::SynapseAction deleteSynapses;
+    NeuNets::NeuronAction deleteNeurons;
+
 };
 
 

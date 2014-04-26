@@ -92,6 +92,14 @@ const Neuron &Iterator::prevNeuron(){
         throw ("Iterator not initialized");
 }
 
+void Iterator::apply(NeuronAction action)
+{
+
+    for (int I = 0; I < neuronLayer.size(); ++I)
+        action(neuronLayer[I]);
+
+}
+
 bool Iterator::isCorrect(){
     return bool(neuronLayer.size());
 }
