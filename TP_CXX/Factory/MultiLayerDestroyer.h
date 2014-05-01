@@ -14,13 +14,10 @@ public:
     void writeFile(NeuNets::MultiLayerNet *nNet, const QString &filename);
 
 private:
-    NeuNets::SynapseAction deleteSynapses;
-    NeuNets::NeuronAction deleteNeurons;
+    NeuNets::UnsafeSynapseAct deleteSynapses;
+    NeuNets::UnsafeNeuronAct deleteNeurons;
 
 };
-
-
-
 
 //---------------------------------------------------------
 struct FileNotFound : public Exception {

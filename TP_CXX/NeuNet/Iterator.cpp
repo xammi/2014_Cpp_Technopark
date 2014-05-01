@@ -92,15 +92,23 @@ const Neuron &Iterator::prevNeuron(){
         throw ("Iterator not initialized");
 }
 
-void Iterator::apply(NeuronAction action)
-{
-
-    for (int I = 0; I < neuronLayer.size(); ++I)
-        action(neuronLayer[I]);
-
-}
-
 bool Iterator::isCorrect(){
     return bool(neuronLayer.size());
 }
+//-------------------------------------------------------------------------------------------------
+void Iterator::apply(NeuronAct action) {
+    for (int I = 0; I < neuronLayer.size(); ++I)
+        action(* neuronLayer[I]);
+}
+
+void Iterator::apply(UnmodNeuronAct action) {
+    for (int I = 0; I < neuronLayer.size(); ++I)
+        action(* neuronLayer[I]);
+}
+
+void Iterator::apply(UnsafeNeuronAct action) {
+    for (int I = 0; I < neuronLayer.size(); ++I)
+        action(neuronLayer[I]);
+}
+
 }//namespace NeuNets

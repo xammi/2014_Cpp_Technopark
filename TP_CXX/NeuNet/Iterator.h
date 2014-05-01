@@ -6,12 +6,10 @@
 
 namespace NeuNets {
 
-typedef std::function< void(Neuron *) > NeuronAction;
-
 class Iterator : public AbstractIterator
 {
     friend class MultiLayerNet;
-    friend class MultiLayerDestroyer;
+    friend class Factory::MultiLayerDestroyer;
 
 public:
 
@@ -22,12 +20,11 @@ public:
     const Neuron &nextNeuron(); // increase ptrPos if possible and return pointer to Neuron at ptrPos
     const Neuron &prevNeuron(); // decrease ptrPos if possible and return pointer to Neuron at ptrPos
 
-    bool operator==(const Iterator &rhs)const { return (neuronLayer == rhs.neuronLayer); }
-    bool operator!=(const Iterator &rhs)const { return (neuronLayer != rhs.neuronLayer); }
+    bool operator==(const Iterator &rhs) const { return (neuronLayer == rhs.neuronLayer); }
+    bool operator!=(const Iterator &rhs) const { return (neuronLayer != rhs.neuronLayer); }
 
-    void apply(NeuronAction action);
-
-    // EG changed it унаследовать итератор !
+    void apply(UnmodNeuronAct);
+    void apply(NeuronAct);
 
 protected:
     Iterator(const NeuVec &);
@@ -35,9 +32,9 @@ protected:
     NeuVec neuronLayer;
     int ptrPos; //contains the position of pointer in vector
 
+    void apply(UnsafeNeuronAct);
     bool isCorrect();
 };
 }//namespace NeuNets
 #endif // ITERATOR_H
-
 

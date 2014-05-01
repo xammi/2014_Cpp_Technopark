@@ -5,14 +5,12 @@ namespace NeuNets {
 MultiLayerNet::MultiLayerNet() : sigmoid(FuncDisp::func("Sigmoid")) {
     inLayerNum = 0;
     outLayerNum = 0;
-
 }
 
 MultiLayerNet::MultiLayerNet (const Func &sigma,
                               const NeuVec &inNeuVec,
                               const NeuVec &outNeuVec)
-    : sigmoid(sigma),
-      inNeurons(inNeuVec), outNeurons(outNeuVec)
+    :    inNeurons(inNeuVec), outNeurons(outNeuVec), sigmoid(sigma)
 {
     outLayerNum = outNeuVec.size();
     inLayerNum = inNeuVec.size();
@@ -34,7 +32,7 @@ OutputData MultiLayerNet::getResponse(const InputData &imgs) {
         buf = netNeuron->summup(imgs, sigmoid);
         if(buf > result) {
             result = buf;
-            answer = netNeuron->value;
+            //answer = netNeuron->value;
         }
     }
     return answer;

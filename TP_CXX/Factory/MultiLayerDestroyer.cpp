@@ -16,7 +16,7 @@ MultiLayerDestroyer::MultiLayerDestroyer() {
 
     deleteNeurons = [ this ] (NeuNets::Neuron * neuron)->void {
         if (neuron) {
-            neuron->apply(deleteSynapses, NeuNets::IN_OUT);
+            neuron->apply(deleteSynapses, NeuNets::IN);
             delete neuron;
         }
     };

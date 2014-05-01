@@ -22,7 +22,25 @@ double Neuron::summup(InputData imgs, const Func &sigmoid){
     return outputValue;
 }
 
-void Neuron::apply(SynapseAction action, const SynapseType type){
+void Neuron::changeOutSyn(double *neuWeights){
+    int outSynNum = outSyn.size();
+    for (int i = 0; i < outSynNum; i++){
+        outSyn[i]->weight = neuWeights[i];
+    }
+}
+
+//-------------------------------------------------------------------------------------------------
+void Neuron::apply(SynapseAct action, const SynapseType type){
+    if (type ==IN || type == IN_OUT)
+        for (int I = 0; I < inSyn.size(); ++I)
+            action(* inSyn[I]);
+
+    if (type == OUT || type == IN_OUT)
+        for (int I = 0; I < outSyn.size(); ++I)
+            action(* outSyn[I]);
+}
+
+void Neuron::apply(UnsafeSynapseAct action, const SynapseType type) {
     if (type ==IN || type == IN_OUT)
         for (int I = 0; I < inSyn.size(); ++I)
             action(inSyn[I]);
@@ -30,13 +48,6 @@ void Neuron::apply(SynapseAction action, const SynapseType type){
     if (type == OUT || type == IN_OUT)
         for (int I = 0; I < outSyn.size(); ++I)
             action(outSyn[I]);
-}
-
-void Neuron::changeOutSyn(double *neuWeights){
-    int outSynNum = outSyn.size();
-    for (int i = 0; i < outSynNum; i++){
-        outSyn[i]->weight = neuWeights[i];
-    }
 }
 
 }//namespace NeuNets

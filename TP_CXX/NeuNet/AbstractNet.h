@@ -8,6 +8,10 @@ namespace NeuNets {
 
 typedef QVector<Neuron *> NeuVec;
 
+typedef function< void (Neuron *) > UnsafeNeuronAct;
+typedef function< void (Neuron &) > NeuronAct;
+typedef function< void (const Neuron &) > UnmodNeuronAct;
+
 class AbstractNet
 {
 public:
