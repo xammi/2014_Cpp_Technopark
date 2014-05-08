@@ -11,11 +11,6 @@ namespace NeuNets {
 using DataProcess::InputData;
 using DataProcess::OutputData;
 
-typedef QVector<double> row;
-
-struct NetImage{
-    QVector<row *> *rows;
-};
 
 enum neuronPos { INPUT = 0, HIDDEN, OUTPUT };
 
@@ -28,8 +23,8 @@ struct Synaps;
 class Neuron  {
 public:
     Neuron();
-    double summup(InputData imgs, func sigmoid);
-    void setSynapse(Neuron *otherNeu, double weight); //Set weight of synapse between this Neuron and otherNeu
+    double summup(InputData *imgs, func sigmoid, int i) const;
+    void setSynaps(Neuron *otherNeu, double weight); //Set weight of synapse between this Neuron and otherNeu
 
     OutputData value;
 
@@ -51,6 +46,19 @@ struct Synaps {
     Neuron *from;
 };
 
+//================================================================
+struct  NoImage: public Exception {
+    QString toString() { return "Fail to get image for response"; }
+};
+struct  NoNeuron: public Exception {
+    QString toString() { return "Fail to get neuron for set weight"; }
+};
+struct  FailLink: public Exception {
+    QString toString() { return "No link between neurons. Can't put weight"; }
+};
+struct  NoWeights: public Exception {
+    QString toString() { return "Can't get weight array"; }
+};
 
 
 }//namespace NeuNets

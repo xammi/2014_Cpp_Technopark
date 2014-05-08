@@ -8,59 +8,45 @@ Iterator::Iterator(const NeuVec &NV){
 
 
 void Iterator::prevLayer(){
-/*    if(isCorrect()){
-        //check existance of previous layer
-        if((neuronLayer[0]).layer == "input")
-            throw("No previous layer");
-        else {
-            int curLayerSize = neuronLayer.size();
-            Neuron curLayerNeuron = neuronLayer[0];
-            int prevLayerSize = (curLayerNeuron.getInSyn())->size() ;
-
-            Synaps pathSynaps;
-            for(int i = 0; i < prevLayerSize; i++){
-                pathSynaps = curLayerNeuron.getInSyn()->at(i);
-                neuronLayer.push_front(*pathSynaps.from);
-            }
-
-            for(int i = 0; i < curLayerSize; i++){
-                neuronLayer.pop_back();
-            }
-            ptrPos = 0;
-        }
-    }
+    if(! isCorrect()) throw FailInitializedIter;
+    if((neuronLayer[0]).layer == "input")
+        throw NoPrevLayer;
     else {
-        throw("Iterator not initializated");
-    }
+        int curLayerSize = neuronLayer.size();
+        Neuron curLayerNeuron = neuronLayer[0];
+        int prevLayerSize = (curLayerNeuron.getInSyn())->size() ;
 
-*/
+        Synaps pathSynaps;
+        for(int i = 0; i < prevLayerSize; i++){
+            pathSynaps = (curLayerNeuron.getInSyn())[i];
+            neuronLayer.push_front(*pathSynaps.from);
+        }
+
+        for(int i = 0; i < curLayerSize; i++){
+            neuronLayer.pop_back();
+        }
+        ptrPos = 0;
+    }
 }
 
 void Iterator::nextLayer(){
-  /*  if(isCorrect()){
-        //check existance of previous layer
-        if((neuronLayer.at(0)).layer == "output")
-            throw("No next layer");
-        else {
-            int curLayerSize = neuronLayer.size();
-            Neuron curLayerNeuron = neuronLayer.at(0);
-            int nextLayerSize = (curLayerNeuron.getOutSyn())->size() ;
-            Synaps pathSynaps;
+    if(! isCorrect()) throw FailInitializedIter;
+    if((neuronLayer[0]).layer == "output") throw NoNextLayer;
 
-            for(int i = 0; i < nextLayerSize; i++){
-                pathSynaps = curLayerNeuron.getInSyn()->at(i);
-                neuronLayer.push_front(*pathSynaps.to);
-            }
+    int curLayerSize = neuronLayer.size();
+    Neuron curLayerNeuron = neuronLayer[0];
+    int nextLayerSize = (curLayerNeuron.getOutSyn())->size() ;
+    Synaps pathSynaps;
 
-            for(int i = 0; i < curLayerSize; i++){
-                neuronLayer.pop_back();
-            }
-            ptrPos = 0;
-        }
+    for(int i = 0; i < nextLayerSize; i++){
+        pathSynaps = (curLayerNeuron.getInSyn())[i];
+        neuronLayer.push_front(*pathSynaps.to);
     }
-    else {
-        throw("Iterator not initializated");
-    }*/
+
+    for(int i = 0; i < curLayerSize; i++){
+        neuronLayer.pop_back();
+    }
+    ptrPos = 0;
 }
 
 const Neuron &Iterator::operator[](int i){
@@ -69,7 +55,7 @@ const Neuron &Iterator::operator[](int i){
         return *neuronLayer[i];
     }
     else
-        throw ("Iterator not initialized");
+        throw FailInitializedIter;
 
 }
 
@@ -79,7 +65,7 @@ const Neuron &Iterator::nextNeuron(){
         return *neuronLayer[ptrPos];
     }
     else
-        throw("Iterator not initialized");
+        throw FailInitializedIter;
 
 }
 
@@ -89,7 +75,7 @@ const Neuron &Iterator::prevNeuron(){
         return *neuronLayer[ptrPos];
     }
     else
-        throw ("Iterator not initialized");
+        throw FailInitializedIter;
 }
 
 bool Iterator::isCorrect(){

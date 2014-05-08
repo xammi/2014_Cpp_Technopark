@@ -22,8 +22,8 @@ MultiLayerNet::~MultiLayerNet() {
 
 }
 
-OutputData MultiLayerNet::getResponse(const InputData &imgs) {
-    //check correctivity of Image
+OutputData MultiLayerNet::getResponse(const InputData &imgs) const{
+    if(!imgs.isCorrect()) throw NoImage;
 
     double result = 0;
     double buf = 0;
@@ -31,7 +31,7 @@ OutputData MultiLayerNet::getResponse(const InputData &imgs) {
     Neuron *netNeuron;
     for (int i = 0; i < outLayerNum; i++) {
         netNeuron = outNeurons.at(i);
-        buf = netNeuron->summup(imgs, sigmoid);
+        buf = netNeuron->summup(&imgs, sigmoid, i);
         if(buf > result) {
             result = buf;
             answer = netNeuron->value;

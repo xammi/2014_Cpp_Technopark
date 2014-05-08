@@ -19,13 +19,25 @@ public:
 
 private:
     Iterator(const NeuVec &);
-    Iterator(const Iterator&);
-    Iterator operator = (const Iterator&);
     NeuVec neuronLayer;
     int ptrPos; //contains the position of pointer in vector
 
     bool isCorrect();
 };
+//-------------------------------------------------------------------------------------------------
+struct  FailInitializedIter: public Exception {
+    QString toString() { return "Failed to initialize the iterator"; }
+};
+
+struct  NoPrevLayer: public Exception {
+    QString toString() { return "No previous layer"; }
+};
+
+struct  NoNextLayer: public Exception {
+    QString toString() { return "No next layer"; }
+};
+
+
 }//namespace NeuNets
 #endif // ITERATOR_H
 
