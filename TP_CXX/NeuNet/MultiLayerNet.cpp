@@ -9,8 +9,9 @@ MultiLayerNet::MultiLayerNet() : sigmoid(FuncDisp::func("Sigmoid")) {
 
 MultiLayerNet::MultiLayerNet (const Func &sigma,
                               const NeuVec &inNeuVec,
-                              const NeuVec &outNeuVec)
-    :    inNeurons(inNeuVec), outNeurons(outNeuVec), sigmoid(sigma)
+                              const NeuVec &outNeuVec,
+                              const uint _layersCnt)
+    :    inNeurons(inNeuVec), outNeurons(outNeuVec), sigmoid(sigma), layersCnt(_layersCnt)
 {
     outLayerNum = outNeuVec.size();
     inLayerNum = inNeuVec.size();

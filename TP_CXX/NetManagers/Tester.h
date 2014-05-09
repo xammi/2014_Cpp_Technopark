@@ -4,8 +4,7 @@
 #include "../NeuNet/AbstractNet.h"
 #include "../NetTutors/TutitionData.h"
 
-#include "../DataProcess/InputData.h"
-#include "../DataProcess/OutputData.h"
+#include "../DataProcess/AbstractProcessor.h"
 
 namespace NetManagers {
 

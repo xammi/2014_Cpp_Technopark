@@ -40,8 +40,6 @@ HEADERS  += \
     DataProcess/AbstractStorage.h \
     DataProcess/ImageProcessor.h \
     DataProcess/ImageStorage.h \
-    DataProcess/OutputData.h \
-    DataProcess/InputData.h \
 \
     NetManagers/NetProcessor.h \
     NetManagers/NeuNetUI.h \

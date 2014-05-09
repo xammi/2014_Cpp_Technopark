@@ -26,6 +26,8 @@ public:
     void apply(UnmodNeuronAct);
     void apply(NeuronAct);
 
+    int count() const { return neuronLayer.size(); }
+
 protected:
     Iterator(const NeuVec &);
 

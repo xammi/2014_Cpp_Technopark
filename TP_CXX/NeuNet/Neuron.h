@@ -3,8 +3,7 @@
 
 #include "../includes.h"
 #include "../PtrVector.h"
-#include "../DataProcess/InputData.h"
-#include "../DataProcess/OutputData.h"
+#include "../DataProcess/AbstractProcessor.h"
 #include "../NetFunction.h"
 #include <functional>
 

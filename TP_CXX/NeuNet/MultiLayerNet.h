@@ -19,10 +19,13 @@ public:
     Iterator getInLayer() const;
     Iterator getOutLayer() const;
 
+    uint count() const { return layersCnt; }
+
 private:
     NeuVec outNeurons;
     NeuVec inNeurons;
     uint inLayerNum, outLayerNum;
+    uint layersCnt;
     Func sigmoid;
 };
 
