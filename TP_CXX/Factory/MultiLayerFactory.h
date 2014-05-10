@@ -23,7 +23,6 @@ class MultiLayerFactory: public AbstractNetFactory
         uint neuroCount;
 
         NeuNets::NeuVec neuron;
-        QVector <NeuNets::Synaps *> synaps;
     };
 
 private:
