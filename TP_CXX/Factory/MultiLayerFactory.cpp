@@ -134,7 +134,7 @@ void MultiLayerFactory::allocMemory() {
         prevLayer = curLayer;
     }
     NeuNets::NeuVec outToSend = curLayer->neuron;
-    bpNewNet = new NeuNets::MultiLayerNet(FuncDisp::func(nnInfo.funcName) , inToSend, outToSend);
+    bpNewNet = new NeuNets::MultiLayerNet(FuncDisp::func(nnInfo.funcName) , inToSend, outToSend, 0); // ?? TODO
 }
 
 

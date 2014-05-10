@@ -11,7 +11,7 @@ class MultiLayerNet : public AbstractNet {
 
 public:
     MultiLayerNet();
-    MultiLayerNet(const Func & sigmoid, const NeuVec &inNeu, const NeuVec &outNeu);
+    MultiLayerNet(const Func &, const NeuVec &, const NeuVec &, const uint);
     ~MultiLayerNet();
 
     OutputData getResponse(const InputData &imgs);

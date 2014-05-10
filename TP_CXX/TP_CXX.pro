@@ -63,4 +63,5 @@ HEADERS  += \
     NetFunction.h
 
 
-FORMS    +=   NetManagers/neunetui.ui
+FORMS    +=   NetManagers/neunetui.ui \
+    NetManagers/createNet.ui

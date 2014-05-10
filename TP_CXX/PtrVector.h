@@ -7,9 +7,6 @@
 struct Containable {
 };
 
-typedef int Index;
-typedef const Index CIndex;
-
 //-------------------------------------------------------------------------------------------------
 template <typename Value>
 class PtrVector : public QVector<Value *>

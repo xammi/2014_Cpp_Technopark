@@ -30,26 +30,37 @@ void NetProcessor::setDefaultConf() {
 }
 
 void NetProcessor::connectUI() {
-    connect(gui, SIGNAL(onLoadNet()), SLOT(onLoadNet()));
-    connect(gui, SIGNAL(onCreateNet()), SLOT(onCreateNet()));
-    connect(gui, SIGNAL(onCreateTopology()), SLOT(onCreateTopology()));
+    connect(gui, SIGNAL(loadNet(QString)), SLOT(onLoadNet(QString)));
+    connect(gui, SIGNAL(createNets(int, NCount)), SLOT(onCreateNets(int, NCount)));
+    connect(gui, SIGNAL(saveNet(QString, CIndex)), SLOT(onSaveNet(QString, CIndex)));
+    connect(gui, SIGNAL(removeNet(CIndex)), SLOT(onRemoveNet(CIndex)));
 
-    connect(gui, SIGNAL(onAddData()), SLOT(onAddData()));
-    connect(gui, SIGNAL(onRemoveData()), SLOT(onRemoveData()));
-    connect(gui, SIGNAL(onFormDataSet()), SLOT(onFormDataSet()));
+    connect(gui, SIGNAL(addData()), SLOT(onAddData()));
+    connect(gui, SIGNAL(removeData()), SLOT(onRemoveData()));
+    connect(gui, SIGNAL(formDataSet()), SLOT(onFormDataSet()));
 
-    connect(gui, SIGNAL(onTestNetSingle()), SLOT(onTestNetSingle()));
-    connect(gui, SIGNAL(onTestNetDataSet()), SLOT(onTestNetDataSet()));
-
-    connect(gui, SIGNAL(onTeachNet()), SLOT(onTeachNet()));
-    connect(gui, SIGNAL(onSaveNet()), SLOT(onSaveNet()));
-    connect(gui, SIGNAL(onRemoveNet()), SLOT(onRemoveNet()));
+    connect(gui, SIGNAL(testNetSingle()), SLOT(onTestNetSingle()));
+    connect(gui, SIGNAL(testNetDataSet()), SLOT(onTestNetDataSet()));
+    connect(gui, SIGNAL(teachNet()), SLOT(onTeachNet()));
 }
 
 //-------------------------------------------------------------------------------------------------
-void NetProcessor::onLoadNet() {}
-void NetProcessor::onCreateNet() {}
-void NetProcessor::onCreateTopology() {}
+void NetProcessor::onLoadNet(QString) {
+    qDebug() << "on load";
+}
+
+void NetProcessor::onCreateNets(int, NCounts) {
+    qDebug() << "on create";
+}
+
+void NetProcessor::onSaveNet(QString, CIndex) {
+    qDebug() << "on save";
+}
+
+void NetProcessor::onRemoveNet(CIndex) {
+    qDebug() << "on remove";
+}
+//-------------------------------------------------------------------------------------------------
 
 void NetProcessor::onAddData() {}
 void NetProcessor::onRemoveData() {}
@@ -57,9 +68,6 @@ void NetProcessor::onFormDataSet() {}
 
 void NetProcessor::onTestNetSingle() {}
 void NetProcessor::onTestNetDataSet() {}
-
 void NetProcessor::onTeachNet() {}
-void NetProcessor::onSaveNet() {}
-void NetProcessor::onRemoveNet() {}
 //-------------------------------------------------------------------------------------------------
 } // namespace NetManagers

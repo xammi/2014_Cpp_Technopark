@@ -24,9 +24,10 @@ class NetProcessor : public QObject {
     Q_OBJECT
 
 private slots:
-    void onLoadNet();
-    void onCreateNet();
-    void onCreateTopology();
+    void onLoadNet(QString);
+    void onSaveNet(QString, CIndex);
+    void onRemoveNet(CIndex);
+    void onCreateNets(int, NCounts);
 
     void onAddData();
     void onRemoveData();
@@ -36,8 +37,6 @@ private slots:
     void onTestNetDataSet();
 
     void onTeachNet();
-    void onSaveNet();
-    void onRemoveNet();
 
 public:
     static const NetProcessor & get_self();
