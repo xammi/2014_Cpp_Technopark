@@ -4,6 +4,7 @@
 #include "Neuron.h"
 #include "AbstractNet.h"
 #include "Iterator.h"
+#include "../DataProcess/AbstractProcessor.h"
 
 namespace NeuNets {
 
@@ -11,10 +12,15 @@ class MultiLayerNet : public AbstractNet {
 
 public:
     MultiLayerNet();
-    MultiLayerNet(const Func & sigmoid, const NeuVec &inNeu, const NeuVec &outNeu);
+
+    MultiLayerNet (const Func &sigma,
+                   const NeuVec &inNeuVec,
+                   const NeuVec &outNeuVec,
+                   const uint _layersCnt
+                   );
     ~MultiLayerNet();
 
-    OutputData getResponse(const InputData &imgs);
+    DataProcess::OutputData getResponse(const InputData &imgs);
 
     Iterator getInLayer() const;
     Iterator getOutLayer() const;

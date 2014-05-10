@@ -134,7 +134,7 @@ void MultiLayerFactory::allocMemory() {
         prevLayer = curLayer;
     }
     NeuNets::NeuVec outToSend = curLayer->neuron;
-    bpNewNet = new NeuNets::MultiLayerNet(FuncDisp::func(nnInfo.funcName) , inToSend, outToSend);
+    bpNewNet = new NeuNets::MultiLayerNet(FuncDisp::func(nnInfo.funcName) , inToSend, outToSend, nnInfo.layersCount);
 }
 
 
@@ -150,7 +150,6 @@ void MultiLayerFactory::assembly(Layer &prevLayer, Layer &curLayer, int layerPos
                 weight = weights[layerPos - 1][i + j + offset]; //
             }
 
-            NeuNets::Synaps *bufSynapse = new NeuNets::Synaps();
             NeuNets::Synaps *bufSynapse = new NeuNets::Synaps(prevLayer.neuron[i], curLayer.neuron[j], weight);
             prevLayer.neuron[i]->setSynapse(bufSynapse);
             curLayer.neuron[i]->setSynapse(bufSynapse);

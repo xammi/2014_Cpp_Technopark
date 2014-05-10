@@ -1,4 +1,5 @@
 #include "MultiLayerNet.h"
+#include "../DataProcess/AbstractProcessor.h"
 
 namespace NeuNets {
 
@@ -21,12 +22,12 @@ MultiLayerNet::~MultiLayerNet() {
 
 }
 
-OutputData MultiLayerNet::getResponse(const InputData &imgs) {
+DataProcess::OutputData MultiLayerNet::getResponse(const InputData &imgs) {
     //check correctivity of Image
 
     double result = 0;
     double buf = 0;
-    OutputData answer;
+    DataProcess::OutputData localAnswer;
     Neuron *netNeuron;
     for (int i = 0; i < outLayerNum; i++) {
         netNeuron = outNeurons.at(i);
@@ -36,7 +37,7 @@ OutputData MultiLayerNet::getResponse(const InputData &imgs) {
             //answer = netNeuron->value;
         }
     }
-    return answer;
+    return localAnswer;
 }
 
 Iterator MultiLayerNet::getInLayer() const{

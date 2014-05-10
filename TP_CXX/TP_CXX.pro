@@ -15,8 +15,6 @@ CONFIG += c++11
 SOURCES += main.cpp \
     DataProcess/ImageProcessor.cpp \
     DataProcess/ImageStorage.cpp \
-    DataProcess/OutputData.cpp \
-    DataProcess/InputData.cpp \
 \
     NetManagers/NetProcessor.cpp \
     NetManagers/NeuNetUI.cpp \
