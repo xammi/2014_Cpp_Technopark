@@ -8,7 +8,7 @@ namespace DataProcess {
 class InputData
 {
 public:
-    InputData();
+    InputData() {}
     QVector <int> values;
     bool operator == (const InputData &) { return true; }
 };
@@ -16,7 +16,7 @@ public:
 class OutputData
 {
 public:
-    OutputData();
+    OutputData() {}
     QVector <int> values;
     bool operator == (const OutputData &) { return true; }
 };

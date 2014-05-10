@@ -3,9 +3,13 @@
 
 #include "Neuron.h"
 #include "AbstractNet.h"
+#include "../DataProcess/AbstractProcessor.h"
 #include "Iterator.h"
 
 namespace NeuNets {
+
+using DataProcess::OutputData;
+using DataProcess::InputData;
 
 class MultiLayerNet : public AbstractNet {
 
