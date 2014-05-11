@@ -8,16 +8,16 @@ namespace DataProcess {
 class InputData
 {
 public:
-    InputData();
-    QVector <int> values;
+    InputData() {;}
+    QVector <double> values;
     bool operator == (const InputData &) { return true; }
 };
 
 class OutputData
 {
 public:
-    OutputData();
-    QVector <int> values;
+    OutputData() {;}
+    QVector <double> values;
     bool operator == (const OutputData &) { return true; }
 };
 

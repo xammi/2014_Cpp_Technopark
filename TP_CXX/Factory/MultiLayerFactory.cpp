@@ -172,4 +172,11 @@ NeuNets::MultiLayerNet *MultiLayerFactory::createFromInfo(BuildInfo newInfo) {
     return bpNewNet;
 }
 
+void MultiLayerFactory::createMultipleNets(BuildInfo newInfo, int count)
+{
+    for(int i = 0; i < count; ++i){
+        createFromInfo(newInfo);
+    }
+}
+
 } // namespace Factory

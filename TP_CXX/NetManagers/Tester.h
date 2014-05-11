@@ -21,6 +21,10 @@ public:
     Tester(AbstractNet *);
 
     CompResult test(const InputData &, const OutputData &);
+
+    // Function from EG Функция пишет в currentErrors ошибки последнего слоя сети
+    void process(QVector<DataProcess::InputData *> *inputs, QVector<DataProcess::OutputData *> *outputs, DataProcess::OutputData *currentErrors, NeuNets::AbstractNet *currentNet) {;}
+
     void setTarget(AbstractNet *);
 
 private:

@@ -42,6 +42,7 @@ public:
 
     NeuNets::MultiLayerNet *createFromFile(const QString &filename);
     NeuNets::MultiLayerNet *createFromInfo(BuildInfo newInfo);
+    void createMultipleNets(BuildInfo newInfo, int count);
 
     void parseFile(const QString &filename);
     void writeFile(const QString &filename);
