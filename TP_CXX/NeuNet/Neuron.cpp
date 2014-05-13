@@ -1,5 +1,5 @@
 #include "Neuron.h"
-
+#include "/../AbstractProcessor.h"
 
 namespace NeuNets {
 
@@ -7,21 +7,35 @@ Neuron::Neuron() {
 
 }
 
-double Neuron::summup(InputData *imgs, func sigmoid, int i) const{
-    if (imgs == NULL) throw NoImage;
-        double outputValue = 0;
-        if(layer == INPUT) {
-            return imgs->getAt(i);
-        }
-        else {
-            int prevLayerSize = inSyn.size();
-            for(int i = 0; i < prevLayerSize; i++){
-                outputValue += inSyn[i]->weight * inSyn[i]->from->summup(imgs, sigmoid, i);
-            }
-            outputValue = sigmoid(outputValue);
-        }
-        return outputValue;
 
+void Neuron::summup(const Func &sigmoid) const{
+    value = 0;
+    int prevLayerSize = inSyn.size();
+    for (int i = 0; i < prevLayerSize; i++){
+        value += inSyn[i]->weight * inSyn[i]->from->value;
+    }
+    value = sigmoid(value);
+
+    /*
+    apply([ this ] (Synaps * synaps) {
+        value += synaps->weight * synaps->from->value;
+    }, IN);
+    */
+}
+
+void Neuron::setSynapse(Synaps *syn){
+    if(syn == 0)
+        throw NoNeuron;
+
+    if(syn->from == this){
+        this->outSyn.append(syn);
+    }
+    else if(syn->to == this){
+        this->inSyn.append(syn);
+    }
+    else{
+        throw FailLink;
+    }
 }
 
 
@@ -52,6 +66,26 @@ void Neuron::changeOutSyn(double *neuWeights){
     }
 }
 
+//-------------------------------------------------------------------------------------------------
+void Neuron::apply(SynapseAct action, const SynapseType type){
+    if (type ==IN || type == IN_OUT)
+        for (int I = 0; I < inSyn.size(); ++I)
+            action(* inSyn[I]);
+
+    if (type == OUT || type == IN_OUT)
+        for (int I = 0; I < outSyn.size(); ++I)
+            action(* outSyn[I]);
+}
+
+void Neuron::apply(UnsafeSynapseAct action, const SynapseType type) {
+    if (type ==IN || type == IN_OUT)
+        for (int I = 0; I < inSyn.size(); ++I)
+            action(inSyn[I]);
+
+    if (type == OUT || type == IN_OUT)
+        for (int I = 0; I < outSyn.size(); ++I)
+            action(outSyn[I]);
+}
 
 
 }//namespace NeuNets

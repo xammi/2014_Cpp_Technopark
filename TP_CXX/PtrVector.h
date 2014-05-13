@@ -17,7 +17,7 @@ class PtrVector : public QVector<Value *>
 public:
     PtrVector() {
         static_assert(std::is_base_of <Containable, Value>::value,
-                      u"Содержимое PtrVector должно быть унаследовано от Containable");
+                      "PtrVector value_type must inherit Containable");
     }
 
     ~PtrVector() {
@@ -26,8 +26,9 @@ public:
 
     void clear() {
         for (int I = 0; I < this->size(); ++I)
-            if (this->at(I))
-                delete this->at(I);
+            if (this->operator [](I)) {
+                delete (this->operator [](I));
+            }
 
         QVector<Value *>::clear();
     }

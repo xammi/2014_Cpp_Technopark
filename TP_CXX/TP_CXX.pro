@@ -15,8 +15,6 @@ CONFIG += c++11
 SOURCES += main.cpp \
     DataProcess/ImageProcessor.cpp \
     DataProcess/ImageStorage.cpp \
-    DataProcess/OutputData.cpp \
-    DataProcess/InputData.cpp \
 \
     NetManagers/NetProcessor.cpp \
     NetManagers/NeuNetUI.cpp \
@@ -25,11 +23,12 @@ SOURCES += main.cpp \
     NetTutors/BackPropTutor.cpp \
 \
     Factory/MultiLayerFactory.cpp \
-    Factory/NnDestroyer.cpp \
+    Factory/MultiLayerDestroyer.cpp \
 \
     NeuNet/Neuron.cpp \
     NeuNet/Iterator.cpp \
-    NeuNet/MultiLayerNet.cpp
+    NeuNet/MultiLayerNet.cpp \
+    NetFunction.cpp
 
 HEADERS  += \
     includes.h \
@@ -39,8 +38,6 @@ HEADERS  += \
     DataProcess/AbstractStorage.h \
     DataProcess/ImageProcessor.h \
     DataProcess/ImageStorage.h \
-    DataProcess/OutputData.h \
-    DataProcess/InputData.h \
 \
     NetManagers/NetProcessor.h \
     NetManagers/NeuNetUI.h \
@@ -52,14 +49,16 @@ HEADERS  += \
 \
     Factory/AbstractNetFactory.h \
     Factory/MultiLayerFactory.h \
-    Factory/NnAbstractDestroyer.h \
-    Factory/NnDestroyer.h \
+    Factory/MultiLayerDestroyer.h \
     Factory/BuildInfo.h \
+    Factory/AbstractNetDestroyer.h \
 \
     NeuNet/Neuron.h \
     NeuNet/Iterator.h \
     NeuNet/MultiLayerNet.h \
     NeuNet/AbstractIterator.h \
-    NeuNet/AbstractNet.h
+    NeuNet/AbstractNet.h \
+    NetFunction.h
+
 
 FORMS    +=   NetManagers/neunetui.ui

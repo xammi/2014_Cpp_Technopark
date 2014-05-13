@@ -2,6 +2,7 @@
 
 namespace NeuNets {
 Iterator::Iterator(const NeuVec &NV){
+    zeroFlags();
     neuronLayer = NV;
     ptrPos = 0;
 }
@@ -9,29 +10,46 @@ Iterator::Iterator(const NeuVec &NV){
 
 void Iterator::prevLayer(){
     if(! isCorrect()) throw FailInitializedIter;
-    if((neuronLayer[0]).layer == "input")
-        throw NoPrevLayer;
-    else {
-        int curLayerSize = neuronLayer.size();
-        Neuron curLayerNeuron = neuronLayer[0];
-        int prevLayerSize = (curLayerNeuron.getInSyn())->size() ;
-
-        Synaps pathSynaps;
-        for(int i = 0; i < prevLayerSize; i++){
-            pathSynaps = (curLayerNeuron.getInSyn())[i];
-            neuronLayer.push_front(*pathSynaps.from);
-        }
-
-        for(int i = 0; i < curLayerSize; i++){
-            neuronLayer.pop_back();
-        }
-        ptrPos = 0;
+    if (flagPseudoEnd){
+        flagPseudoEnd == false;
+        return;
     }
+
+    if (flagPseudoBegin) return;
+    if((neuronLayer[0]).layer == INPUT){
+        flagPseudoBegin = true;
+        return;
+    }
+
+    int curLayerSize = neuronLayer.size();
+    Neuron curLayerNeuron = neuronLayer[0];
+    int prevLayerSize = (curLayerNeuron.getInSyn())->size() ;
+
+    Synaps pathSynaps;
+    for(int i = 0; i < prevLayerSize; i++){
+        pathSynaps = (curLayerNeuron.getInSyn())[i];
+        neuronLayer.push_front(*pathSynaps.from);
+    }
+
+    for(int i = 0; i < curLayerSize; i++){
+        neuronLayer.pop_back();
+    }
+    ptrPos = 0;
+
 }
 
 void Iterator::nextLayer(){
-    if(! isCorrect()) throw FailInitializedIter;
-    if((neuronLayer[0]).layer == "output") throw NoNextLayer;
+    if (!isCorrect()) throw FailInitializedIter;
+    if (flagPseudoBegin){
+        flagPseudoBegin = false;
+        return;
+    }
+
+    if (flagPseudoEnd) return;
+    if((neuronLayer[0]).layer == OUTPUT){
+        flagPseudoEnd = true;
+        return;
+    }
 
     int curLayerSize = neuronLayer.size();
     Neuron curLayerNeuron = neuronLayer[0];
@@ -50,6 +68,11 @@ void Iterator::nextLayer(){
 }
 
 const Neuron &Iterator::operator[](int i){
+    if(flagPseudoEnd)
+        throw NoNextLayer;
+    if(flagPseudoBegin)
+        throw NoPrevLayer;
+
     if(isCorrect()){
         ptrPos = i;
         return *neuronLayer[i];
@@ -60,6 +83,11 @@ const Neuron &Iterator::operator[](int i){
 }
 
 const Neuron &Iterator::nextNeuron(){
+    if(flagPseudoEnd)
+        throw NoNextLayer;
+    if(flagPseudoBegin)
+        throw NoPrevLayer;
+
     if(isCorrect()){
         ptrPos ++;
         return *neuronLayer[ptrPos];
@@ -70,6 +98,11 @@ const Neuron &Iterator::nextNeuron(){
 }
 
 const Neuron &Iterator::prevNeuron(){
+    if(flagPseudoEnd)
+        throw NoNextLayer;
+    if(flagPseudoBegin)
+        throw NoPrevLayer;
+
     if(isCorrect()){
         ptrPos --;
         return *neuronLayer[ptrPos];
@@ -81,4 +114,20 @@ const Neuron &Iterator::prevNeuron(){
 bool Iterator::isCorrect(){
     return bool(neuronLayer.size());
 }
+//-------------------------------------------------------------------------------------------------
+void Iterator::apply(NeuronAct action) {
+    for (int I = 0; I < neuronLayer.size(); ++I)
+        action(* neuronLayer[I]);
+}
+
+void Iterator::apply(UnmodNeuronAct action) {
+    for (int I = 0; I < neuronLayer.size(); ++I)
+        action(* neuronLayer[I]);
+}
+
+void Iterator::apply(UnsafeNeuronAct action) {
+    for (int I = 0; I < neuronLayer.size(); ++I)
+        action(neuronLayer[I]);
+}
+
 }//namespace NeuNets

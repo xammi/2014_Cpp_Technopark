@@ -4,8 +4,8 @@
 
 #include "AbstractNet.h"
 #include "Iterator.h"
-#include "/../DataProcess/InputData.h"
-#include "/../DataProcess/OutputData.h"
+#include "../DataProcess/AbstractProcessor.h"
+
 
 namespace NeuNets {
 
@@ -16,22 +16,33 @@ class MultiLayerNet : public AbstractNet {
 
 public:
     MultiLayerNet();
-    MultiLayerNet(func sigmoid, const NeuVec &inNeu, const NeuVec &outNeu);
+
+    MultiLayerNet (const Func &sigma,
+                   const NeuVec &inNeuVec,
+                   const NeuVec &outNeuVec,
+                   const uint _layersCnt
+                   );
     ~MultiLayerNet();
 
-    OutputData getResponse(const InputData &imgs) const;
+    DataProcess::OutputData getResponse(const InputData &imgs) const;
+
 
     Iterator getInLayer() const;
     Iterator getOutLayer() const;
+    Iterator getAfterOut() const;
+    Iterator getBeforeIn() const;
+
+    uint count() const { return layersCnt; }
 
 private:
     NeuVec outNeurons;
     NeuVec inNeurons;
     uint inLayerNum, outLayerNum;
-    func sigmoid;
+    uint layersCnt;
+    Func sigmoid;
 };
 //================================================================
-struct  NoImage: public Exception {
+struct  NoImageForResp: public Exception {
     QString toString() { return "Fail to get image for response"; }
 };
 

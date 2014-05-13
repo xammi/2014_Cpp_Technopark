@@ -6,6 +6,25 @@
 #include "../NetManagers/Tester.h"
 namespace NetTutors {
 
+//-------------------------------------
+struct NetNotFound : public Exception {
+    QString toString() { return "Сеть не задана"; }
+};
+
+struct TesterNotFound : public Exception {
+    QString toString() { return "Не найден тестер"; }
+};
+//--------------------------------------
+
+/*
+ * Input Data:
+ * 1. QVector of QVector of input layer weights
+ * 2. QVector of QVector of output layer weights
+ */
+
+
+
+
 //-------------------------------------------------------------------------------------------------
 class BackPropTutor : public AbstractTutor {
     Q_OBJECT

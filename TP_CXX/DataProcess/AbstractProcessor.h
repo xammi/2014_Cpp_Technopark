@@ -1,10 +1,25 @@
 #ifndef ABSTRACTPROCESSOR_H
 #define ABSTRACTPROCESSOR_H
 
-#include "InputData.h"
-#include "OutputData.h"
+#include "../includes.h"
 
 namespace DataProcess {
+
+class InputData
+{
+public:
+    InputData();
+    QVector <int> values;
+    bool operator == (const InputData &) { return true; }
+};
+
+class OutputData
+{
+public:
+    OutputData();
+    QVector <int> values;
+    bool operator == (const OutputData &) { return true; }
+};
 
 //-------------------------------------------------------------------------------------------------
 struct AbstractProcessor : public QObject {
