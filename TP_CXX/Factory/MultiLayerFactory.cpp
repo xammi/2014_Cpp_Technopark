@@ -137,6 +137,7 @@ void MultiLayerFactory::allocMemory() {
     }
     NeuNets::NeuVec outToSend = curLayer->neuron;
     bpNewNet = new NeuNets::MultiLayerNet(FuncDisp::func(nnInfo.funcName) , inToSend, outToSend, 0); // ?? TODO
+    bpNewNet->setName(nnInfo.netName);
 }
 
 
@@ -172,11 +173,32 @@ NeuNets::MultiLayerNet *MultiLayerFactory::createFromFile(const QString &filenam
     return bpNewNet;
 }
 
-NeuNets::MultiLayerNet *MultiLayerFactory::createFromInfo(BuildInfo newInfo) {
+NeuNets::MultiLayerNet *MultiLayerFactory::createFromInfo(const BuildInfo &newInfo) {
     currentMode = 1;
     nnInfo = newInfo;
     allocMemory();
     return bpNewNet;
 }
+//-------------------------------------------------------------------------------------------------
+void MultiLayerFactory::createFromInfo(const QString &name, const QString &funcName, const NCounts &cnts, QVector<AbstractNet *> &nets) {
+    BuildInfo nnInfo(name, funcName, cnts.size());
+    int I = 0;
+    createFromInfoRec(cnts, I, nnInfo, nets);
+}
+
+void MultiLayerFactory::createFromInfoRec(const NCounts &cnts, int I,
+                                          BuildInfo &nnInfo,
+                                          QVector<AbstractNet *> &nets) {
+    if (nnInfo.layersCount == I) {
+        nets.append(createFromInfo(nnInfo));
+        return;
+    }
+
+    for (int J = cnts[I].from; J <= cnts[I].to; ++J) {
+        nnInfo.neuronsPerLayer[I] = J;
+        createFromInfoRec(cnts, I + 1, nnInfo, nets);
+    }
+}
+
 
 } // namespace Factory

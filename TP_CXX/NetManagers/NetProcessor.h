@@ -33,7 +33,7 @@ private slots:
     void onLoadNet(QString);
     void onSaveNet(QString, CIndex);
     void onRemoveNet(CIndex);
-    void onCreateNets(int, NCounts);
+    void onCreateNets(QString, QString, NCounts);
 
     void onUpdateNets(QTableWidget *);
     void onUpdateData(QTreeWidget *);

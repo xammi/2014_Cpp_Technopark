@@ -40,7 +40,7 @@ void NetProcessor::setDefaultConf() {
 
 void NetProcessor::connectUI() {
     connect(gui, SIGNAL(loadNet(QString)), SLOT(onLoadNet(QString)));
-    connect(gui, SIGNAL(createNets(int, NCounts)), SLOT(onCreateNets(int, NCounts)));
+    connect(gui, SIGNAL(createNets(QString, QString, NCounts)), SLOT(onCreateNets(QString, QString, NCounts)));
     connect(gui, SIGNAL(saveNet(QString, CIndex)), SLOT(onSaveNet(QString, CIndex)));
     connect(gui, SIGNAL(removeNet(CIndex)), SLOT(onRemoveNet(CIndex)));
 
@@ -71,11 +71,9 @@ void NetProcessor::onLoadNet(QString filename) {
     }
 }
 
-void NetProcessor::onCreateNets(int layersCnt, NCounts cnts) {
+void NetProcessor::onCreateNets(QString name, QString funcName, NCounts cnts) {
     try {
-        AbstractNet *created;
-        // created = factory->createFromInfo(BuildInfo(layersCnt, cnts));
-        nets.append(created);
+        factory->createFromInfo(name, funcName, cnts, nets);
     } catch(Exception &exc) {
         emit showException(exc.toString());
     }

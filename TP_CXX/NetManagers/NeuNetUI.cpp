@@ -128,12 +128,13 @@ void NeuNetUI::onCreateNets() {
                 return;
             }
 
-            neuronsCnt.append(NCount(range_from, range_to));
+            neuronsCnt.append(NeuronsCount(range_from, range_to));
         } else
-            neuronsCnt.append(NCount(item.toInt()));
+            neuronsCnt.append(NeuronsCount(item.toInt()));
     }
 
-    emit createNets(layersCnt, neuronsCnt);
+    QString funcName = createUi->func->currentText();
+    emit createNets(name, funcName, neuronsCnt);
     createDlg->hide();
 
     this->updateUI();

@@ -28,7 +28,7 @@ class NeuNetUI : public QMainWindow {
     
 signals:
     void loadNet(QString);
-    void createNets(int, NCounts);
+    void createNets(QString, QString, NCounts);
     void saveNet(QString, CIndex);
     void removeNet(CIndex);
 

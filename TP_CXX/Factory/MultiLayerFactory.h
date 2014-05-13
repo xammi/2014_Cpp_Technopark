@@ -36,13 +36,17 @@ private:
     void allocMemory() ;
     void assembly(Layer &prevLayer, Layer &curLayer, int layerPos);
 
+    void createFromInfoRec(const NCounts &, int, BuildInfo &, QVector<AbstractNet *> &);
+
 
 public:
     MultiLayerFactory(bool flag = true);
     ~MultiLayerFactory();
 
     NeuNets::MultiLayerNet *createFromFile(const QString &filename);
-    NeuNets::MultiLayerNet *createFromInfo(BuildInfo newInfo);
+    NeuNets::MultiLayerNet *createFromInfo(const BuildInfo &newInfo);
+
+    void createFromInfo(const QString &, const QString &, const NCounts &cnts, QVector<AbstractNet *> &);
 
     void parseFile(const QString &filename);
     void writeFile(const QString &filename);
