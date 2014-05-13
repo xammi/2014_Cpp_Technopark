@@ -7,6 +7,8 @@
 
 namespace Factory{
 
+using namespace BuildData;
+
 // Abstract Factory
 class AbstractNetFactory
 {

@@ -28,7 +28,8 @@ SOURCES += main.cpp \
     NeuNet/Neuron.cpp \
     NeuNet/Iterator.cpp \
     NeuNet/MultiLayerNet.cpp \
-    NetFunction.cpp
+    NetFunction.cpp \
+    Factory/BuildInfo.cpp
 
 HEADERS  += \
     includes.h \
@@ -61,4 +62,5 @@ HEADERS  += \
     NetFunction.h
 
 
-FORMS    +=   NetManagers/neunetui.ui
+FORMS    +=   NetManagers/neunetui.ui \
+    NetManagers/createNet.ui

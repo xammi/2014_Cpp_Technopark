@@ -50,5 +50,18 @@ Iterator MultiLayerNet::getOutLayer() const{
     return outIter;
 }
 
+QString MultiLayerNet::topology() const {
+    Iterator inIter = getInLayer();
+    Iterator outIter = getOutLayer();
+
+    QString description;
+    do {
+        description += QString::number(inIter.count());
+        inIter.nextLayer();
+    } while (inIter != outIter);
+
+    return description;
+}
+
 } //namespace NeuNets
 

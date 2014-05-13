@@ -3,21 +3,21 @@
 
 #include "Neuron.h"
 #include "AbstractNet.h"
+#include "../DataProcess/AbstractProcessor.h"
 #include "Iterator.h"
 #include "../DataProcess/AbstractProcessor.h"
 
 namespace NeuNets {
+
+using DataProcess::OutputData;
+using DataProcess::InputData;
 
 class MultiLayerNet : public AbstractNet {
 
 public:
     MultiLayerNet();
 
-    MultiLayerNet (const Func &sigma,
-                   const NeuVec &inNeuVec,
-                   const NeuVec &outNeuVec,
-                   const uint _layersCnt
-                   );
+    MultiLayerNet(const Func &, const NeuVec &, const NeuVec &, const uint);
     ~MultiLayerNet();
 
     DataProcess::OutputData getResponse(const InputData &imgs);
@@ -26,6 +26,7 @@ public:
     Iterator getOutLayer() const;
 
     uint count() const { return layersCnt; }
+    QString topology() const;
 
 private:
     NeuVec outNeurons;
