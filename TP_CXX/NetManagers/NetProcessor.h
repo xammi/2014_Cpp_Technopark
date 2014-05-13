@@ -3,20 +3,26 @@
 
 #include "NeuNetUI.h"
 #include "Tester.h"
+
 #include "../DataProcess/ImageStorage.h"
 #include "../DataProcess/ImageProcessor.h"
+
 #include "../NetTutors/BackPropTutor.h"
+#include "../Factory/MultiLayerDestroyer.h"
 #include "../Factory/MultiLayerFactory.h"
+#include "../NeuNet/MultiLayerNet.h"
 
 namespace NetManagers {
 
+    using namespace BuildData;
+
     using DataProcess::AbstractStorage;
-    using DataProcess::ImageStorage;
     using DataProcess::AbstractProcessor;
-    using DataProcess::ImageProcessor;
 
     using NetTutors::AbstractTutor;
-    using NetTutors::BackPropTutor;
+    using NeuNets::AbstractNet;
+    using Factory::AbstractNetFactory;
+    using Factory::AbstractNetDestroyer;
 
 //-------------------------------------------------------------------------------------------------
 class NetProcessor : public QObject {
@@ -29,6 +35,9 @@ private slots:
     void onRemoveNet(CIndex);
     void onCreateNets(int, NCounts);
 
+    void onUpdateNets(QTableWidget *);
+    void onUpdateData(QTreeWidget *);
+
     void onAddData();
     void onRemoveData();
     void onFormDataSet();
@@ -37,6 +46,9 @@ private slots:
     void onTestNetDataSet();
 
     void onTeachNet();
+
+signals:
+    void showException(QString);
 
 public:
     static const NetProcessor & get_self();
@@ -55,6 +67,11 @@ private:
 
     AbstractStorage *dataStore;
     AbstractProcessor *dataProc;
+
+    PtrVector<AbstractNet> nets;
+
+    AbstractNetFactory *factory;
+    AbstractNetDestroyer *destroyer;
 };
 //-------------------------------------------------------------------------------------------------
 } // namespace NetManagers

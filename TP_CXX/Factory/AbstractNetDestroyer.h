@@ -10,7 +10,8 @@ class AbstractNetDestroyer
 {
 public:
     virtual ~AbstractNetDestroyer() {}
-//    virtual void destroy(NeuNets::AbstractNet *nnet) = 0;
+    virtual void destroy(AbstractNet *) = 0;
+    virtual void writeNetToFile(AbstractNet *, const QString &) = 0;
 };
 
 } // namespace Factory

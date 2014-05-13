@@ -61,6 +61,8 @@ MultiLayerFactory::~MultiLayerFactory() {}
 
 void MultiLayerFactory::parseFile(const QString &filename) {
 
+    // filename.remove(".net");
+
     QFile file(filename);
 
     if(!file.open(QIODevice::ReadOnly))

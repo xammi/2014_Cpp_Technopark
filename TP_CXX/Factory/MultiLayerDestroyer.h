@@ -10,8 +10,8 @@ class MultiLayerDestroyer : public AbstractNetDestroyer
 {
 public:
     MultiLayerDestroyer();
-    void destroy(NeuNets::MultiLayerNet *nNet);
-    void writeFile(NeuNets::MultiLayerNet *nNet, const QString &filename);
+    void destroy(NeuNets::AbstractNet *nNet);
+    void writeNetToFile(NeuNets::AbstractNet *nNet, const QString &filename);
 
 private:
     NeuNets::UnsafeSynapseAct deleteSynapses;
@@ -30,6 +30,11 @@ struct NetNotFound : public Exception {
 struct NeuronNotFound : public Exception {
     QString toString() { return "Нейрон не существует. А должен!"; }
 };
+
+struct WrongKindOfNet : public Exception {
+    QString toString() { return "Ожидается экземпляр MultiLayerNet"; }
+};
+
 //---------------------------------------------------------
 
 

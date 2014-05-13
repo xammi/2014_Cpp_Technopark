@@ -4,11 +4,6 @@
 
 namespace NetManagers {
 
-NCount::NCount(const int _cnt)
-    :   cnt(_cnt), type(NUM) {}
-
-NCount::NCount(const int range_from, const int range_to)
-    :   from(range_from), to(range_to), type(RANGE) {}
 //-------------------------------------------------------------------------------------------------
 NeuNetUI::NeuNetUI(QWidget *parent) :
       QMainWindow(parent), ui(new Ui::NeuNetUI),
@@ -39,7 +34,13 @@ NeuNetUI::~NeuNetUI() {
     delete ui;
 }
 //-------------------------------------------------------------------------------------------------
+void NeuNetUI::onShowException(QString problem) {
+    ui->messages->setText(problem);
+}
+
 void NeuNetUI::onLoadNets(QStringList files) {
+    ui->messages->setText("");
+
     foreach (QString file, files)
         if (file.contains(".net")) {
             emit loadNet(file);
@@ -48,15 +49,22 @@ void NeuNetUI::onLoadNets(QStringList files) {
             msgBox.setText("You can only load .net files.");
             msgBox.exec();
         }
+    this->updateUI();
 }
 
 void NeuNetUI::onSaveNets() {
+    ui->messages->setText("");
+
     foreach (QTableWidgetItem * item, ui->nets->selectedItems())
         if (item->column() == 0)
             emit saveNet(item->text() + ".net", item->row());
+
+    this->updateUI();
 }
 
 void NeuNetUI::onRemoveNets() {
+    ui->messages->setText("");
+
     QList<QTableWidgetItem *> items = ui->nets->selectedItems();
 
     for (int I = 0; I < items.size(); ++I)
@@ -65,6 +73,8 @@ void NeuNetUI::onRemoveNets() {
             ui->nets->removeRow(items[I]->row());
             items[I + 1] = NULL;
         }
+
+    this->updateUI();
 }
 //-------------------------------------------------------------------------------------------------
 void NeuNetUI::onCreateShow() {
@@ -75,6 +85,8 @@ void NeuNetUI::onCreateShow() {
 }
 
 void NeuNetUI::onCreateNets() {
+    ui->messages->setText("");
+
     QString name = createUi->name->text();
     if (name == "")
         name = "Net # " + QString::number(ui->nets->rowCount());
@@ -116,17 +128,15 @@ void NeuNetUI::onCreateNets() {
             neuronsCnt.append(NCount(item.toInt()));
     }
 
-    createNetRecord(name, nData);
-
     emit createNets(layersCnt, neuronsCnt);
     createDlg->hide();
-}
 
-void NeuNetUI::createNetRecord(const QString & name, const QString & topology) {
-    int row = ui->nets->rowCount();
-    ui->nets->setRowCount(row + 1);
-    ui->nets->setItem(row, 0, new QTableWidgetItem(name));
-    ui->nets->setItem(row, 1, new QTableWidgetItem(topology));
+    this->updateUI();
 }
 //-------------------------------------------------------------------------------------------------
+void NeuNetUI::updateUI() {
+    emit updateNets(ui->nets);
+    emit updateData(ui->data);
+}
+
 } // namespace NetManagers

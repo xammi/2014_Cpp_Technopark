@@ -22,22 +22,20 @@ MultiLayerDestroyer::MultiLayerDestroyer() {
     };
 }
 
-void MultiLayerDestroyer::destroy(NeuNets::MultiLayerNet *nNet) {
+void MultiLayerDestroyer::destroy(NeuNets::AbstractNet *aNet) {
+    NeuNets::MultiLayerNet *nNet;
+    try {
+        nNet = dynamic_cast<NeuNets::MultiLayerNet *>(aNet);
+    } catch (std::bad_cast) {
+        throw WrongKindOfNet();
+    }
+
     if(!nNet)
         throw NetNotFound();
 
     NeuNets::Iterator from = nNet->getInLayer();
     NeuNets::Iterator to = nNet->getOutLayer();
-/*
-    1. Replace the usual iterator with our own;
-         The problem: net doesn't know about it;and we cannot convert usual iterator to derived one.
-         Solution: 1. Forget about iterator hierarchy and biuld templates on getIn/OutLayer()
 
-     * 2. Forse iterator to delete neurons.
-     * 3. Destroy the destroyer and use net destructor.
-     * 4. Not use iterator altogether. Just relation of friendship with MultiLayerNet.
-     * 5.
-     */
     for ( ; from != to; from.nextLayer()) {
         from.apply(deleteNeurons);
     }
@@ -53,7 +51,14 @@ void MultiLayerDestroyer::destroy(NeuNets::MultiLayerNet *nNet) {
   */
 
 
-void MultiLayerDestroyer::writeFile(NeuNets::MultiLayerNet *nNet, const QString &filename) {
+void MultiLayerDestroyer::writeNetToFile(NeuNets::AbstractNet *aNet, const QString &filename) {
+    NeuNets::MultiLayerNet *nNet;
+    try {
+        nNet = dynamic_cast<NeuNets::MultiLayerNet *>(aNet);
+    } catch (std::bad_cast) {
+        throw WrongKindOfNet();
+    }
+
     if(!nNet)
         throw NetNotFound();
 
@@ -72,14 +77,6 @@ void MultiLayerDestroyer::writeFile(NeuNets::MultiLayerNet *nNet, const QString 
     for ( ; from != to; from.nextLayer()) {
         from.apply(deleteNeurons);
     }
-
-//    while(firstIter != lastIter){
-//        NeuNets::Neuron bufNeuron = firstIter.nextNeuron();
-
-
-
-//        firstIter.nextLayer();
-//    }
 
 }
 

@@ -2,20 +2,13 @@
 #define PTRVECTOR_H
 
 #include <QVector>
-#include <type_traits>
-
-struct Containable {
-};
 
 //-------------------------------------------------------------------------------------------------
 template <typename Value>
 class PtrVector : public QVector<Value *>
 {
 public:
-    PtrVector() {
-        static_assert(std::is_base_of <Containable, Value>::value,
-                      "PtrVector value_type must inherit Containable");
-    }
+    PtrVector() {}
 
     ~PtrVector() {
         this->clear();
@@ -28,6 +21,24 @@ public:
             }
 
         QVector<Value *>::clear();
+    }
+
+    void remove(int i) {
+        Value * tmp_ptr = this->operator [](i);
+        if (tmp_ptr)
+            delete tmp_ptr;
+
+        QVector<Value *>::remove(i);
+    }
+
+    void remove(int i, int n) {
+        for (int cnt = 0; cnt < n; ++cnt) {
+            Value *tmp_ptr = this->operator [](i + cnt);
+            if (tmp_ptr)
+                delete tmp_ptr;
+        }
+
+        QVector<Value *>::remove(i, n);
     }
 };
 

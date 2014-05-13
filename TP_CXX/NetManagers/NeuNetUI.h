@@ -6,7 +6,10 @@
 #include <QRegExpValidator>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QTableWidget>
+#include <QTreeWidget>
 
+#include "Factory/BuildInfo.h"
 #include "../includes.h"
 
 namespace Ui {
@@ -16,24 +19,9 @@ namespace Ui {
 
 namespace NetManagers {
 
+    using namespace BuildData;
+
 //-------------------------------------------------------------------------------------------------
-enum NumOrRange { NUM, RANGE };
-
-struct NCount {
-    NCount() {}
-    NCount(const int);
-    NCount(const int, const int);
-
-    union {
-        int cnt;
-        struct {
-            int from;
-            int to;
-        };
-    };
-    NumOrRange type;
-};
-typedef QVector<NCount> NCounts;
 //-------------------------------------------------------------------------------------------------
 class NeuNetUI : public QMainWindow {
     Q_OBJECT
@@ -44,6 +32,9 @@ signals:
     void saveNet(QString, CIndex);
     void removeNet(CIndex);
 
+    void updateNets(QTableWidget *);
+    void updateData(QTreeWidget *);
+
     void addData();
     void removeData();
     void formDataSet();
@@ -51,6 +42,9 @@ signals:
     void testNetSingle();
     void testNetDataSet();
     void teachNet();
+
+public slots:
+    void onShowException(QString);
 
 private slots:
     void onCreateShow();
@@ -66,8 +60,7 @@ public:
     
 private:
     void adjustUi();
-    void createError(const QString &, int selFrom = 0, int selAmount = 0);
-    void createNetRecord(const QString &, const QString &);
+    void updateUI();
 
     Ui::NeuNetUI *ui;
     QFileDialog *openDlg;

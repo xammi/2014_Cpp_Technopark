@@ -7,14 +7,20 @@ NetProcessor::NetProcessor()
     :   gui(new NeuNetUI)
 {
     this->setDefaultConf();
+    this->connectUI();
     gui->show();
 }
 
 NetProcessor::~NetProcessor() {
-    delete gui;
-    delete tester;
     delete dataStore;
     delete dataProc;
+
+    delete gui;
+    delete tester;
+    delete tutor;
+
+    delete factory;
+    delete destroyer;
 }
 //-------------------------------------------------------------------------------------------------
 const NetProcessor & NetProcessor::get_self() {
@@ -23,17 +29,24 @@ const NetProcessor & NetProcessor::get_self() {
 }
 
 void NetProcessor::setDefaultConf() {
+    dataStore = new DataProcess::ImageStorage;
+    dataProc = new DataProcess::ImageProcessor;
+
     tester = new Tester;
-    tutor = new BackPropTutor;
-    dataStore = new ImageStorage;
-    dataProc = new ImageProcessor;
+    tutor = new NetTutors::BackPropTutor;
+    factory = new Factory::MultiLayerFactory;
+    destroyer = new Factory::MultiLayerDestroyer;
 }
 
 void NetProcessor::connectUI() {
     connect(gui, SIGNAL(loadNet(QString)), SLOT(onLoadNet(QString)));
-    connect(gui, SIGNAL(createNets(int, NCount)), SLOT(onCreateNets(int, NCount)));
+    connect(gui, SIGNAL(createNets(int, NCounts)), SLOT(onCreateNets(int, NCounts)));
     connect(gui, SIGNAL(saveNet(QString, CIndex)), SLOT(onSaveNet(QString, CIndex)));
     connect(gui, SIGNAL(removeNet(CIndex)), SLOT(onRemoveNet(CIndex)));
+
+    connect(gui, SIGNAL(updateNets(QTableWidget*)), SLOT(onUpdateNets(QTableWidget*)));
+    connect(gui, SIGNAL(updateData(QTreeWidget*)), SLOT(onUpdateData(QTreeWidget*)));
+    connect(this, SIGNAL(showException(QString)), gui, SLOT(onShowException(QString)));
 
     connect(gui, SIGNAL(addData()), SLOT(onAddData()));
     connect(gui, SIGNAL(removeData()), SLOT(onRemoveData()));
@@ -45,26 +58,59 @@ void NetProcessor::connectUI() {
 }
 
 //-------------------------------------------------------------------------------------------------
-void NetProcessor::onLoadNet(QString) {
-    qDebug() << "on load";
+void NetProcessor::onLoadNet(QString filename) {
+    try {
+        AbstractNet *loaded = factory->createFromFile(filename);
+        nets.append(loaded);
+    } catch (Exception &exc) {
+        emit showException(exc.toString());
+    }
 }
 
-void NetProcessor::onCreateNets(int, NCounts) {
-    qDebug() << "on create";
+void NetProcessor::onCreateNets(int layersCnt, NCounts cnts) {
+    try {
+        AbstractNet *created;
+        // created = factory->createFromInfo(BuildInfo(layersCnt, cnts));
+        nets.append(created);
+    } catch(Exception &exc) {
+        emit showException(exc.toString());
+    }
 }
 
-void NetProcessor::onSaveNet(QString, CIndex) {
-    qDebug() << "on save";
+void NetProcessor::onSaveNet(QString filename, CIndex netIndex) {
+    try {
+        AbstractNet *toSave = nets[netIndex];
+        destroyer->writeNetToFile(toSave, filename);
+    } catch (Exception &exc) {
+        emit showException(exc.toString());
+    }
 }
 
-void NetProcessor::onRemoveNet(CIndex) {
-    qDebug() << "on remove";
+void NetProcessor::onRemoveNet(CIndex index) {
+    try {
+        destroyer->destroy(nets[index]);
+        nets.remove(index);
+    } catch (Exception &exc) {
+        emit showException(exc.toString());
+    }
+}
+
+void NetProcessor::onUpdateNets(QTableWidget * view) {
+    view->clearContents();
+    view->setRowCount(nets.size());
+
+    int row = 0;
+    foreach (AbstractNet *net, nets) {
+        view->setItem(row, 0, new QTableWidgetItem(net->name()));
+        view->setItem(row, 1, new QTableWidgetItem(net->topology()));
+        row++;
+    }
 }
 //-------------------------------------------------------------------------------------------------
-
 void NetProcessor::onAddData() {}
 void NetProcessor::onRemoveData() {}
 void NetProcessor::onFormDataSet() {}
+void NetProcessor::onUpdateData(QTreeWidget *) {}
 
 void NetProcessor::onTestNetSingle() {}
 void NetProcessor::onTestNetDataSet() {}

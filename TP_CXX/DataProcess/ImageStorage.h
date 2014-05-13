@@ -17,7 +17,7 @@ typedef QMap <QString, QPixmap *> ImageMap;
 typedef QString StrKey;
 typedef uint NumKey;
 //-------------------------------------------------------------------------------------------------
-class ImageSet : Containable
+class ImageSet
 {
 public:
     ImageSet(const QString &);

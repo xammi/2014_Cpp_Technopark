@@ -28,7 +28,8 @@ SOURCES += main.cpp \
     NeuNet/Neuron.cpp \
     NeuNet/Iterator.cpp \
     NeuNet/MultiLayerNet.cpp \
-    NetFunction.cpp
+    NetFunction.cpp \
+    Factory/BuildInfo.cpp
 
 HEADERS  += \
     includes.h \

@@ -24,6 +24,7 @@ public:
     Iterator getOutLayer() const;
 
     uint count() const { return layersCnt; }
+    QString topology() const;
 
 private:
     NeuVec outNeurons;
