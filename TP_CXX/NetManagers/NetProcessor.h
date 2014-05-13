@@ -49,6 +49,7 @@ private slots:
 
 signals:
     void showException(QString);
+    void showDebug(QString);
 
 public:
     static const NetProcessor & get_self();

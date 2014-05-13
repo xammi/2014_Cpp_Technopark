@@ -38,6 +38,11 @@ void NeuNetUI::onShowException(QString problem) {
     ui->messages->setText(problem);
 }
 
+void NeuNetUI::onShowDebug(QString msg) {
+    ui->lstProcess->addItem(msg);
+    ui->lstProcess->scrollToBottom();
+}
+
 void NeuNetUI::onLoadNets(QStringList files) {
     ui->messages->setText("");
 

@@ -28,6 +28,10 @@ struct TesterNotFound : public Exception {
 //-------------------------------------------------------------------------------------------------
 class BackPropTutor : public AbstractTutor {
     Q_OBJECT
+
+signals:
+    void toDebug(QString);
+
 public:
     BackPropTutor();
     BackPropTutor(NetManagers::Tester *test): currentTester(test) {}

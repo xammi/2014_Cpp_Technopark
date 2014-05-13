@@ -46,7 +46,11 @@ void NetProcessor::connectUI() {
 
     connect(gui, SIGNAL(updateNets(QTableWidget*)), SLOT(onUpdateNets(QTableWidget*)));
     connect(gui, SIGNAL(updateData(QTreeWidget*)), SLOT(onUpdateData(QTreeWidget*)));
+
     connect(this, SIGNAL(showException(QString)), gui, SLOT(onShowException(QString)));
+    connect(this, SIGNAL(showDebug(QString)), gui, SLOT(onShowDebug(QString)));
+    connect(tester, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
+    connect(tutor, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
 
     connect(gui, SIGNAL(addData()), SLOT(onAddData()));
     connect(gui, SIGNAL(removeData()), SLOT(onRemoveData()));

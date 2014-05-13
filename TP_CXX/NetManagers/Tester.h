@@ -16,6 +16,10 @@ typedef bool CompResult;
 //-------------------------------------------------------------------------------------------------
 class Tester : public QObject {
     Q_OBJECT
+
+signals:
+    void toDebug(QString);
+
 public:
     Tester();
     Tester(AbstractNet *);

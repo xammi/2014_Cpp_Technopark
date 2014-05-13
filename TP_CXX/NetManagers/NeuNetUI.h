@@ -45,6 +45,7 @@ signals:
 
 public slots:
     void onShowException(QString);
+    void onShowDebug(QString);
 
 private slots:
     void onCreateShow();
