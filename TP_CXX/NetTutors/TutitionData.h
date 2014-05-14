@@ -4,9 +4,16 @@
 #include "../includes.h"
 #include "DataProcess/AbstractProcessor.h"
 
-struct TuteData {
+// Single Image
+struct PackedData {
     QVector<DataProcess::InputData *> inputs;
     QVector<DataProcess::OutputData *> outputs;
+};
+
+struct TuteData{
+    QVector <PackedData> ImageData;
+    long double minErr;
+    long int maxIter;
 };
 
 

@@ -136,7 +136,7 @@ void MultiLayerFactory::allocMemory() {
         prevLayer = curLayer;
     }
     NeuNets::NeuVec outToSend = curLayer->neuron;
-    bpNewNet = new NeuNets::MultiLayerNet(FuncDisp::func(nnInfo.funcName) , inToSend, outToSend, 0); // ?? TODO
+    bpNewNet = new NeuNets::MultiLayerNet(FuncDisp::func(nnInfo.funcName) , inToSend, outToSend, nnInfo.layersCount);
     bpNewNet->setName(nnInfo.netName);
 }
 
@@ -146,21 +146,16 @@ void MultiLayerFactory::assembly(Layer &prevLayer, Layer &curLayer, int layerPos
     for(uint i = 0; i < prevLayer.neuroCount; ++i){
         for(uint j = 0; j < curLayer.neuroCount; ++j){
 
-            NeuNets::Synaps *bufSynaps = new NeuNets::Synaps;
-            bufSynaps->from = prevLayer.neuron[i];
-            bufSynaps->to = curLayer.neuron[j];
-
+            double weight;
             if(currentMode)
-                bufSynaps->weight = get_random(MIN_SYNAPSE_VAL, MAX_SYNAPSE_VAL);
+                weight = get_random(MIN_SYNAPSE_VAL, MAX_SYNAPSE_VAL);
             else{
-                bufSynaps->weight = weights[layerPos - 1][i + j + offset]; //
+                weight = weights[layerPos - 1][i + j + offset]; //
             }
 
-
-            // !
-            // Мои слои никак не связаны с Нейронной сетью. В самой сети нет методов для простановки весов
-
-            prevLayer.synaps.append(bufSynaps);
+            NeuNets::Synaps *bufSynapse = new NeuNets::Synaps(prevLayer.neuron[i], curLayer.neuron[j], weight);
+            prevLayer.neuron[i]->setSynapse(bufSynapse);
+            curLayer.neuron[i]->setSynapse(bufSynapse);
         }
         offset++;
     }
@@ -199,6 +194,5 @@ void MultiLayerFactory::createFromInfoRec(const NCounts &cnts, int I,
         createFromInfoRec(cnts, I + 1, nnInfo, nets);
     }
 }
-
 
 } // namespace Factory

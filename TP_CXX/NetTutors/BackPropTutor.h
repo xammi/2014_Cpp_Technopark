@@ -16,12 +16,12 @@ struct TesterNotFound : public Exception {
 };
 //--------------------------------------
 
-/*
- * Input Data:
- * 1. QVector of QVector of input layer weights
- * 2. QVector of QVector of output layer weights
- */
-
+// ошибка одного слоя НС
+typedef DataProcess::OutputData CurLayerErr;
+// Вектор ошибок для одного образа
+typedef QVector < CurLayerErr > CurImageErr;
+// Ошибки всей сети
+typedef QVector < CurImageErr > TotalErr;
 
 
 
@@ -37,7 +37,8 @@ public:
     BackPropTutor(NetManagers::Tester *test): currentTester(test) {}
 
     void initialize() {}
-    bool start(const TuteData &Data);
+    bool start(const TuteData &data);
+
 
     void setNet(NeuNets::MultiLayerNet *net);
     void setTester(NetManagers::Tester *test);
@@ -48,6 +49,9 @@ private:
 
     double propagate() {return 0;}
     void backPropagate() {}
+    bool isMinError(DataProcess::OutputData *currentErrors, long double err);
+    void changeWeights(NeuNets::Neuron neuron, double error);
+    CurLayerErr getMidError(CurLayerErr *curErr, NeuNets::Iterator cur, NeuNets::Iterator prev);
 
 };
 //-------------------------------------------------------------------------------------------------

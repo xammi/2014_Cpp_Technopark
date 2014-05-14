@@ -40,7 +40,7 @@ class Neuron {
 public:
     Neuron();
     double summup(InputData imgs, const Func &sigmoid);
-    void setSynapse(Neuron *otherNeu, double weight); //Set weight of synapse between this Neuron and otherNeu
+    void setSynapse(Synaps *syn);
 
     neuronPos getLayer() {return layer;}
     const QVector<Synaps *> &getInSyn() {return inSyn;}
@@ -62,6 +62,8 @@ struct Synaps {
     double weight;
     Neuron *to;
     Neuron *from;
+    Synaps (Neuron *fr, Neuron *to, double w) : weight(w), to(to), from(fr) {}
+    Synaps ();
 };
 
 

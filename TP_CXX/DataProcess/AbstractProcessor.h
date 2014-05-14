@@ -17,7 +17,7 @@ class OutputData
 {
 public:
     OutputData() {}
-    QVector <int> values;
+    QVector <double> values;
     bool operator == (const OutputData &) { return true; }
 };
 

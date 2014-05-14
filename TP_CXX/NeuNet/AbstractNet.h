@@ -3,6 +3,7 @@
 
 #include "../includes.h"
 #include "Neuron.h"
+#include "../DataProcess/AbstractProcessor.h"
 
 namespace NeuNets {
 
@@ -15,7 +16,7 @@ typedef function< void (const Neuron &) > UnmodNeuronAct;
 class AbstractNet
 {
 public:
-    virtual OutputData getResponse(const InputData &) = 0;
+    virtual DataProcess::OutputData getResponse(const InputData &) = 0;
 
     virtual QString topology() const = 0;
 

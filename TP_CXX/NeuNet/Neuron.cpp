@@ -6,6 +6,21 @@ Neuron::Neuron() {
 
 }
 
+void Neuron::setSynapse(Synaps *syn){
+    if(syn == 0)
+        return;
+    if(syn->from == this){
+        this->outSyn.append(syn);
+    }
+    else if(syn->to == this){
+        this->inSyn.append(syn);
+    }
+    else{
+        ;
+    }
+}
+
+
 double Neuron::summup(InputData imgs, const Func &sigmoid){
     double outputValue = 0;
     if(layer == INPUT) {
