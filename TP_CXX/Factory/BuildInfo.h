@@ -6,33 +6,27 @@
 
 namespace BuildData {
 
-enum NumOrRange { NUM, RANGE };
+struct NeuronsCount {
+    NeuronsCount() {}
+    NeuronsCount(const int);
+    NeuronsCount(const int, const int);
 
-struct NCount {
-    NCount() {}
-    NCount(const int);
-    NCount(const int, const int);
-
-    union {
-        int cnt;
-        struct {
-            int from;
-            int to;
-        };
-    };
-    NumOrRange type;
+    int from;
+    int to;
 };
 
-typedef QVector<NCount> NCounts;
+typedef QVector<NeuronsCount> NCounts;
 //-------------------------------------------------------------------------------------------------
 struct BuildInfo {
-    // BuildInfo() {}
-    // BuildInfo(uint, const NCounts &) {}
+    BuildInfo() {}
+    BuildInfo(const QString &, const QString &);
+    BuildInfo(const QString &, const QString &, const int);
 
-    uint layersCount;
+    int layersCount;
     QVector<uint> neuronsPerLayer;
-    // NCounts cnts;
+
     QString funcName;
+    QString netName;
 };
 //-------------------------------------------------------------------------------------------------
 } // namespace Factory

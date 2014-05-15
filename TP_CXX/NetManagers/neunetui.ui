@@ -345,7 +345,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QTableWidget" name="lstProcess"/>
+         <widget class="QListWidget" name="lstProcess"/>
         </item>
        </layout>
       </item>
