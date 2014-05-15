@@ -17,7 +17,7 @@ class AbstractNet
 {
 public:
     virtual ~AbstractNet() {}
-    virtual DataProcess::OutputData getResponse(const InputData &) = 0;
+    virtual DataProcess::OutputData getResponse(const InputData &);
 
     virtual QString topology() const = 0;
 

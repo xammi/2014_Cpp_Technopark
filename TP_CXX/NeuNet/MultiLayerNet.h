@@ -1,16 +1,19 @@
 #ifndef NEUNET_H
 #define NEUNET_H
 
-#include "Neuron.h"
+
 #include "AbstractNet.h"
 #include "../DataProcess/AbstractProcessor.h"
 #include "Iterator.h"
 #include "../DataProcess/AbstractProcessor.h"
 
+
 namespace NeuNets {
 
-using DataProcess::OutputData;
+
 using DataProcess::InputData;
+using DataProcess::OutputData;
+
 
 class MultiLayerNet : public AbstractNet {
 
@@ -20,10 +23,13 @@ public:
     MultiLayerNet(const Func &, const NeuVec &, const NeuVec &, const uint);
     ~MultiLayerNet();
 
-    DataProcess::OutputData getResponse(const InputData &imgs);
+    DataProcess::OutputData getResponse(const DataProcess::InputData &imgs);
+
 
     Iterator getInLayer() const;
     Iterator getOutLayer() const;
+    Iterator getAfterOut() const;
+    Iterator getBeforeIn() const;
 
     uint count() const { return layersCnt; }
     QString topology() const;
@@ -34,6 +40,10 @@ private:
     uint inLayerNum, outLayerNum;
     uint layersCnt;
     Func sigmoid;
+};
+//================================================================
+struct  NoImageForResp: public Exception {
+    QString toString() { return "Fail to get image for response"; }
 };
 
 } //namespace NeuNets

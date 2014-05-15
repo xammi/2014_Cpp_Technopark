@@ -22,25 +22,37 @@ MultiLayerNet::~MultiLayerNet() {
 
 }
 
-DataProcess::OutputData MultiLayerNet::getResponse(const InputData &imgs) {
-    //check correctivity of Image
+OutputData MultiLayerNet::getResponse(const DataProcess::InputData &imgs){
+//    if(!imgs.)
+//        throw NoImage();
 
-    double result = 0;
-    double buf = 0;
-    DataProcess::OutputData localAnswer;
-    Neuron *netNeuron;
-    for (int i = 0; i < outLayerNum; i++) {
-        netNeuron = outNeurons.at(i);
-        buf = netNeuron->summup(imgs, sigmoid);
-        if(buf > result) {
-            result = buf;
-            //answer = netNeuron->value;
+
+    Iterator layerIter = getInLayer();
+    int layerSize = layerIter.count();
+    for (int i = 0; i < layerSize; i++){
+        layerIter[i].setVal(imgs.values[i]);
+    }
+
+    Iterator falseEndLayer = getAfterOut();
+    for (layerIter = getInLayer(); layerIter != falseEndLayer ;layerIter.nextLayer()){
+        for (int i = 0; i < layerIter.count(); i++){
+            layerIter[i].summup(sigmoid);
         }
     }
-    return localAnswer;
+
+    layerIter = getOutLayer();
+    layerSize = layerIter.count();
+
+    OutputData returnVal;
+    for (int i = 0; i < layerSize; i++){
+            returnVal.values[i] = layerIter[i].getVal();
+        }
+    return returnVal;
+
 }
 
 Iterator MultiLayerNet::getInLayer() const{
+
     Iterator inIter(inNeurons);
     return inIter;
 }
@@ -61,6 +73,16 @@ QString MultiLayerNet::topology() const {
 //    } while (inIter != outIter);
 
     return description;
+}
+Iterator MultiLayerNet::getAfterOut() const{
+    Iterator bufIter = this->getOutLayer();
+    bufIter.nextLayer();
+    return (bufIter);
+}
+Iterator MultiLayerNet::getBeforeIn() const{
+    Iterator bufIter = this->getInLayer();
+    bufIter.prevLayer();
+    return (bufIter);
 }
 
 } //namespace NeuNets

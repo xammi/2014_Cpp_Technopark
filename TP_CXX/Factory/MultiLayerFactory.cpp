@@ -181,6 +181,8 @@ NeuNets::MultiLayerNet *MultiLayerFactory::createFromInfo(const BuildInfo &newIn
     bpNewNet = allocMemory(bpNewNet);
     return bpNewNet;
 }
+
+
 //-------------------------------------------------------------------------------------------------
 void MultiLayerFactory::createFromInfo(const QString &name, const QString &funcName, const NCounts &cnts, QVector<AbstractNet *> &nets) {
     BuildInfo nnInfo(name, funcName, cnts.size());

@@ -1,4 +1,5 @@
 #include "Neuron.h"
+#include "../DataProcess/AbstractProcessor.h"
 
 namespace NeuNets {
 
@@ -6,9 +7,26 @@ Neuron::Neuron() {
 
 }
 
+
+void Neuron::summup(const Func &sigmoid){
+    value = 0;
+    int prevLayerSize = inSyn.size();
+    for (int i = 0; i < prevLayerSize; i++){
+        value += inSyn[i]->weight * inSyn[i]->from->value;
+    }
+    value = sigmoid(value);
+
+    /*
+    apply([ this ] (Synaps * synaps) {
+        value += synaps->weight * synaps->from->value;
+    }, IN);
+    */
+}
+
 void Neuron::setSynapse(Synaps *syn){
     if(syn == 0)
-        return;
+        throw NoNeuron();
+
     if(syn->from == this){
         this->outSyn.append(syn);
     }
@@ -16,28 +34,14 @@ void Neuron::setSynapse(Synaps *syn){
         this->inSyn.append(syn);
     }
     else{
-        ;
+        throw FailLink();
     }
 }
 
-
-double Neuron::summup(InputData imgs, const Func &sigmoid){
-    double outputValue = 0;
-    if(layer == INPUT) {
-
-        //Somehow take information from imgs
-    }
-    else {
-        int prevLayerSize = inSyn.size();
-        for(int i = 0; i < prevLayerSize; i++){
-            outputValue += inSyn[i]->weight * inSyn[i]->from->summup(imgs, sigmoid);
-        }
-        outputValue = sigmoid(outputValue);
-    }
-    return outputValue;
-}
 
 void Neuron::changeOutSyn(double *neuWeights){
+    if (neuWeights == NULL)
+        throw NoWeights();
     int outSynNum = outSyn.size();
     for (int i = 0; i < outSynNum; i++){
         outSyn[i]->weight = neuWeights[i];
@@ -64,5 +68,6 @@ void Neuron::apply(UnsafeSynapseAct action, const SynapseType type) {
         for (int I = 0; I < outSyn.size(); ++I)
             action(outSyn[I]);
 }
+
 
 }//namespace NeuNets
