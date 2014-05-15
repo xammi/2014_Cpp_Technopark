@@ -66,23 +66,30 @@ void MultiLayerFactory::parseFile(const QString &filename) {
 
     QTextStream stream(&file);
     quint32 magicNumber;
-    stream >> magicNumber;
 
+    stream >> magicNumber;
     if(magicNumber != fileId)
         throw WrongFileFormat();
+
+    nnInfo.clear();
+
     stream >> nnInfo.funcName;
     stream >> nnInfo.layersCount;
 
     // Проверка на правильность входных данных??
 
 
-    unsigned int bufIntVar; // Нельзя напрямую читать в вектор
+    unsigned int bufIntVar; // Количество в слое
 
     stream >> bufIntVar;
+    if(!(bufIntVar > 0))
+        throw WrongFileFormat();
     nnInfo.neuronsPerLayer.append(bufIntVar);
 
     for(uint i = 1; i < nnInfo.layersCount; ++i){
         stream >> bufIntVar;
+        if(!(bufIntVar > 0))
+            throw WrongFileFormat();
         nnInfo.neuronsPerLayer.append(bufIntVar);
         //
         int cur = nnInfo.neuronsPerLayer[i];

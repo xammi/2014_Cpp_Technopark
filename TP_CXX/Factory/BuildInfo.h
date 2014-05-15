@@ -21,6 +21,12 @@ struct BuildInfo {
     BuildInfo() {}
     BuildInfo(const QString &, const QString &);
     BuildInfo(const QString &, const QString &, const int);
+    void clear(){
+        layersCount = 0;
+        neuronsPerLayer.clear();
+        funcName.clear();
+        netName.clear();
+    }
 
     uint layersCount;
     QVector<uint> neuronsPerLayer;

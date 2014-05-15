@@ -9,7 +9,7 @@ NeuNetUI::NeuNetUI(QWidget *parent) :
       QMainWindow(parent), ui(new Ui::NeuNetUI),
       openDlg(new QFileDialog),
       createUi(new Ui::CreateNetUI), createDlg(new QDialog),
-      createValidator(new QRegExpValidator(QRegExp("([0-9]+,|[0-9]+-[0-9]+,)+")))
+      createValidator(new QRegExpValidator(QRegExp("([1-9]+,|[1-9]+-[1-9]+,)+")))
 {
     ui->setupUi(this);
     createUi->setupUi(createDlg);

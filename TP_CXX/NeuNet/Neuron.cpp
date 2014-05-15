@@ -8,6 +8,12 @@ Neuron::Neuron() {
 }
 
 
+int Neuron::getSynapseCnt(SynapseType stype) const{
+    if (stype == IN)
+        return inSyn.size();
+    return outSyn.size();
+}
+
 void Neuron::summup(const Func &sigmoid){
     value = 0;
     int prevLayerSize = inSyn.size();

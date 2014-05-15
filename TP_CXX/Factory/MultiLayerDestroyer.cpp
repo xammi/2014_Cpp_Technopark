@@ -1,8 +1,8 @@
 #include "MultiLayerDestroyer.h"
 #include <QFile>
 
-const quint32 fileId  = 0xA1B1C1D1;
-
+//const quint32 fileId  = 0xA1B1C1D1;
+const qint32 fileId = 10;
 
 namespace Factory{
 
@@ -34,22 +34,21 @@ void MultiLayerDestroyer::destroy(NeuNets::AbstractNet *aNet) {
         throw NetNotFound();
 
     NeuNets::Iterator from = nNet->getInLayer();
+    NeuNets::Iterator buf = nNet->getInLayer();
     NeuNets::Iterator to = nNet->getAfterOut();
 
+    // Даже сравнение не проходит. Проблема в том, что при вызове nextLayer
+    // почему-то меняются нейроны местами. В результате флаги сохраняются
+    // а значения синапсов другие
+
     for ( ; from != to; from.nextLayer()) {
+        buf.nextLayer();
         from.apply(deleteNeurons);
+        from = buf;
+        if(from == to)
+            break;
     }
 }
-
-
-
- /*
-  *Беда такая - куда писать кол-во слоев? Если вначале - то неудобно читать.
-  *Если в конце - то неудобно писать.
-  *И удаление вываливается просто так. Надо подключать веса
-  *
-  */
-
 
 void MultiLayerDestroyer::writeNetToFile(NeuNets::AbstractNet *aNet, const QString &filename) {
     NeuNets::MultiLayerNet *nNet;
@@ -63,7 +62,7 @@ void MultiLayerDestroyer::writeNetToFile(NeuNets::AbstractNet *aNet, const QStri
         throw NetNotFound();
 
     NeuNets::Iterator from = nNet->getInLayer();
-    NeuNets::Iterator to = nNet->getOutLayer();
+    NeuNets::Iterator to = nNet->getAfterOut();
 
     QFile file(filename);
 
@@ -73,11 +72,19 @@ void MultiLayerDestroyer::writeNetToFile(NeuNets::AbstractNet *aNet, const QStri
     QTextStream stream(&file);
 
     stream << fileId;
+    stream << nNet->count();
+
+    stream << from.count();
+    from.nextLayer();
 
     for ( ; from != to; from.nextLayer()) {
+        stream << from.count();
+
+        // Как захватить в контекст stream?
+        // А так - написать ту же самую функцию, только вместо
+        // deleteSynapse писать stream << synapse.weight
         from.apply(deleteNeurons);
     }
-
 }
 
 } // namespace Factory

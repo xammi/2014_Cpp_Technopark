@@ -16,9 +16,6 @@ namespace NeuNets {
 using DataProcess::InputData;
 using DataProcess::OutputData;
 
-
-enum neuronPos { INPUT = 0, HIDDEN, OUTPUT };
-
 typedef double (* func)(double);
 //typedef std::function <double (double)> ofunc;
 
@@ -36,20 +33,20 @@ public:
     void summup(const Func &sigmoid);
     void setSynapse(Synaps *syn);
 
-    neuronPos getLayer() {return layer;}
     const QVector<Synaps *> &getInSyn() {return inSyn;}
     const QVector<Synaps *> &getOutSyn() {return outSyn;}
 
     void apply(SynapseAct action, const SynapseType type);
 
     void changeOutSyn(double *);
-    void setVal(double sV) {if(layer == INPUT) value = sV;}
-    double getVal() {if (layer == OUTPUT) return value;}
+    int getSynapseCnt(SynapseType) const;
+    void setVal(double sV) { value = sV; }
+    double getVal() const { return value; }
+
 private:
     void apply(UnsafeSynapseAct action, const SynapseType type);
 
     double value;
-    neuronPos layer;
     QVector<Synaps *> inSyn;
     QVector<Synaps *> outSyn;
 };

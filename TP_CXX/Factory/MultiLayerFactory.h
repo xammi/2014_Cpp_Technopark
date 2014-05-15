@@ -30,6 +30,7 @@ private:
     NeuNets::MultiLayerNet *allocMemory(NeuNets::MultiLayerNet *bpNewNet);
     void assembly(NeuNets::NeuVec &prevLayer, NeuNets::NeuVec &curLayer, int layerPos);
 
+
     void createFromInfoRec(const NCounts &, int, BuildInfo &, QVector<AbstractNet *> &);
 
 

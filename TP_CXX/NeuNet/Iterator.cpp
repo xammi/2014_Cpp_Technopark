@@ -17,7 +17,7 @@ void Iterator::prevLayer(){
     }
 
     if (flagPseudoBegin) return;
-    if((neuronLayer[0])->getLayer() == INPUT){
+    if(neuronLayer[0]->getSynapseCnt(IN) == 0){
         flagPseudoBegin = true;
         return;
     }
@@ -48,7 +48,7 @@ void Iterator::nextLayer(){
     }
 
     if (flagPseudoEnd) return;
-    if((neuronLayer[0])->getLayer() == OUTPUT){
+    if(neuronLayer[0]->getSynapseCnt(OUT) == 0){
         flagPseudoEnd = true;
         return;
     }

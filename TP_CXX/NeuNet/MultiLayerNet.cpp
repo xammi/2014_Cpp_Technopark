@@ -66,8 +66,17 @@ QString MultiLayerNet::topology() const {
 
     QString description;
 
+
+
+    // Проблема в том, что выставление флага происходит
+    // После того, как прошло сравнение
+    // Сейчас - костыль, потом посмотрим
     for(;inIter != outIter; inIter.nextLayer()){
+        if(inIter.flagPseudoEnd)
+            break;
         description += QString::number(inIter.count());
+        if (inIter[0].getSynapseCnt(OUT) != 0)
+            description += ", ";
     }
 
     return description;

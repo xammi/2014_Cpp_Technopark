@@ -22,8 +22,8 @@ public:
     const Neuron &nextNeuron(); // increase ptrPos if possible and return pointer to Neuron at ptrPos
     const Neuron &prevNeuron(); // decrease ptrPos if possible and return pointer to Neuron at ptrPos
 
-    bool operator==(const Iterator &rhs) const { return (neuronLayer == rhs.neuronLayer); }
-    bool operator!=(const Iterator &rhs) const { return (neuronLayer != rhs.neuronLayer); }
+    bool operator==(const Iterator &rhs) const { return (flagPseudoEnd == rhs.flagPseudoEnd && flagPseudoBegin == rhs.flagPseudoBegin && neuronLayer == rhs.neuronLayer); }
+    bool operator!=(const Iterator &rhs) const { return !(*this == rhs); }
 
     void apply(UnmodNeuronAct);
     void apply(NeuronAct);
