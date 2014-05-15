@@ -7,8 +7,8 @@ namespace NetManagers {
 //-------------------------------------------------------------------------------------------------
 NeuNetUI::NeuNetUI(QWidget *parent) :
       QMainWindow(parent), ui(new Ui::NeuNetUI),
-      openDlg(new QFileDialog(this)),
-      createUi(new Ui::CreateNetUI), createDlg(new QDialog(this)),
+      openDlg(new QFileDialog),
+      createUi(new Ui::CreateNetUI), createDlg(new QDialog),
       createValidator(new QRegExpValidator(QRegExp("([0-9]+,|[0-9]+-[0-9]+,)+")))
 {
     ui->setupUi(this);
@@ -32,6 +32,10 @@ void NeuNetUI::adjustUi() {
 
 NeuNetUI::~NeuNetUI() {
     delete ui;
+    delete createDlg;
+//    delete openDlg;
+    delete createUi;
+    delete createValidator;
 }
 //-------------------------------------------------------------------------------------------------
 void NeuNetUI::onShowException(QString problem) {

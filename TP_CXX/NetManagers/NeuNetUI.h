@@ -57,7 +57,7 @@ private slots:
 
 public:
     explicit NeuNetUI(QWidget *parent = 0);
-    ~NeuNetUI();
+    virtual ~NeuNetUI();
     
 private:
     void adjustUi();
