@@ -14,7 +14,9 @@ using NeuNets::AbstractNet;
 class AbstractNetFactory
 {
 public:
-//    virtual NeuNets::AbstractNet *createNet(QString filename) = 0;
+    virtual ~AbstractNetFactory() {}
+
+    //    virtual NeuNets::AbstractNet *createNet(QString filename) = 0;
     virtual AbstractNet *createFromFile(const QString &filename) = 0;
     virtual AbstractNet *createFromInfo(const BuildInfo &newInfo) = 0;
     virtual void createFromInfo(const QString &, const QString &, const NCounts &, QVector<AbstractNet *> &) = 0;

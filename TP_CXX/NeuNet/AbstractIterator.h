@@ -9,6 +9,7 @@ namespace NeuNets {
 class AbstractIterator
 {
 public:
+    virtual ~AbstractIterator() {}
     virtual void prevLayer() = 0;
     virtual void nextLayer() = 0;
 };

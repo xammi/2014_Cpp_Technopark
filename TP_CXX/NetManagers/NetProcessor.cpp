@@ -66,6 +66,12 @@ void NetProcessor::onLoadNet(QString filename) {
     try {
         AbstractNet *loaded = factory->createFromFile(filename);
         nets.append(loaded);
+
+
+        // Program crashes here! Alert!
+        // But it's not your fault
+
+
     } catch (Exception &exc) {
         emit showException(exc.toString());
     }
