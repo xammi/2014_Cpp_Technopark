@@ -29,7 +29,7 @@ public:
     CompResult test(const InputData &, const OutputData &);
 
     // Function from EG Функция пишет в currentErrors ошибки последнего слоя сети
-    void process(const InputDataSet &inputs, const OutputDataSet &outputs, DataProcess::OutputData &currentErrors) {}
+//    void process(const InputDataSet &inputs, const OutputDataSet &outputs, DataProcess::OutputData &currentErrors) {}
 
     void setTarget(AbstractNet *);
 

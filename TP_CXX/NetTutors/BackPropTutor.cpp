@@ -26,13 +26,13 @@ bool BackPropTutor::isMinError(DataProcess::OutputData *currentErrors, long doub
     return 1;
 }
 
-void BackPropTutor::changeWeights(NeuNets::Neuron neuron, double error){
-}
+//void BackPropTutor::changeWeights(NeuNets::Neuron neuron, double error){
+//}
 
-CurLayerErr BackPropTutor::getMidError(CurLayerErr *curErr, NeuNets::Iterator cur, NeuNets::Iterator prev){
-    CurLayerErr newErr;
-    return newErr;
-}
+//CurLayerErr BackPropTutor::getMidError(CurLayerErr *curErr, NeuNets::Iterator cur, NeuNets::Iterator prev){
+//    CurLayerErr newErr;
+//    return newErr;
+//}
 
 bool BackPropTutor::start(const TuteData &data){
     long int curIter = 0;
@@ -90,12 +90,12 @@ bool BackPropTutor::start(const TuteData &data){
                     // Сменить веса для слоя
                     for(int j = 0; j < from.count(); ++j){
                         //функция меняет значения синапсов по одной формуле
-                        changeWeights(from[j], bufLayerErr.values[j]);
+//                        changeWeights(from[j], bufLayerErr.values[j]);
                     }
 
 
                     from.nextLayer();
-                    bufLayerErr = getMidError(&bufLayerErr, from, mid);
+//                    bufLayerErr = getMidError(&bufLayerErr, from, mid);
 
                 }
                 curErrLayer = 0;

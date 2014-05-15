@@ -16,8 +16,8 @@ typedef function< void (const Neuron &) > UnmodNeuronAct;
 class AbstractNet
 {
 public:
-//    virtual ~AbstractNet();
-    virtual DataProcess::OutputData getResponse(const InputData &) const;
+    virtual ~AbstractNet() {}
+    virtual DataProcess::OutputData getResponse(const InputData &) const = 0;
 
     virtual QString topology() const = 0;
 
