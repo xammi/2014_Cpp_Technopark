@@ -23,7 +23,7 @@ public:
 
 //-------------------------------------------------------------------------------------------------
 struct AbstractProcessor : public QObject {
-
+    virtual ~AbstractProcessor() {}
     virtual InputData * prepareData(QPixmap &) = 0;
 };
 //-------------------------------------------------------------------------------------------------

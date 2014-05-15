@@ -22,7 +22,7 @@ struct BuildInfo {
     BuildInfo(const QString &, const QString &);
     BuildInfo(const QString &, const QString &, const int);
 
-    int layersCount;
+    uint layersCount;
     QVector<uint> neuronsPerLayer;
 
     QString funcName;

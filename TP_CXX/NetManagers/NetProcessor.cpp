@@ -68,7 +68,8 @@ void NetProcessor::onLoadNet(QString filename) {
         nets.append(loaded);
 
 
-        // Program freezes here!
+        // Program crashes here! Alert!
+        // But it's not your fault
 
 
     } catch (Exception &exc) {

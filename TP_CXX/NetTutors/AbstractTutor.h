@@ -12,6 +12,7 @@ class AbstractTutor : public QObject {
     Q_OBJECT
 
 public:
+    virtual ~AbstractTutor() {}
     virtual void initialize() = 0;
     virtual bool start(const TuteData &) = 0;
 };

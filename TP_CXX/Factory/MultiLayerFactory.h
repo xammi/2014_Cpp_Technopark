@@ -19,21 +19,16 @@ typedef QVector<double *> SynapsWeights;
 // Concrete Factory
 class MultiLayerFactory: public AbstractNetFactory
 {
-    struct Layer {
-        uint neuroCount;
-
-        NeuNets::NeuVec neuron;
-    };
 
 private:
     BuildInfo nnInfo;
-    NeuNets::MultiLayerNet *bpNewNet;
+//    NeuNets::MultiLayerNet *bpNewNet;
     SynapsWeights weights;
 
     bool currentMode;  // 0 - fromFILE 1 - fromDATA
 
-    void allocMemory() ;
-    void assembly(Layer &prevLayer, Layer &curLayer, int layerPos);
+    NeuNets::MultiLayerNet *allocMemory(NeuNets::MultiLayerNet *bpNewNet);
+    void assembly(NeuNets::NeuVec &prevLayer, NeuNets::NeuVec &curLayer, int layerPos);
 
     void createFromInfoRec(const NCounts &, int, BuildInfo &, QVector<AbstractNet *> &);
 

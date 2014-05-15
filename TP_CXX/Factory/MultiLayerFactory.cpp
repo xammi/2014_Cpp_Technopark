@@ -8,11 +8,7 @@
 const qint32 fileId = 10;
 
 /* Summary
- * Файл практически готов. Нужно разобраться с чтением - не нравится массив weights (почему?)
- * Можно навести косметику. Можно выкинуть это в долг
- *
- * Предложение - вынести nnInfo на уровень процессора. Тогда можно будет получать инфу оттуда
- *
+
  * Долг - обработать какое-нибудь стандартное исключение, которое выбрасывается, когда я хочу считать число
  * А получаю EOF
  */
@@ -102,49 +98,58 @@ void MultiLayerFactory::parseFile(const QString &filename) {
         }
         weights.append(bufArr);
     }
+
+    nnInfo.netName = filename;
+    nnInfo.netName.remove(".net");
 }
 
 
-void MultiLayerFactory::allocMemory() {
+NeuNets::MultiLayerNet *MultiLayerFactory::allocMemory(NeuNets::MultiLayerNet *bpNewNet) {
 
-    Layer *prevLayer;
-    Layer *curLayer;
+    NeuNets::NeuVec *prevLayer;
+    NeuNets::NeuVec *curLayer;
+//    Layer *prevLayer;
+//    Layer *curLayer;
 
     uint i, j;
 
     //---------------
-    // Creating first Layer(looks bad)
+    // Creating first Layer
     //---------------
-    Layer *firstLayer = new Layer();
-    firstLayer->neuroCount = nnInfo.neuronsPerLayer[0];
+    NeuNets::NeuVec *firstLayer = new NeuNets::NeuVec();
+    uint firstNeuroCount = nnInfo.neuronsPerLayer[0];
 
-    for(j = 0; j < firstLayer->neuroCount; ++j)
-        firstLayer->neuron.append(new NeuNets::Neuron);
+
+    for(j = 0; j < firstNeuroCount; ++j)
+        firstLayer->append(new NeuNets::Neuron);
 
     prevLayer = firstLayer;
     //---------------
-    NeuNets::NeuVec inToSend = firstLayer->neuron;
+    NeuNets::NeuVec inToSend = *firstLayer;
 
     for(i = 1; i < nnInfo.layersCount; ++i){
-        curLayer = new Layer();
-        curLayer->neuroCount = nnInfo.neuronsPerLayer[i];
+        curLayer = new NeuNets::NeuVec();
+        uint neuroCount = nnInfo.neuronsPerLayer[i];
 
-        for(j = 0; j < curLayer->neuroCount; ++j)
-            curLayer->neuron.append(new NeuNets::Neuron);
+
+        for(j = 0; j < neuroCount; ++j)
+            curLayer->append(new NeuNets::Neuron);
 
         assembly(*prevLayer, *curLayer, i);
         prevLayer = curLayer;
     }
-    NeuNets::NeuVec outToSend = curLayer->neuron;
+    NeuNets::NeuVec outToSend = *curLayer;
     bpNewNet = new NeuNets::MultiLayerNet(FuncDisp::func(nnInfo.funcName) , inToSend, outToSend, nnInfo.layersCount);
     bpNewNet->setName(nnInfo.netName);
+    return bpNewNet;
 }
 
 
-void MultiLayerFactory::assembly(Layer &prevLayer, Layer &curLayer, int layerPos)  {
+void MultiLayerFactory::assembly(NeuNets::NeuVec &prevLayer, NeuNets::NeuVec &curLayer, int layerPos)  {
     uint offset = 0;
-    for(uint i = 0; i < prevLayer.neuroCount; ++i){
-        for(uint j = 0; j < curLayer.neuroCount; ++j){
+    uint prevNeuCount = prevLayer.size(), curNeuCount = curLayer.size();
+    for(uint i = 0; i < prevNeuCount; ++i){
+        for(uint j = 0; j < curNeuCount; ++j){
 
             double weight;
             if(currentMode)
@@ -153,9 +158,9 @@ void MultiLayerFactory::assembly(Layer &prevLayer, Layer &curLayer, int layerPos
                 weight = weights[layerPos - 1][i + j + offset]; //
             }
 
-            NeuNets::Synaps *bufSynapse = new NeuNets::Synaps(prevLayer.neuron[i], curLayer.neuron[j], weight);
-            prevLayer.neuron[i]->setSynapse(bufSynapse);
-            curLayer.neuron[j]->setSynapse(bufSynapse);
+            NeuNets::Synaps *bufSynapse = new NeuNets::Synaps(prevLayer[i], curLayer[j], weight);
+            prevLayer[i]->setSynapse(bufSynapse);
+            curLayer[j]->setSynapse(bufSynapse);
         }
         offset++;
     }
@@ -163,15 +168,17 @@ void MultiLayerFactory::assembly(Layer &prevLayer, Layer &curLayer, int layerPos
 
 NeuNets::MultiLayerNet *MultiLayerFactory::createFromFile(const QString &filename) {
     currentMode = 0;
+    NeuNets::MultiLayerNet *bpNewNet = 0;
     parseFile(filename);
-    allocMemory();
+    bpNewNet = allocMemory(bpNewNet);
     return bpNewNet;
 }
 
 NeuNets::MultiLayerNet *MultiLayerFactory::createFromInfo(const BuildInfo &newInfo) {
     currentMode = 1;
+    NeuNets::MultiLayerNet *bpNewNet = 0;
     nnInfo = newInfo;
-    allocMemory();
+    bpNewNet = allocMemory(bpNewNet);
     return bpNewNet;
 }
 //-------------------------------------------------------------------------------------------------
@@ -184,7 +191,7 @@ void MultiLayerFactory::createFromInfo(const QString &name, const QString &funcN
 void MultiLayerFactory::createFromInfoRec(const NCounts &cnts, int I,
                                           BuildInfo &nnInfo,
                                           QVector<AbstractNet *> &nets) {
-    if (nnInfo.layersCount == I) {
+    if ((uint)nnInfo.layersCount == I) {
         nets.append(createFromInfo(nnInfo));
         return;
     }
