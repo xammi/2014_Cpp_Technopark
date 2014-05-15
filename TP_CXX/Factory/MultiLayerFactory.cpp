@@ -154,7 +154,7 @@ void MultiLayerFactory::assembly(Layer &prevLayer, Layer &curLayer, int layerPos
 
             NeuNets::Synaps *bufSynapse = new NeuNets::Synaps(prevLayer.neuron[i], curLayer.neuron[j], weight);
             prevLayer.neuron[i]->setSynapse(bufSynapse);
-            curLayer.neuron[i]->setSynapse(bufSynapse);
+            curLayer.neuron[j]->setSynapse(bufSynapse);
         }
         offset++;
     }
