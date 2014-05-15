@@ -84,7 +84,7 @@ bool BackPropTutor::start(const TuteData &data){
                 NeuNets::Iterator mid = from;
 
                 // Тестер взял картинку текущего образа, его идеальный выход и записал результат в текущие ошибки
-                currentTester->process(&curImage.inputs, &curImage.outputs, &bufLayerErr, currentNet);
+//                currentTester->process(&curImage.inputs, &curImage.outputs, &bufLayerErr);
                 while (from != to) {
                     bufImageErr[curErrLayer++] = bufLayerErr;
                     // Сменить веса для слоя

@@ -23,7 +23,7 @@ public:
     MultiLayerNet(const Func &, const NeuVec &, const NeuVec &, const uint);
     ~MultiLayerNet();
 
-    DataProcess::OutputData getResponse(const DataProcess::InputData &imgs);
+    DataProcess::OutputData getResponse(const DataProcess::InputData &imgs) const;
 
 
     Iterator getInLayer() const;
@@ -41,7 +41,8 @@ private:
     uint layersCnt;
     Func sigmoid;
 };
-//================================================================
+
+
 struct  NoImageForResp: public Exception {
     QString toString() { return "Fail to get image for response"; }
 };

@@ -18,11 +18,9 @@ MultiLayerNet::MultiLayerNet (const Func &sigma,
     inLayerNum = inNeuVec.size();
 }
 
-MultiLayerNet::~MultiLayerNet() {
+MultiLayerNet::~MultiLayerNet() {}
 
-}
-
-OutputData MultiLayerNet::getResponse(const DataProcess::InputData &imgs){
+DataProcess::OutputData MultiLayerNet::getResponse(const DataProcess::InputData &imgs) const {
 //    if(!imgs.)
 //        throw NoImage();
 

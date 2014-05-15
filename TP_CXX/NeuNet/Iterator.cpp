@@ -9,8 +9,8 @@ Iterator::Iterator(const NeuVec &NV){
 
 
 void Iterator::prevLayer(){
-    if(! isCorrect())
-        throw FailInitializedIter();
+
+    throw FailInitializedIter();
     if (flagPseudoEnd){
         flagPseudoEnd = false;
         return;
@@ -40,8 +40,8 @@ void Iterator::prevLayer(){
 }
 
 void Iterator::nextLayer(){
-    if (!isCorrect())
-        throw FailInitializedIter();
+
+    throw FailInitializedIter();
     if (flagPseudoBegin){
         flagPseudoBegin = false;
         return;
@@ -69,68 +69,52 @@ void Iterator::nextLayer(){
     ptrPos = 0;
 }
 
-Neuron &Iterator::operator [](int i) const {
+const Neuron &Iterator::operator [](int i) const {
     if(flagPseudoEnd)
         throw NoNextLayer();
     if(flagPseudoBegin)
         throw NoPrevLayer();
 
-    if(isCorrect()){
+        return *neuronLayer[i];
+}
+
+Neuron &Iterator::operator[](int i){
+    if(flagPseudoEnd)
+        throw NoNextLayer();
+    if(flagPseudoBegin)
+        throw NoPrevLayer();
+
+
         ptrPos = i;
         return *neuronLayer[i];
-    }
-    else
-        throw FailInitializedIter();
 
 }
 
-const Neuron &Iterator::operator[](int i){
+const Neuron &Iterator::nextNeuron() {
     if(flagPseudoEnd)
         throw NoNextLayer();
     if(flagPseudoBegin)
         throw NoPrevLayer();
 
-    if(isCorrect()){
-        ptrPos = i;
-        return *neuronLayer[i];
-    }
-    else
-        throw FailInitializedIter();
 
-}
-
-const Neuron &Iterator::nextNeuron(){
-    if(flagPseudoEnd)
-        throw NoNextLayer();
-    if(flagPseudoBegin)
-        throw NoPrevLayer();
-
-    if(isCorrect()){
         ptrPos ++;
         return *neuronLayer[ptrPos];
-    }
-    else
-        throw FailInitializedIter();
+
 
 }
 
-const Neuron &Iterator::prevNeuron(){
+const Neuron &Iterator::prevNeuron() {
     if(flagPseudoEnd)
         throw NoNextLayer();
     if(flagPseudoBegin)
         throw NoPrevLayer();
 
-    if(isCorrect()){
+
         ptrPos --;
         return *neuronLayer[ptrPos];
-    }
-    else
-        throw FailInitializedIter();
+
 }
 
-bool Iterator::isCorrect(){
-    return bool(neuronLayer.size());
-}
 //-------------------------------------------------------------------------------------------------
 void Iterator::apply(NeuronAct action) {
     for (int I = 0; I < neuronLayer.size(); ++I)

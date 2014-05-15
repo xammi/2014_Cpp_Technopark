@@ -13,6 +13,8 @@ using DataProcess::InputData;
 using DataProcess::OutputData;
 
 typedef bool CompResult;
+typedef QVector<InputData *> InputDataSet;
+typedef QVector<OutputData *> OutputDataSet;
 //-------------------------------------------------------------------------------------------------
 class Tester : public QObject {
     Q_OBJECT
@@ -27,7 +29,7 @@ public:
     CompResult test(const InputData &, const OutputData &);
 
     // Function from EG Функция пишет в currentErrors ошибки последнего слоя сети
-    void process(QVector<DataProcess::InputData *> *inputs, QVector<DataProcess::OutputData *> *outputs, DataProcess::OutputData *currentErrors, NeuNets::AbstractNet *currentNet) {;}
+    void process(const InputDataSet &inputs, const OutputDataSet &outputs, DataProcess::OutputData &currentErrors) {}
 
     void setTarget(AbstractNet *);
 

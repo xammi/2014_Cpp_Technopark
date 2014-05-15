@@ -16,8 +16,8 @@ public:
     void prevLayer();//Set neuron vector in previous layer
     void nextLayer();//Set neuron vector in next layer
 
-    Neuron &operator[](int i) const;
-    const Neuron &operator[](int i); //Return pointer to i neuron in current layer
+    Neuron &operator[](int i);
+    const Neuron &operator[](int i) const; //Return pointer to i neuron in current layer
 
     const Neuron &nextNeuron(); // increase ptrPos if possible and return pointer to Neuron at ptrPos
     const Neuron &prevNeuron(); // decrease ptrPos if possible and return pointer to Neuron at ptrPos
@@ -35,6 +35,7 @@ protected:
     void zeroFlags() {flagPseudoEnd = false; flagPseudoBegin = false;}
     bool flagPseudoEnd;
     bool flagPseudoBegin;
+
     Iterator(const NeuVec &);
     NeuVec neuronLayer;
     int ptrPos; //contains the position of pointer in vector
