@@ -62,13 +62,13 @@ Iterator MultiLayerNet::getOutLayer() const{
 
 QString MultiLayerNet::topology() const {
     Iterator inIter = getInLayer();
-    Iterator outIter = getOutLayer();
+    Iterator outIter = getAfterOut();
 
     QString description;
-//    do {
-//        description += QString::number(inIter.count());
-//        inIter.nextLayer();
-//    } while (inIter != outIter);
+
+    for(;inIter != outIter; inIter.nextLayer()){
+        description += QString::number(inIter.count());
+    }
 
     return description;
 }

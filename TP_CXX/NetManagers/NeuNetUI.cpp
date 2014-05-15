@@ -28,6 +28,8 @@ void NeuNetUI::adjustUi() {
     connect(openDlg, SIGNAL(filesSelected(QStringList)), SLOT(onLoadNets(QStringList)));
     connect(ui->netSave, SIGNAL(pressed()), SLOT(onSaveNets()));
     connect(ui->netRemove, SIGNAL(pressed()), SLOT(onRemoveNets()));
+
+    createUi->ok->setFocus();
 }
 
 NeuNetUI::~NeuNetUI() {

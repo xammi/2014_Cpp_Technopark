@@ -108,7 +108,7 @@ void NetProcessor::onUpdateNets(QTableWidget * view) {
     view->setRowCount(nets.size());
 
     int row = 0;
-    foreach (AbstractNet *net, nets) {
+    for (AbstractNet *net: nets) {
         view->setItem(row, 0, new QTableWidgetItem(net->name()));
         view->setItem(row, 1, new QTableWidgetItem(net->topology()));
         row++;

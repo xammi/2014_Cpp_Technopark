@@ -55,11 +55,12 @@ private:
 };
 
 struct Synaps {
+    Synaps () {}
+    Synaps (Neuron *fr, Neuron *to, double w) : weight(w), to(to), from(fr) {}
+
     double weight;
     Neuron *to;
     Neuron *from;
-    Synaps (Neuron *fr, Neuron *to, double w) : weight(w), to(to), from(fr) {}
-    Synaps ();
 };
 
 //================================================================

@@ -34,7 +34,7 @@ void MultiLayerDestroyer::destroy(NeuNets::AbstractNet *aNet) {
         throw NetNotFound();
 
     NeuNets::Iterator from = nNet->getInLayer();
-    NeuNets::Iterator to = nNet->getOutLayer();
+    NeuNets::Iterator to = nNet->getAfterOut();
 
     for ( ; from != to; from.nextLayer()) {
         from.apply(deleteNeurons);

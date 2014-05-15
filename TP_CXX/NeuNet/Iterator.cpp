@@ -10,7 +10,7 @@ Iterator::Iterator(const NeuVec &NV){
 
 void Iterator::prevLayer(){
 
-    throw FailInitializedIter();
+
     if (flagPseudoEnd){
         flagPseudoEnd = false;
         return;
@@ -41,7 +41,7 @@ void Iterator::prevLayer(){
 
 void Iterator::nextLayer(){
 
-    throw FailInitializedIter();
+
     if (flagPseudoBegin){
         flagPseudoBegin = false;
         return;
@@ -59,7 +59,7 @@ void Iterator::nextLayer(){
     Synaps pathSynaps;
 
     for(int i = 0; i < nextLayerSize; i++){
-        pathSynaps = *(curLayerNeuron.getInSyn())[i];
+        pathSynaps = *(curLayerNeuron.getOutSyn())[i];
         neuronLayer.push_front(pathSynaps.to);
     }
 
