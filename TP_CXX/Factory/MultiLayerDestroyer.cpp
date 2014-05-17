@@ -6,26 +6,24 @@ const qint32 fileId = 10;
 
 namespace Factory{
 
-
-
 MultiLayerDestroyer::MultiLayerDestroyer() {
-    deleteSynapses = [] (NeuNets::Synaps * synaps)->void {
+    deleteSynapses = [] (Synapse * synaps) {
         if (synaps)
             delete synaps;
     };
 
-    deleteNeurons = [ this ] (NeuNets::Neuron * neuron)->void {
+    deleteNeurons = [ this ] (Neuron * neuron) {
         if (neuron) {
-            neuron->apply(deleteSynapses, NeuNets::IN);
+            neuron->apply(deleteSynapses, IN);
             delete neuron;
         }
     };
 }
 
 void MultiLayerDestroyer::destroy(NeuNets::AbstractNet *aNet) {
-    NeuNets::MultiLayerNet *nNet;
+    MultiLayerNet *nNet;
     try {
-        nNet = dynamic_cast<NeuNets::MultiLayerNet *>(aNet);
+        nNet = dynamic_cast<MultiLayerNet *>(aNet);
     } catch (std::bad_cast) {
         throw WrongKindOfNet();
     }
@@ -33,13 +31,9 @@ void MultiLayerDestroyer::destroy(NeuNets::AbstractNet *aNet) {
     if(!nNet)
         throw NetNotFound();
 
-    NeuNets::Iterator from = nNet->getInLayer();
-    NeuNets::Iterator buf = nNet->getInLayer();
-    NeuNets::Iterator to = nNet->getAfterOut();
-
-    // Даже сравнение не проходит. Проблема в том, что при вызове nextLayer
-    // почему-то меняются нейроны местами. В результате флаги сохраняются
-    // а значения синапсов другие
+    Iterator from = nNet->getInLayer(),
+             buf = nNet->getInLayer(),
+             to = nNet->getAfterOut();
 
     for ( ; from != to; from.nextLayer()) {
         buf.nextLayer();
@@ -48,10 +42,10 @@ void MultiLayerDestroyer::destroy(NeuNets::AbstractNet *aNet) {
     }
 }
 
-void MultiLayerDestroyer::writeNetToFile(NeuNets::AbstractNet *aNet, const QString &filename) {
-    NeuNets::MultiLayerNet *nNet;
+void MultiLayerDestroyer::writeNetToFile(AbstractNet *aNet, const QString &filename) {
+    MultiLayerNet *nNet;
     try {
-        nNet = dynamic_cast<NeuNets::MultiLayerNet *>(aNet);
+        nNet = dynamic_cast<MultiLayerNet *>(aNet);
     } catch (std::bad_cast) {
         throw WrongKindOfNet();
     }
@@ -59,8 +53,8 @@ void MultiLayerDestroyer::writeNetToFile(NeuNets::AbstractNet *aNet, const QStri
     if(!nNet)
         throw NetNotFound();
 
-    NeuNets::Iterator from = nNet->getInLayer();
-    NeuNets::Iterator to = nNet->getAfterOut();
+    Iterator from = nNet->getInLayer(),
+             to = nNet->getAfterOut();
 
     QFile file(filename);
 
@@ -75,7 +69,7 @@ void MultiLayerDestroyer::writeNetToFile(NeuNets::AbstractNet *aNet, const QStri
     stream << from.count();
     from.nextLayer();
 
-    SynapseAct sAct = [ &stream ] (Synaps &synapse) {
+    SynapseAct sAct = [ &stream ] (Synapse &synapse) {
         stream << synapse.weight;
     };
     NeuronAct nAct = [ &sAct ] (Neuron &neuron) {

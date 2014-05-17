@@ -47,6 +47,7 @@ void NetProcessor::connectUI() {
     connect(gui, SIGNAL(updateNets(QTableWidget*)), SLOT(onUpdateNets(QTableWidget*)));
     connect(gui, SIGNAL(updateData(QTreeWidget*)), SLOT(onUpdateData(QTreeWidget*)));
 
+    connect(this, SIGNAL(showInfo(QString)), gui, SLOT(onShowInfo(QString)));
     connect(this, SIGNAL(showException(QString)), gui, SLOT(onShowException(QString)));
     connect(this, SIGNAL(showDebug(QString)), gui, SLOT(onShowDebug(QString)));
     connect(tester, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
@@ -89,6 +90,7 @@ void NetProcessor::onSaveNet(QString filename, CIndex netIndex) {
     try {
         AbstractNet *toSave = nets[netIndex];
         destroyer->writeNetToFile(toSave, filename);
+        emit showInfo("Successfully saved");
     } catch (Exception &exc) {
         emit showException(exc.toString());
     }

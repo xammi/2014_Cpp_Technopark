@@ -23,7 +23,7 @@ public:
     MultiLayerNet(const Func &, const NeuVec &, const NeuVec &, const uint);
     ~MultiLayerNet();
 
-    DataProcess::OutputData getResponse(const DataProcess::InputData &imgs) const;
+    OutputData getResponse(const InputData &imgs) const;
 
 
     Iterator getInLayer() const;

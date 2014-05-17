@@ -1,34 +1,30 @@
 #ifndef BACKPROPNETFACTORY_H
 #define BACKPROPNETFACTORY_H
 
-#include "AbstractNetFactory.h"
+#include "AbstractFactory.h"
 #include "../NeuNet/MultiLayerNet.h"
 
 #include "BuildInfo.h"
 
 namespace Factory{
 
-using NeuNets::Neuron;
-using NeuNets::Synaps;
-using NeuNets::MultiLayerNet;
-using NeuNets::AbstractNet;
+using namespace NeuNets;
 
-
-typedef QVector<double *> SynapsWeights;
+typedef QVector<double *> SynapseWeights;
 
 // Concrete Factory
-class MultiLayerFactory: public AbstractNetFactory
+class MultiLayerFactory: public AbstractFactory
 {
 
 private:
     BuildInfo nnInfo;
 //    NeuNets::MultiLayerNet *bpNewNet;
-    SynapsWeights weights;
+    SynapseWeights weights;
 
     bool currentMode;  // 0 - fromFILE 1 - fromDATA
 
-    NeuNets::MultiLayerNet *allocMemory(NeuNets::MultiLayerNet *bpNewNet);
-    void assembly(NeuNets::NeuVec &prevLayer, NeuNets::NeuVec &curLayer, int layerPos);
+    MultiLayerNet *allocMemory(MultiLayerNet *bpNewNet);
+    void assembly(NeuVec &prevLayer, NeuVec &curLayer, int layerPos);
 
 
     void createFromInfoRec(const NCounts &, int, BuildInfo &, QVector<AbstractNet *> &);
@@ -38,8 +34,8 @@ public:
     MultiLayerFactory(bool flag = true);
     ~MultiLayerFactory();
 
-    NeuNets::MultiLayerNet *createFromFile(const QString &filename);
-    NeuNets::MultiLayerNet *createFromInfo(const BuildInfo &newInfo);
+    MultiLayerNet *createFromFile(const QString &filename);
+    MultiLayerNet *createFromInfo(const BuildInfo &newInfo);
 
     void createFromInfo(const QString &, const QString &, const NCounts &cnts, QVector<AbstractNet *> &);
 

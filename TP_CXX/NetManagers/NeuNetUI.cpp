@@ -40,6 +40,12 @@ NeuNetUI::~NeuNetUI() {
     delete createValidator;
 }
 //-------------------------------------------------------------------------------------------------
+void NeuNetUI::onShowInfo(QString info) {
+    QMessageBox msgBox;
+    msgBox.setText(info);
+    msgBox.exec();
+}
+
 void NeuNetUI::onShowException(QString problem) {
     ui->messages->setText(problem);
 }

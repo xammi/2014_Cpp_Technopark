@@ -44,6 +44,7 @@ signals:
     void teachNet();
 
 public slots:
+    void onShowInfo(QString);
     void onShowException(QString);
     void onShowDebug(QString);
 

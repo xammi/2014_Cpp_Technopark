@@ -18,7 +18,7 @@ void Iterator::prevLayer(){
         return;
     }
 
-    SynapseAct action = [ this ] (Synaps &synapse) {
+    SynapseAct action = [ this ] (Synapse &synapse) {
         neuronLayer.push_back(synapse.from);
     };
 
@@ -40,7 +40,7 @@ void Iterator::nextLayer(){
         return;
     }
 
-    SynapseAct action = [ this ] (Synaps &synapse) {
+    SynapseAct action = [ this ] (Synapse &synapse) {
         neuronLayer.push_back(synapse.to);
     };
 

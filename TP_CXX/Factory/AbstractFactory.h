@@ -11,10 +11,10 @@ using namespace BuildData;
 using NeuNets::AbstractNet;
 
 // Abstract Factory
-class AbstractNetFactory
+class AbstractFactory
 {
 public:
-    virtual ~AbstractNetFactory() {}
+    virtual ~AbstractFactory() {}
 
     //    virtual NeuNets::AbstractNet *createNet(QString filename) = 0;
     virtual AbstractNet *createFromFile(const QString &filename) = 0;

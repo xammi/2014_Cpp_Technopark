@@ -19,11 +19,11 @@ using DataProcess::OutputData;
 typedef double (* func)(double);
 //typedef std::function <double (double)> ofunc;
 
-struct Synaps;
+struct Synapse;
 
-typedef function< void (Synaps *) > UnsafeSynapseAct;
-typedef function< void (Synaps &) > SynapseAct;
-typedef function< void (const Synaps &) > UnmodSynapseAct;
+typedef function< void (Synapse *) > UnsafeSynapseAct;
+typedef function< void (Synapse &) > SynapseAct;
+typedef function< void (const Synapse &) > UnmodSynapseAct;
 enum SynapseType { IN = 0, OUT, IN_OUT };
 
 class Neuron {
@@ -31,10 +31,10 @@ class Neuron {
 public:
     Neuron();
     void summup(const Func &sigmoid);
-    void setSynapse(Synaps *syn);
+    void setSynapse(Synapse *syn);
 
-    const QVector<Synaps *> &getInSyn() {return inSyn;}
-    const QVector<Synaps *> &getOutSyn() {return outSyn;}
+    const QVector<Synapse *> &getInSyn() {return inSyn;}
+    const QVector<Synapse *> &getOutSyn() {return outSyn;}
 
     void apply(SynapseAct action, const SynapseType type);
 
@@ -47,13 +47,13 @@ private:
     void apply(UnsafeSynapseAct action, const SynapseType type);
 
     double value;
-    QVector<Synaps *> inSyn;
-    QVector<Synaps *> outSyn;
+    QVector<Synapse *> inSyn;
+    QVector<Synapse *> outSyn;
 };
 
-struct Synaps {
-    Synaps () {}
-    Synaps (Neuron *fr, Neuron *to, double w) : weight(w), to(to), from(fr) {}
+struct Synapse {
+    Synapse () {}
+    Synapse (Neuron *fr, Neuron *to, double w) : weight(w), to(to), from(fr) {}
 
     double weight;
     Neuron *to;

@@ -21,8 +21,8 @@ namespace NetManagers {
 
     using NetTutors::AbstractTutor;
     using NeuNets::AbstractNet;
-    using Factory::AbstractNetFactory;
-    using Factory::AbstractNetDestroyer;
+    using Factory::AbstractFactory;
+    using Factory::AbstractDestroyer;
 
 //-------------------------------------------------------------------------------------------------
 class NetProcessor : public QObject {
@@ -48,6 +48,7 @@ private slots:
     void onTeachNet();
 
 signals:
+    void showInfo(QString);
     void showException(QString);
     void showDebug(QString);
 
@@ -71,8 +72,8 @@ private:
 
     PtrVector<AbstractNet> nets;
 
-    AbstractNetFactory *factory;
-    AbstractNetDestroyer *destroyer;
+    AbstractFactory *factory;
+    AbstractDestroyer *destroyer;
 };
 //-------------------------------------------------------------------------------------------------
 } // namespace NetManagers

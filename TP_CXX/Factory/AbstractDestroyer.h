@@ -4,13 +4,12 @@
 
 namespace Factory{
 
-using NeuNets::AbstractNet;
 using namespace NeuNets;
 
-class AbstractNetDestroyer
+class AbstractDestroyer
 {
 public:
-    virtual ~AbstractNetDestroyer() {}
+    virtual ~AbstractDestroyer() {}
     virtual void destroy(AbstractNet *) = 0;
     virtual void writeNetToFile(AbstractNet *, const QString &) = 0;
 };

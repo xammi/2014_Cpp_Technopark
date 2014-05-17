@@ -29,7 +29,7 @@ void Neuron::summup(const Func &sigmoid){
     */
 }
 
-void Neuron::setSynapse(Synaps *syn){
+void Neuron::setSynapse(Synapse *syn){
     if(syn == 0)
         throw NoNeuron();
 

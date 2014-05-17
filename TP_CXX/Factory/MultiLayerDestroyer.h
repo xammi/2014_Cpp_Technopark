@@ -1,21 +1,21 @@
 #ifndef NNDESTROYER_H
 #define NNDESTROYER_H
-#include "AbstractNetDestroyer.h"
+#include "AbstractDestroyer.h"
 #include "../NeuNet/MultiLayerNet.h"
 #include "../NeuNet/Iterator.h"
 
 namespace Factory{
 
-class MultiLayerDestroyer : public AbstractNetDestroyer
+class MultiLayerDestroyer : public AbstractDestroyer
 {
 public:
     MultiLayerDestroyer();
-    void destroy(NeuNets::AbstractNet *nNet);
-    void writeNetToFile(NeuNets::AbstractNet *nNet, const QString &filename);
+    void destroy(AbstractNet *nNet);
+    void writeNetToFile(AbstractNet *nNet, const QString &filename);
 
 private:
-    NeuNets::UnsafeSynapseAct deleteSynapses;
-    NeuNets::UnsafeNeuronAct deleteNeurons;
+    UnsafeSynapseAct deleteSynapses;
+    UnsafeNeuronAct deleteNeurons;
 
 };
 
