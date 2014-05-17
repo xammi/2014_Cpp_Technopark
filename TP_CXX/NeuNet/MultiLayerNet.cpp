@@ -72,8 +72,8 @@ QString MultiLayerNet::topology() const {
     // После того, как прошло сравнение
     // Сейчас - костыль, потом посмотрим
     for(;inIter != outIter; inIter.nextLayer()){
-        if(inIter.flagPseudoEnd)
-            break;
+//        if(inIter.flagPseudoEnd)
+//            break;
         description += QString::number(inIter.count());
         if (inIter[0].getSynapseCnt(OUT) != 0)
             description += ", ";

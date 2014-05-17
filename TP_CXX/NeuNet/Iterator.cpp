@@ -7,67 +7,50 @@ Iterator::Iterator(const NeuVec &NV){
     ptrPos = 0;
 }
 
-
 void Iterator::prevLayer(){
-
-
-    if (flagPseudoEnd){
+    if (flagPseudoEnd || flagPseudoBegin || count() == 0){
         flagPseudoEnd = false;
         return;
     }
 
-    if (flagPseudoBegin) return;
     if(neuronLayer[0]->getSynapseCnt(IN) == 0){
         flagPseudoBegin = true;
         return;
     }
 
-    int curLayerSize = neuronLayer.size();
-    Neuron curLayerNeuron = *neuronLayer[0];
-    int prevLayerSize = (curLayerNeuron.getInSyn()).size() ;
+    SynapseAct action = [ this ] (Synaps &synapse) {
+        neuronLayer.push_back(synapse.from);
+    };
 
-    Synaps pathSynaps;
-    for(int i = 0; i < prevLayerSize; i++){
-        pathSynaps = *(curLayerNeuron.getInSyn())[i];
-        neuronLayer.push_front(pathSynaps.from);
-    }
+    Neuron *curNeuron = neuronLayer[0];
+    neuronLayer.clear();
+    curNeuron->apply(action, IN);
 
-    for(int i = 0; i < curLayerSize; i++){
-        neuronLayer.pop_back();
-    }
     ptrPos = 0;
-
 }
 
 void Iterator::nextLayer(){
-
-
-    if (flagPseudoBegin){
+    if (flagPseudoBegin || flagPseudoEnd || count() == 0){
         flagPseudoBegin = false;
         return;
     }
 
-    if (flagPseudoEnd) return;
     if(neuronLayer[0]->getSynapseCnt(OUT) == 0){
         flagPseudoEnd = true;
         return;
     }
 
-    int curLayerSize = neuronLayer.size();
-    Neuron curLayerNeuron = *neuronLayer[0];
-    int nextLayerSize = (curLayerNeuron.getOutSyn()).size() ;
-    Synaps pathSynaps;
+    SynapseAct action = [ this ] (Synaps &synapse) {
+        neuronLayer.push_back(synapse.to);
+    };
 
-    for(int i = 0; i < nextLayerSize; i++){
-        pathSynaps = *(curLayerNeuron.getOutSyn())[i];
-        neuronLayer.push_front(pathSynaps.to);
-    }
+    Neuron *curNeuron = neuronLayer[0];
+    neuronLayer.clear();
+    curNeuron->apply(action, OUT);
 
-    for(int i = 0; i < curLayerSize; i++){
-        neuronLayer.pop_back();
-    }
     ptrPos = 0;
 }
+
 
 const Neuron &Iterator::operator [](int i) const {
     if(flagPseudoEnd)
@@ -96,10 +79,12 @@ const Neuron &Iterator::nextNeuron() {
     if(flagPseudoBegin)
         throw NoPrevLayer();
 
-
+    if(ptrPos >= neuronLayer.size())
+        throw PosOutOfRange();
+    else{
         ptrPos ++;
         return *neuronLayer[ptrPos];
-
+    }
 
 }
 
@@ -110,9 +95,19 @@ const Neuron &Iterator::prevNeuron() {
         throw NoPrevLayer();
 
 
+    if(ptrPos < 0)
+        throw PosOutOfRange();
+    else{
         ptrPos --;
         return *neuronLayer[ptrPos];
+    }
+}
 
+bool Iterator::operator ==(const Iterator &rhs) const
+{
+    return (flagPseudoEnd == rhs.flagPseudoEnd &&
+            flagPseudoBegin == rhs.flagPseudoBegin &&
+            neuronLayer == rhs.neuronLayer);
 }
 
 //-------------------------------------------------------------------------------------------------

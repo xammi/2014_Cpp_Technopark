@@ -19,15 +19,15 @@ NeuNetUI::NeuNetUI(QWidget *parent) :
 }
 
 void NeuNetUI::adjustUi() {
-    connect(ui->netCreate, SIGNAL(pressed()), SLOT(onCreateShow()));
-    connect(createUi->ok, SIGNAL(pressed()), SLOT(onCreateNets()));
-    connect(createUi->cancel, SIGNAL(pressed()), createDlg, SLOT(hide()));
+    connect(ui->netCreate, SIGNAL(clicked()), SLOT(onCreateShow()));
+    connect(createUi->ok, SIGNAL(clicked()), SLOT(onCreateNets()));
+    connect(createUi->cancel, SIGNAL(clicked()), createDlg, SLOT(hide()));
     createUi->neurons->setValidator(createValidator);
 
-    connect(ui->netLoad, SIGNAL(pressed()), openDlg, SLOT(show()));
+    connect(ui->netLoad, SIGNAL(clicked()), openDlg, SLOT(show()));
     connect(openDlg, SIGNAL(filesSelected(QStringList)), SLOT(onLoadNets(QStringList)));
-    connect(ui->netSave, SIGNAL(pressed()), SLOT(onSaveNets()));
-    connect(ui->netRemove, SIGNAL(pressed()), SLOT(onRemoveNets()));
+    connect(ui->netSave, SIGNAL(clicked()), SLOT(onSaveNets()));
+    connect(ui->netRemove, SIGNAL(clicked()), SLOT(onRemoveNets()));
 
     createUi->ok->setFocus();
 }

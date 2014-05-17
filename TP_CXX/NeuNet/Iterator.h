@@ -13,16 +13,16 @@ class Iterator : public AbstractIterator
 
 public:
 
-    void prevLayer();//Set neuron vector in previous layer
-    void nextLayer();//Set neuron vector in next layer
+    void prevLayer();
+    void nextLayer();
 
     Neuron &operator[](int i);
-    const Neuron &operator[](int i) const; //Return pointer to i neuron in current layer
+    const Neuron &operator[](int i) const;
 
-    const Neuron &nextNeuron(); // increase ptrPos if possible and return pointer to Neuron at ptrPos
-    const Neuron &prevNeuron(); // decrease ptrPos if possible and return pointer to Neuron at ptrPos
+    const Neuron &nextNeuron();
+    const Neuron &prevNeuron();
 
-    bool operator==(const Iterator &rhs) const { return (flagPseudoEnd == rhs.flagPseudoEnd && flagPseudoBegin == rhs.flagPseudoBegin && neuronLayer == rhs.neuronLayer); }
+    bool operator==(const Iterator &rhs) const;
     bool operator!=(const Iterator &rhs) const { return !(*this == rhs); }
 
     void apply(UnmodNeuronAct);
@@ -33,6 +33,7 @@ public:
 
 protected:
     void zeroFlags() {flagPseudoEnd = false; flagPseudoBegin = false;}
+
     bool flagPseudoEnd;
     bool flagPseudoBegin;
 
@@ -41,7 +42,6 @@ protected:
     int ptrPos; //contains the position of pointer in vector
 
     void apply(UnsafeNeuronAct);
-    bool isCorrect() const;
 };
 //-------------------------------------------------------------------------------------------------
 struct  FailInitializedIter: public Exception {
@@ -54,6 +54,10 @@ struct  NoPrevLayer: public Exception {
 
 struct  NoNextLayer: public Exception {
     QString toString() { return "No next layer"; }
+};
+
+struct  PosOutOfRange: public Exception {
+    QString toString() { return "Internal cursor out of range"; }
 };
 
 
