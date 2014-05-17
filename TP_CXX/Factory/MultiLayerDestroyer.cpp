@@ -75,18 +75,16 @@ void MultiLayerDestroyer::writeNetToFile(NeuNets::AbstractNet *aNet, const QStri
     stream << from.count();
     from.nextLayer();
 
+    SynapseAct sAct = [ &stream ] (Synaps &synapse) {
+        stream << synapse.weight;
+    };
+    NeuronAct nAct = [ &sAct ] (Neuron &neuron) {
+        neuron.apply(sAct, IN_OUT);
+    };
+
     for ( ; from != to; from.nextLayer()) {
         stream << from.count();
-
-        // Как захватить в контекст stream?
-        // А так - написать ту же самую функцию, только вместо
-        // deleteSynapse писать stream << synapse.weight
-
-        from.apply([ &stream ] (NeuNets::Neuron &neuron) {
-            neuron.apply([ &stream ] (NeuNets::Synaps &synapse) {
-                stream << synapse.weight;
-            }, NeuNets::IN_OUT);
-        });
+        from.apply(nAct);
     }
 }
 

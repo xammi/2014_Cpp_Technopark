@@ -5,6 +5,7 @@
 namespace Factory{
 
 using NeuNets::AbstractNet;
+using namespace NeuNets;
 
 class AbstractNetDestroyer
 {
