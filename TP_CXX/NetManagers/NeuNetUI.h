@@ -56,6 +56,8 @@ private slots:
     void onSaveNets();
     void onRemoveNets();
 
+    void onTeachNet();
+
 public:
     explicit NeuNetUI(QWidget *parent = 0);
     virtual ~NeuNetUI();

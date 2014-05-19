@@ -32,6 +32,8 @@ void NetProcessor::setDefaultConf() {
     dataStore = new DataProcess::ImageStorage;
     dataProc = new DataProcess::ImageProcessor;
 
+
+    // Что за странные создания???
     tester = new Tester;
     tutor = new NetTutors::BackPropTutor;
     factory = new Factory::MultiLayerFactory;
@@ -67,10 +69,6 @@ void NetProcessor::onLoadNet(QString filename) {
     try {
         AbstractNet *loaded = factory->createFromFile(filename);
         nets.append(loaded);
-
-
-        // Program crashes here! Alert!
-        // But it's not your fault
 
 
     } catch (Exception &exc) {
@@ -122,8 +120,50 @@ void NetProcessor::onRemoveData() {}
 void NetProcessor::onFormDataSet() {}
 void NetProcessor::onUpdateData(QTreeWidget *) {}
 
+//-------------------------------------------------------------------------------------------------
 void NetProcessor::onTestNetSingle() {}
 void NetProcessor::onTestNetDataSet() {}
-void NetProcessor::onTeachNet() {}
+
+
+void NetProcessor::onTeachNet() {
+    NetManagers::Tester tester(nets[0]);
+    NetTutors::BackPropTutor tutor(&tester);
+
+    // Выглядит костыльно. ПРоблема описана в BackPropTutor'e
+    tutor.setNet(static_cast<NeuNets::MultiLayerNet *>(nets[0]));
+
+    TuteData data;
+    PackedData pack;
+
+    // Смотрим сеть с композицией 3-2-2
+
+    DataProcess::InputData *one;
+    one->values.resize(3);
+    one->values.fill(1);
+
+    DataProcess::InputData *two;
+    two->values.resize(3);
+    two->values.fill(0);
+
+    DataProcess::OutputData *oneOut;
+    oneOut->values.resize(2);
+    oneOut->values[0] = 0;
+    oneOut->values[1] = 1;
+
+    DataProcess::OutputData *twoOut;
+    twoOut->values.resize(2);
+    twoOut->values[0] = 1;
+    twoOut->values[1] = 0;
+
+    pack.inputs.append(one);
+    pack.inputs.append(two);
+
+    pack.outputs.append(oneOut);
+    pack.outputs.append(twoOut);
+
+    data.RunData.append(pack);
+
+    tutor.start(data);
+}
 //-------------------------------------------------------------------------------------------------
 } // namespace NetManagers

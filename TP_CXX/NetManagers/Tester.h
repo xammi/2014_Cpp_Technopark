@@ -13,8 +13,6 @@ using DataProcess::InputData;
 using DataProcess::OutputData;
 
 typedef bool CompResult;
-typedef QVector<InputData *> InputDataSet;
-typedef QVector<OutputData *> OutputDataSet;
 //-------------------------------------------------------------------------------------------------
 class Tester : public QObject {
     Q_OBJECT
@@ -26,10 +24,7 @@ public:
     Tester();
     Tester(AbstractNet *);
 
-    CompResult test(const InputData &, const OutputData &);
-
-    // Function from EG Функция пишет в currentErrors ошибки последнего слоя сети
-//    void process(const InputDataSet &inputs, const OutputDataSet &outputs, DataProcess::OutputData &currentErrors) {}
+    CompResult test(const InputData &, const OutputData &, OutputData &errors);
 
     void setTarget(AbstractNet *);
 
@@ -37,5 +32,11 @@ private:
     AbstractNet *target;
 };
 //-------------------------------------------------------------------------------------------------
+
+
+struct SizeMismatch : public Exception {
+    QString toString() { return "Размеры вектора ошибок и выхода разные"; }
+};
+
 } // namespace Tester
 #endif // TESTER_H

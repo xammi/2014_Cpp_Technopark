@@ -35,7 +35,7 @@ void NeuNetUI::adjustUi() {
 NeuNetUI::~NeuNetUI() {
     delete ui;
     delete createDlg;
-//    delete openDlg;
+
     delete createUi;
     delete createValidator;
 }
@@ -92,6 +92,11 @@ void NeuNetUI::onRemoveNets() {
         }
 
     this->updateUI();
+}
+
+void NeuNetUI::onTeachNet()
+{
+    emit teachNet();
 }
 //-------------------------------------------------------------------------------------------------
 void NeuNetUI::onCreateShow() {
@@ -156,5 +161,6 @@ void NeuNetUI::updateUI() {
     emit updateNets(ui->nets);
     emit updateData(ui->data);
 }
+
 
 } // namespace NetManagers

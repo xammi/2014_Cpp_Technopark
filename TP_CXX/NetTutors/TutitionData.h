@@ -11,7 +11,7 @@ struct PackedData {
 };
 
 struct TuteData{
-    QVector <PackedData> ImageData;
+    QVector <PackedData> RunData;
     long double minErr;
     long int maxIter;
 };

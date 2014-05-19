@@ -54,6 +54,7 @@ private:
 struct Synapse {
     Synapse () {}
     Synapse (Neuron *fr, Neuron *to, double w) : weight(w), to(to), from(fr) {}
+    void changeWeight(double newWeight) { weight = newWeight; }
 
     double weight;
     Neuron *to;

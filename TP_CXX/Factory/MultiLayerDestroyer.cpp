@@ -42,6 +42,8 @@ void MultiLayerDestroyer::destroy(NeuNets::AbstractNet *aNet) {
     }
 }
 
+
+// TODO
 void MultiLayerDestroyer::writeNetToFile(AbstractNet *aNet, const QString &filename) {
     MultiLayerNet *nNet;
     try {
