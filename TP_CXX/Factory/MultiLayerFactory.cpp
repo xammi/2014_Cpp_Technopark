@@ -11,7 +11,7 @@ const qint32 fileId = 10;
 // Jawdropping randomness
 //---------------------------------
 const int MAX_SYNAPSE_VAL = 1;
-const int MIN_SYNAPSE_VAL = -1;
+const int MIN_SYNAPSE_VAL = 0;
 
 double get_random(double left, double right) {
     return ((double) qrand() / (double) RAND_MAX * (right - left) + left);// Rand Max is very small, so хаполняются не все значащик юиты мантиссы числа, маленькая точность

@@ -130,38 +130,46 @@ void NetProcessor::onTeachNet() {
     NetTutors::BackPropTutor tutor(&tester);
 
     // Выглядит костыльно. ПРоблема описана в BackPropTutor'e
-    tutor.setNet(static_cast<NeuNets::MultiLayerNet *>(nets[0]));
+    tutor.setNet(dynamic_cast<NeuNets::MultiLayerNet *>(nets[0]));
 
     TuteData data;
     PackedData pack;
 
     // Смотрим сеть с композицией 3-2-2
 
-    DataProcess::InputData *one;
+    DataProcess::InputData *one = new DataProcess::InputData();
     one->values.resize(3);
-    one->values.fill(1);
+    one->values[0] = 1;
+    one->values[1] = 0;
+    one->values[2] = 0;
 
-    DataProcess::InputData *two;
+    DataProcess::InputData *two = new DataProcess::InputData();
     two->values.resize(3);
-    two->values.fill(0);
+    two->values[0] = 0;
+    two->values[1] = 0;
+    two->values[2] = 1;
 
-    DataProcess::OutputData *oneOut;
+    DataProcess::OutputData *oneOut = new DataProcess::OutputData();
     oneOut->values.resize(2);
-    oneOut->values[0] = 0;
-    oneOut->values[1] = 1;
+    oneOut->values[0] = 1;
+    oneOut->values[1] = 0;
 
-    DataProcess::OutputData *twoOut;
+    DataProcess::OutputData *twoOut = new DataProcess::OutputData();
     twoOut->values.resize(2);
-    twoOut->values[0] = 1;
-    twoOut->values[1] = 0;
+    twoOut->values[0] = 0;
+    twoOut->values[1] = 1;
 
     pack.inputs.append(one);
-    pack.inputs.append(two);
-
     pack.outputs.append(oneOut);
-    pack.outputs.append(twoOut);
-
     data.RunData.append(pack);
+
+    pack.inputs.clear();
+    pack.outputs.clear();
+
+    pack.outputs.append(twoOut);
+    pack.inputs.append(two);
+    data.RunData.append(pack);
+
 
     tutor.start(data);
 }

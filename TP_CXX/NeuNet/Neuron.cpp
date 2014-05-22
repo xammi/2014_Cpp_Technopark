@@ -14,13 +14,13 @@ int Neuron::getSynapseCnt(SynapseType stype) const{
     return outSyn.size();
 }
 
-void Neuron::summup(const Func &sigmoid){
+void Neuron::summup(const Func &function){
     value = 0;
     int prevLayerSize = inSyn.size();
     for (int i = 0; i < prevLayerSize; i++){
         value += inSyn[i]->weight * inSyn[i]->from->value;
     }
-    value = sigmoid(value);
+    value = function(value);
 
     /*
     apply([ this ] (Synaps * synaps) {

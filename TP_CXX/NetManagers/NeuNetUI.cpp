@@ -29,6 +29,8 @@ void NeuNetUI::adjustUi() {
     connect(ui->netSave, SIGNAL(clicked()), SLOT(onSaveNets()));
     connect(ui->netRemove, SIGNAL(clicked()), SLOT(onRemoveNets()));
 
+    connect(ui->tute, SIGNAL(clicked()), SLOT(onTeachNet()));
+
     createUi->ok->setFocus();
 }
 
@@ -94,10 +96,7 @@ void NeuNetUI::onRemoveNets() {
     this->updateUI();
 }
 
-void NeuNetUI::onTeachNet()
-{
-    emit teachNet();
-}
+
 //-------------------------------------------------------------------------------------------------
 void NeuNetUI::onCreateShow() {
     createUi->name->setText("");
@@ -162,5 +161,8 @@ void NeuNetUI::updateUI() {
     emit updateData(ui->data);
 }
 
+void NeuNetUI::onTeachNet() {
+    emit teachNet();
+}
 
 } // namespace NetManagers

@@ -32,7 +32,10 @@ DataProcess::OutputData MultiLayerNet::getResponse(const DataProcess::InputData 
     }
 
     Iterator falseEndLayer = getAfterOut();
-    for (layerIter = getInLayer(); layerIter != falseEndLayer ;layerIter.nextLayer()){
+
+    // Первый слой не изменияем!!!
+    layerIter.nextLayer();
+    for ( ; layerIter != falseEndLayer ;layerIter.nextLayer()){
         for (int i = 0; i < layerIter.count(); i++){
             layerIter[i].summup(sigmoid);
         }
@@ -42,6 +45,7 @@ DataProcess::OutputData MultiLayerNet::getResponse(const DataProcess::InputData 
     layerSize = layerIter.count();
 
     OutputData returnVal;
+    returnVal.values.resize(layerSize);
     for (int i = 0; i < layerSize; i++){
             returnVal.values[i] = layerIter[i].getVal();
         }

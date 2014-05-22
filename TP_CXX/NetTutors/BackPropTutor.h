@@ -54,6 +54,7 @@ private:
     void processLayer(NeuNets::Iterator &it, DataProcess::OutputData &error);
     double propagate() {return 0;}
     void backPropagate() {}
+    bool isNormalyzed(DataProcess::OutputData &error);
 
 };
 //-------------------------------------------------------------------------------------------------

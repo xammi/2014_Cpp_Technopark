@@ -30,7 +30,7 @@ class Neuron {
     friend class Factory::MultiLayerDestroyer;
 public:
     Neuron();
-    void summup(const Func &sigmoid);
+    void summup(const Func &function);
     void setSynapse(Synapse *syn);
 
     const QVector<Synapse *> &getInSyn() {return inSyn;}

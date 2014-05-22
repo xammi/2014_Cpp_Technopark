@@ -20,10 +20,11 @@ void BackPropTutor::setTester(NetManagers::Tester *test){
 void BackPropTutor::getMidLayerErrors(DataProcess::OutputData &oldErrors, DataProcess::OutputData &newErrors, NeuNets::Iterator &it)
 {
     for(int i = 0; i < it.count(); ++i){
-        QVector<NeuNets::Synapse *> synVec = it[i].getOutSyn();
+        NeuNets::Neuron bufNeuron = it[i];
+        QVector<NeuNets::Synapse *> synVec = bufNeuron.getOutSyn();
         double synapseSum = 0;
         for(int j = 0; j < synVec.size(); ++j){
-            synapseSum += synVec[i]->weight * oldErrors.values[j];
+            synapseSum += synVec[j]->weight * oldErrors.values[j];
         }
         double neuVal = it[i].getVal();
         newErrors.values[i] = neuVal * (1 - neuVal) * synapseSum;
@@ -32,34 +33,47 @@ void BackPropTutor::getMidLayerErrors(DataProcess::OutputData &oldErrors, DataPr
 
 void BackPropTutor::processImage(const PackedData &image)
 {
-    for(int i = 0; i < image.inputs.size(); ++i){
-        DataProcess::InputData input = *image.inputs[i];
-        DataProcess::OutputData output = *image.outputs[i];
-        DataProcess::OutputData curErrVec;
-        curErrVec.values.resize(output.values.size());
 
-        // Получили ощибки очередного Input'a
-        currentTester->test(input, output, curErrVec);
+    DataProcess::OutputData curErrVec, neuResponseVec;
 
-        NeuNets::Iterator from = currentNet->getOutLayer();
-        NeuNets::Iterator to = currentNet->getInLayer();
+        for(int i = 0; i < image.inputs.size(); ++i){
+
+            neuResponseVec.values.resize(1);
+            neuResponseVec.values.fill(1);
+
+            while(!isNormalyzed(neuResponseVec)){
+                DataProcess::InputData input = *image.inputs[i];
+                DataProcess::OutputData output = *image.outputs[i];
+
+                curErrVec.values.resize(output.values.size());
+
+                //NB Веса сети не меняются??
+                // Получили ощибки очередного Input'a
+                currentTester->test(input, output, curErrVec);
+                neuResponseVec.values = curErrVec.values;
+
+                NeuNets::Iterator from = currentNet->getOutLayer();
+                NeuNets::Iterator to = currentNet->getInLayer();
 
 
-        while(from != to){
+                while(from != to){
+                    // изменение весов
+                    processLayer(from, curErrVec);
+                    // Forget-me-not
+                    from.prevLayer();
 
-            processLayer(from, curErrVec);
-            from.nextLayer();
-
-            // Middle layer errors
-            DataProcess::OutputData bufErrVec;
-            bufErrVec.values.resize(from.count());
-            getMidLayerErrors(curErrVec, bufErrVec, from);
-            // обычная замена одного вектора ошибок на другой
-            curErrVec.values.clear();
-            curErrVec.values.resize(bufErrVec.values.size());
-            curErrVec.values = bufErrVec.values;
+                    // Middle layer errors
+                    DataProcess::OutputData bufErrVec;
+                    bufErrVec.values.resize(from.count());
+                    getMidLayerErrors(curErrVec, bufErrVec, from);
+                    // обычная замена одного вектора ошибок на другой
+                    curErrVec.values.clear();
+                    curErrVec.values.resize(bufErrVec.values.size());
+                    curErrVec.values = bufErrVec.values;
+                }
+            }
+            int ak = 0;
         }
-    }
 }
 
 void BackPropTutor::processLayer(NeuNets::Iterator &it, DataProcess::OutputData &error)
@@ -80,92 +94,39 @@ void BackPropTutor::processLayer(NeuNets::Iterator &it, DataProcess::OutputData 
     }
 }
 
+bool BackPropTutor::isNormalyzed(DataProcess::OutputData &error)
+{
+    const double maxErr = 0.005;  // must be in neunet
+    for(int i = 0; i < error.values.size(); ++i){
+        if(fabs(error.values[i]) > maxErr)
+            return false;
+    }
+    return true;
+}
+
 // e-learning,bmstu.ru/IU7
 
 
 bool BackPropTutor::start(const TuteData &data){
 
-    for(int i = 0; i < data.RunData.size(); ++i){
-        if(data.RunData[i].inputs.size() != data.RunData[i].outputs.size())
-            throw InputsOutputsCountMismatch();
-
-        processImage(data.RunData[i]);
+    // один RunData для одного образа
+    for(int k = 0; k < 200; ++k){
+        for(int i = 0; i < data.RunData.size(); ++i){
+            if(data.RunData[i].inputs.size() != data.RunData[i].outputs.size())
+                throw InputsOutputsCountMismatch();
+            processImage(data.RunData[i]);
+        }
     }
-
-
-//    long int curIter = 0;
-//        long double curErr = 1;
-//        uint curImageNumber = 0;
-//        uint curErrLayer = 0;
-
-//        PackedData curImage;
-
-
-//        CurLayerErr bufLayerErr;
-
-//        CurImageErr bufImageErr;
-
-//        TotalErr runErr;
-
-
-//        // Нужно проставить начальные значения ошибок
-//        for(int j = 0; j < data.ImageData.size(); ++j){
-//            CurImageErr bufImageErr;
-//            CurLayerErr bufLayerErr;
-//            curImage = data.ImageData[j];
-
-//            bufLayerErr.values.resize(curImage.outputs.size());
-//            bufLayerErr.values.fill(1);
-
-
-//            bufImageErr.append(bufLayerErr);
-//            runErr.append(bufImageErr);
-//            bufImageErr.clear();
-//            bufLayerErr.values.clear();
-//        }
-
-
-
-
-//        while(curErr > data.minErr){
-//            ++curIter;
-
-
-
-//            // Тут можно поймать какое-нибудь стандартное исключение, если размера остальных образов не такие, как у первого
-
-//            curImage = data.ImageData[curImageNumber];
-//            bufImageErr = runErr[curImageNumber];
-//            bufLayerErr = bufImageErr[curErrLayer];
-//            // Main Cycle
-//            do{
-
-//                NeuNets::Iterator to = currentNet->getInLayer();
-//                NeuNets::Iterator from = currentNet->getOutLayer();
-//                NeuNets::Iterator mid = from;
-
-//                // Тестер взял картинку текущего образа, его идеальный выход и записал результат в текущие ошибки
-//                currentTester->process(&curImage.inputs, &curImage.outputs, &bufLayerErr, currentNet);
-//                while (from != to) {
-//                    bufImageErr[curErrLayer++] = bufLayerErr;
-//                    // Сменить веса для слоя
-//                    for(int j = 0; j < from.count(); ++j){
-//                        //функция меняет значения синапсов по одной формуле
-//                        changeWeights(from[j], bufLayerErr.values[j]);
-//                    }
-
-
-//                    from.nextLayer();
-//                    bufLayerErr = getMidError(&bufLayerErr, from, mid);
-
-//                }
-//                curErrLayer = 0;
-//            }
-//            while(! isMinError(&bufImageErr[curErrLayer], data.minErr));
-//        }
-
-
-//    return true;
+    DataProcess::InputData checker;
+    checker.values.resize(3);
+    checker.values[0] = 0;
+    checker.values[1] = 0;
+    checker.values[2] = 1;
+    DataProcess::OutputData checkerOut = currentNet->getResponse(checker);
+    checker.values[0] = 1;
+    checker.values[1] = 0;
+    checker.values[2] = 0;
+    checkerOut = currentNet->getResponse(checker);
     return true;
 }
 
