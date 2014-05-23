@@ -2,7 +2,7 @@
 #define TESTER_H
 
 #include "../NeuNet/AbstractNet.h"
-#include "../NetTutors/TutitionData.h"
+#include "../NetTutors/TuteData.h"
 
 #include "../DataProcess/AbstractProcessor.h"
 

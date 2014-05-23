@@ -1,19 +1,13 @@
 #ifndef NEUNET_H
 #define NEUNET_H
 
-
 #include "AbstractNet.h"
 #include "../DataProcess/AbstractProcessor.h"
-#include "Iterator.h"
-#include "../DataProcess/AbstractProcessor.h"
-
 
 namespace NeuNets {
 
-
 using DataProcess::InputData;
 using DataProcess::OutputData;
-
 
 class MultiLayerNet : public AbstractNet {
 
@@ -25,11 +19,8 @@ public:
 
     OutputData getResponse(const InputData &imgs) const;
 
-
     Iterator getInLayer() const;
     Iterator getOutLayer() const;
-    Iterator getAfterOut() const;
-    Iterator getBeforeIn() const;
 
     uint count() const { return layersCnt; }
     QString topology() const;

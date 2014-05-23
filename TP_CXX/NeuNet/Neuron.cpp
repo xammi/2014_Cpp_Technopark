@@ -4,9 +4,7 @@
 namespace NeuNets {
 
 Neuron::Neuron() {
-
 }
-
 
 int Neuron::getSynapseCnt(SynapseType stype) const{
     if (stype == IN)
@@ -14,19 +12,16 @@ int Neuron::getSynapseCnt(SynapseType stype) const{
     return outSyn.size();
 }
 
-void Neuron::summup(const Func &function){
+double Neuron::summup(const Func &func){
     value = 0;
-    int prevLayerSize = inSyn.size();
-    for (int i = 0; i < prevLayerSize; i++){
-        value += inSyn[i]->weight * inSyn[i]->from->value;
-    }
-    value = function(value);
 
-    /*
-    apply([ this ] (Synaps * synaps) {
-        value += synaps->weight * synaps->from->value;
-    }, IN);
-    */
+    SynapseAct action = [ this ] (Synapse & synapse) {
+        value += synapse.weight * synapse.from->value;
+    };
+    apply(action, IN);
+
+    value = func(value);
+    return value;
 }
 
 void Neuron::setSynapse(Synapse *syn){

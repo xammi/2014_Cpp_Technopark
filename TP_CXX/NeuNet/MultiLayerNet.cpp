@@ -21,19 +21,16 @@ MultiLayerNet::MultiLayerNet (const Func &sigma,
 MultiLayerNet::~MultiLayerNet() {}
 
 DataProcess::OutputData MultiLayerNet::getResponse(const DataProcess::InputData &imgs) const {
-//    if(!imgs.)
-//        throw NoImage();
-
-
     Iterator layerIter = getInLayer();
     int layerSize = layerIter.count();
+
     for (int i = 0; i < layerSize; i++){
         layerIter[i].setVal(imgs.values[i]);
     }
 
     Iterator falseEndLayer = getAfterOut();
 
-    // Первый слой не изменияем!!!
+    // Первый слой не изменяем!!!
     layerIter.nextLayer();
     for ( ; layerIter != falseEndLayer ;layerIter.nextLayer()){
         for (int i = 0; i < layerIter.count(); i++){
@@ -70,30 +67,14 @@ QString MultiLayerNet::topology() const {
 
     QString description;
 
-
-
-    // Проблема в том, что выставление флага происходит
-    // После того, как прошло сравнение
-    // Сейчас - костыль, потом посмотрим
     for(;inIter != outIter; inIter.nextLayer()){
-//        if(inIter.flagPseudoEnd)
-//            break;
+
         description += QString::number(inIter.count());
         if (inIter[0].getSynapseCnt(OUT) != 0)
             description += ", ";
     }
 
     return description;
-}
-Iterator MultiLayerNet::getAfterOut() const{
-    Iterator bufIter = this->getOutLayer();
-    bufIter.nextLayer();
-    return (bufIter);
-}
-Iterator MultiLayerNet::getBeforeIn() const{
-    Iterator bufIter = this->getInLayer();
-    bufIter.prevLayer();
-    return (bufIter);
 }
 
 } //namespace NeuNets

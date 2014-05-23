@@ -15,14 +15,11 @@
 namespace NetManagers {
 
     using namespace BuildData;
+    using namespace Factory;
+    using namespace NetTutors;
+    using namespace DataProcess;
 
-    using DataProcess::AbstractStorage;
-    using DataProcess::AbstractProcessor;
-
-    using NetTutors::AbstractTutor;
     using NeuNets::AbstractNet;
-    using Factory::AbstractFactory;
-    using Factory::AbstractDestroyer;
 
 //-------------------------------------------------------------------------------------------------
 class NetProcessor : public QObject {

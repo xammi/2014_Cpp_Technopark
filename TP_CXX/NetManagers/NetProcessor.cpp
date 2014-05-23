@@ -32,10 +32,8 @@ void NetProcessor::setDefaultConf() {
     dataStore = new DataProcess::ImageStorage;
     dataProc = new DataProcess::ImageProcessor;
 
-
-    // Что за странные создания???
     tester = new Tester;
-    tutor = new NetTutors::BackPropTutor;
+    tutor = new NetTutors::BackPropTutor(tester);
     factory = new Factory::MultiLayerFactory;
     destroyer = new Factory::MultiLayerDestroyer;
 }
@@ -126,14 +124,13 @@ void NetProcessor::onTestNetDataSet() {}
 
 
 void NetProcessor::onTeachNet() {
-    NetManagers::Tester tester(nets[0]);
-    NetTutors::BackPropTutor tutor(&tester);
+    if (nets.size() == 0) return;
 
-    // Выглядит костыльно. ПРоблема описана в BackPropTutor'e
-    tutor.setNet(dynamic_cast<NeuNets::MultiLayerNet *>(nets[0]));
+    tester->setTarget(nets[0]);
+    tutor->setNet(nets[0]);
 
     TuteData data;
-    PackedData pack;
+    InOutDataSet pack;
 
     // Смотрим сеть с композицией 3-2-2
 
@@ -161,17 +158,17 @@ void NetProcessor::onTeachNet() {
 
     pack.inputs.append(one);
     pack.outputs.append(oneOut);
-    data.RunData.append(pack);
+    data.runData.append(pack);
 
     pack.inputs.clear();
     pack.outputs.clear();
 
     pack.outputs.append(twoOut);
     pack.inputs.append(two);
-    data.RunData.append(pack);
+    data.runData.append(pack);
 
 
-    tutor.start(data);
+    tutor->start(data);
 }
 //-------------------------------------------------------------------------------------------------
 } // namespace NetManagers

@@ -2,7 +2,6 @@
 #define ABSTRITERATOR_H
 
 #include "../includes.h"
-#include "AbstractNet.h"
 
 namespace NeuNets {
 

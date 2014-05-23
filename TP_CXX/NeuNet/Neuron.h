@@ -2,22 +2,13 @@
 #define NEURON_H
 
 #include "../includes.h"
-#include "../PtrVector.h"
-#include "../DataProcess/AbstractProcessor.h"
 #include "../NetFunction.h"
-#include <functional>
 
 namespace Factory {
     class MultiLayerDestroyer;
 }
 //-------------------------------------------------------------------------------------------------
 namespace NeuNets {
-
-using DataProcess::InputData;
-using DataProcess::OutputData;
-
-typedef double (* func)(double);
-//typedef std::function <double (double)> ofunc;
 
 struct Synapse;
 
@@ -30,7 +21,7 @@ class Neuron {
     friend class Factory::MultiLayerDestroyer;
 public:
     Neuron();
-    void summup(const Func &function);
+    double summup(const Func &function);
     void setSynapse(Synapse *syn);
 
     const QVector<Synapse *> &getInSyn() {return inSyn;}
@@ -60,6 +51,12 @@ struct Synapse {
     Neuron *to;
     Neuron *from;
 };
+
+typedef QVector<Neuron *> NeuVec;
+
+typedef function< void (Neuron *) > UnsafeNeuronAct;
+typedef function< void (Neuron &) > NeuronAct;
+typedef function< void (const Neuron &) > UnmodNeuronAct;
 
 //================================================================
 struct  NoImage: public Exception {

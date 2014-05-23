@@ -6,22 +6,24 @@ namespace NetTutors {
 BackPropTutor::BackPropTutor()
 {}
 
-void BackPropTutor::setNet(NeuNets::AbstractNet *aNet){ // TODO: not NULL
+void BackPropTutor::setNet(AbstractNet *aNet) {
     NeuNets::MultiLayerNet *nNet;
     try {
-        nNet = dynamic_cast<NeuNets::MultiLayerNet *>(aNet);
+        nNet = dynamic_cast<MultiLayerNet *>(aNet);
     } catch (std::bad_cast) {
         throw WrongKindOfNet();
     }
+
     if((!nNet) && (currentNet))
         throw NetNotFound();
     currentNet = nNet;
 }
 
-void BackPropTutor::setTester(NetManagers::Tester *test){
+void BackPropTutor::setTester(Tester *test){
     if((!test) && (currentTester))
         currentTester = test;
 }
+//-------------------------------------------------------------------------------------------------
 
 void BackPropTutor::getMidLayerErrors(DataProcess::OutputData &oldErrors, DataProcess::OutputData &newErrors, NeuNets::Iterator &it)
 {
@@ -38,7 +40,7 @@ void BackPropTutor::getMidLayerErrors(DataProcess::OutputData &oldErrors, DataPr
     }
 }
 
-void BackPropTutor::processImage(const PackedData &image)
+void BackPropTutor::processImage(const InOutDataSet &image)
 {
 
     DataProcess::OutputData curErrVec, neuResponseVec;
@@ -118,11 +120,11 @@ bool BackPropTutor::isNormalyzed(DataProcess::OutputData &error)
 bool BackPropTutor::start(const TuteData &data){
 
     // один RunData для одного образа
-    for(int k = 0; k < 200; ++k){
-        for(int i = 0; i < data.RunData.size(); ++i){
-            if(data.RunData[i].inputs.size() != data.RunData[i].outputs.size())
+    for(int k = 0; k < 200; ++k) {
+        for(int i = 0; i < data.runData.size(); ++i){
+            if(data.runData[i].inputs.size() != data.runData[i].outputs.size())
                 throw InputsOutputsCountMismatch();
-            processImage(data.RunData[i]);
+            processImage(data.runData[i]);
         }
     }
     DataProcess::InputData checker;
