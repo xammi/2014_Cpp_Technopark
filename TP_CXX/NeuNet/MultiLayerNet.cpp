@@ -3,7 +3,7 @@
 
 namespace NeuNets {
 
-MultiLayerNet::MultiLayerNet() : sigmoid(FuncDisp::func("Sigmoid")) {
+MultiLayerNet::MultiLayerNet() : activationFunc(FuncDisp::func("Sigmoid")) {
     inLayerNum = 0;
     outLayerNum = 0;
 }
@@ -12,7 +12,7 @@ MultiLayerNet::MultiLayerNet (const Func &sigma,
                               const NeuVec &inNeuVec,
                               const NeuVec &outNeuVec,
                               const uint _layersCnt)
-    :    inNeurons(inNeuVec), outNeurons(outNeuVec), sigmoid(sigma), layersCnt(_layersCnt)
+    :    inNeurons(inNeuVec), outNeurons(outNeuVec), activationFunc(sigma), layersCnt(_layersCnt)
 {
     outLayerNum = outNeuVec.size();
     inLayerNum = inNeuVec.size();
@@ -37,7 +37,7 @@ DataProcess::OutputData MultiLayerNet::getResponse(const DataProcess::InputData 
     layerIter.nextLayer();
     for ( ; layerIter != falseEndLayer ;layerIter.nextLayer()){
         for (int i = 0; i < layerIter.count(); i++){
-            layerIter[i].summup(sigmoid);
+            layerIter[i].summup(activationFunc);
         }
     }
 

@@ -6,10 +6,16 @@ namespace NetTutors {
 BackPropTutor::BackPropTutor()
 {}
 
-void BackPropTutor::setNet(NeuNets::MultiLayerNet *net){ // TODO: not NULL
-    if((!net) && (currentNet))
+void BackPropTutor::setNet(NeuNets::AbstractNet *aNet){ // TODO: not NULL
+    NeuNets::MultiLayerNet *nNet;
+    try {
+        nNet = dynamic_cast<NeuNets::MultiLayerNet *>(aNet);
+    } catch (std::bad_cast) {
+        throw WrongKindOfNet();
+    }
+    if((!nNet) && (currentNet))
         throw NetNotFound();
-    currentNet = net;
+    currentNet = nNet;
 }
 
 void BackPropTutor::setTester(NetManagers::Tester *test){
@@ -21,6 +27,7 @@ void BackPropTutor::getMidLayerErrors(DataProcess::OutputData &oldErrors, DataPr
 {
     for(int i = 0; i < it.count(); ++i){
         NeuNets::Neuron bufNeuron = it[i];
+
         QVector<NeuNets::Synapse *> synVec = bufNeuron.getOutSyn();
         double synapseSum = 0;
         for(int j = 0; j < synVec.size(); ++j){
@@ -38,12 +45,13 @@ void BackPropTutor::processImage(const PackedData &image)
 
         for(int i = 0; i < image.inputs.size(); ++i){
 
+            DataProcess::InputData input = *image.inputs[i];
+            DataProcess::OutputData output = *image.outputs[i];
+
             neuResponseVec.values.resize(1);
             neuResponseVec.values.fill(1);
 
             while(!isNormalyzed(neuResponseVec)){
-                DataProcess::InputData input = *image.inputs[i];
-                DataProcess::OutputData output = *image.outputs[i];
 
                 curErrVec.values.resize(output.values.size());
 
@@ -55,12 +63,13 @@ void BackPropTutor::processImage(const PackedData &image)
                 NeuNets::Iterator from = currentNet->getOutLayer();
                 NeuNets::Iterator to = currentNet->getInLayer();
 
-
                 while(from != to){
                     // изменение весов
                     processLayer(from, curErrVec);
                     // Forget-me-not
                     from.prevLayer();
+
+//                    curErrVec = getMidLayerErrors(curErrVec, from);
 
                     // Middle layer errors
                     DataProcess::OutputData bufErrVec;
@@ -72,7 +81,7 @@ void BackPropTutor::processImage(const PackedData &image)
                     curErrVec.values = bufErrVec.values;
                 }
             }
-            int ak = 0;
+            ;
         }
 }
 
@@ -88,7 +97,6 @@ void BackPropTutor::processLayer(NeuNets::Iterator &it, DataProcess::OutputData 
             double newWeight = synapse.weight + 1 * neuronError * synapse.to->getVal(); // Instead of 1 here needs to be speed
             synapse.changeWeight(newWeight);
         };
-
 
         it[i].apply(action, NeuNets::IN);
     }

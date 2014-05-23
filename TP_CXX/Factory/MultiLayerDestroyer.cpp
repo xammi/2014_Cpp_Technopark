@@ -65,21 +65,28 @@ void MultiLayerDestroyer::writeNetToFile(AbstractNet *aNet, const QString &filen
 
     QTextStream stream(&file);
 
-    stream << fileId;
-    stream << nNet->count();
+    // FILEID?
+    //
+    // Program crashes when net is saved, then removed. BugReport
 
-    stream << from.count();
+    //
+    //
+    stream << fileId << endl;
+    stream << nNet->getFunc().name() << endl;
+    stream << nNet->count() << endl;
+
+    stream << from.count() << endl;
     from.nextLayer();
 
     SynapseAct sAct = [ &stream ] (Synapse &synapse) {
-        stream << synapse.weight;
+        stream << synapse.weight << endl;
     };
     NeuronAct nAct = [ &sAct ] (Neuron &neuron) {
-        neuron.apply(sAct, IN_OUT);
+        neuron.apply(sAct, IN);
     };
 
     for ( ; from != to; from.nextLayer()) {
-        stream << from.count();
+        stream << from.count() << endl;
         from.apply(nAct);
     }
 }

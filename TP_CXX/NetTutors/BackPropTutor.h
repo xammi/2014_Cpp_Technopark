@@ -42,10 +42,12 @@ public:
     bool start(const TuteData &data);
 
 
-    void setNet(NeuNets::MultiLayerNet *net);
+    void setNet(NeuNets::AbstractNet *aNet);
     void setTester(NetManagers::Tester *test);
 
 private:
+    // For MAX to set int NetProcessor
+    double maxError;
     NeuNets::MultiLayerNet *currentNet;
     NetManagers::Tester *currentTester;
 
@@ -73,6 +75,10 @@ struct NetNotFound : public Exception {
 
 struct TesterNotFound : public Exception {
     QString toString() { return "Не найден тестер"; }
+};
+
+struct WrongKindOfNet : public Exception {
+    QString toString() { return "Сеть недопустимого типа"; }
 };
 
 } // namespace NetTutors

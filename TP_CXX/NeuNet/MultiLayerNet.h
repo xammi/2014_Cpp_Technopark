@@ -33,13 +33,14 @@ public:
 
     uint count() const { return layersCnt; }
     QString topology() const;
+    const Func &getFunc() { return activationFunc; }
 
 private:
     NeuVec outNeurons;
     NeuVec inNeurons;
     uint inLayerNum, outLayerNum;
     uint layersCnt;
-    Func sigmoid;
+    Func activationFunc;
 };
 
 
