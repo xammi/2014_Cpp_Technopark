@@ -35,8 +35,8 @@ signals:
     void toDebug(QString);
 
 public:
-    BackPropTutor();
-    BackPropTutor(NetManagers::Tester *test): currentTester(test) {}
+    BackPropTutor() : currentNet(0), currentTester(0) {}
+    BackPropTutor(NetManagers::Tester *test): currentNet(0), currentTester(test) {}
 
     void initialize() {}
     bool start(const TuteData &data);
@@ -46,7 +46,7 @@ public:
     void setTester(NetManagers::Tester *test);
 
 private:
-    // For MAX to set int NetProcessor
+    // For Max to set in NetProcessor
     double maxError;
     NeuNets::MultiLayerNet *currentNet;
     NetManagers::Tester *currentTester;

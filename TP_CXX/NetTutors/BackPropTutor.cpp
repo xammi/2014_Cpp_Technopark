@@ -3,8 +3,7 @@
 namespace NetTutors {
 
 //-------------------------------------------------------------------------------------------------
-BackPropTutor::BackPropTutor()
-{}
+
 
 void BackPropTutor::setNet(NeuNets::AbstractNet *aNet){ // TODO: not NULL
     NeuNets::MultiLayerNet *nNet;
@@ -40,6 +39,8 @@ void BackPropTutor::getMidLayerErrors(DataProcess::OutputData &oldErrors, DataPr
 
 void BackPropTutor::processImage(const PackedData &image)
 {
+    int iter = 0;
+
 
     DataProcess::OutputData curErrVec, neuResponseVec;
 
@@ -52,6 +53,7 @@ void BackPropTutor::processImage(const PackedData &image)
             neuResponseVec.values.fill(1);
 
             while(!isNormalyzed(neuResponseVec)){
+                iter++;
 
                 curErrVec.values.resize(output.values.size());
 
@@ -80,8 +82,8 @@ void BackPropTutor::processImage(const PackedData &image)
                     curErrVec.values.resize(bufErrVec.values.size());
                     curErrVec.values = bufErrVec.values;
                 }
+
             }
-            ;
         }
 }
 
@@ -94,7 +96,7 @@ void BackPropTutor::processLayer(NeuNets::Iterator &it, DataProcess::OutputData 
     for(int i = 0; i < it.count(); ++i){
         double neuronError = error.values[i];
         NeuNets::SynapseAct action = [ neuronError ] (NeuNets::Synapse &synapse) {
-            double newWeight = synapse.weight + 1 * neuronError * synapse.to->getVal(); // Instead of 1 here needs to be speed
+            double newWeight = synapse.weight + 1 * neuronError * synapse.from->getVal(); // Instead of 1 here needs to be speed
             synapse.changeWeight(newWeight);
         };
 
@@ -117,8 +119,13 @@ bool BackPropTutor::isNormalyzed(DataProcess::OutputData &error)
 
 bool BackPropTutor::start(const TuteData &data){
 
+    // Нужно как-нибудь обрабатывать внешний цикл Сейчас стоит максимум итераций,
+    // можно выводить первую ошибку каждого пуска и сравнивать с минимальной
+    //
     // один RunData для одного образа
-    for(int k = 0; k < 200; ++k){
+
+    int maxIter = 100;
+    for(int k = 0; k < maxIter; ++k){
         for(int i = 0; i < data.RunData.size(); ++i){
             if(data.RunData[i].inputs.size() != data.RunData[i].outputs.size())
                 throw InputsOutputsCountMismatch();
@@ -127,12 +134,12 @@ bool BackPropTutor::start(const TuteData &data){
     }
     DataProcess::InputData checker;
     checker.values.resize(3);
-    checker.values[0] = 0;
+    checker.values[0] = 1;
     checker.values[1] = 0;
     checker.values[2] = 1;
     DataProcess::OutputData checkerOut = currentNet->getResponse(checker);
     checker.values[0] = 1;
-    checker.values[1] = 0;
+    checker.values[1] = 1;
     checker.values[2] = 0;
     checkerOut = currentNet->getResponse(checker);
     return true;

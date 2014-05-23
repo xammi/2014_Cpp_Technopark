@@ -128,9 +128,7 @@ void NetProcessor::onTestNetDataSet() {}
 void NetProcessor::onTeachNet() {
     NetManagers::Tester tester(nets[0]);
     NetTutors::BackPropTutor tutor(&tester);
-
-    // Выглядит костыльно. ПРоблема описана в BackPropTutor'e
-    tutor.setNet(dynamic_cast<NeuNets::MultiLayerNet *>(nets[0]));
+    tutor.setNet(nets[0]);
 
     TuteData data;
     PackedData pack;
@@ -140,19 +138,23 @@ void NetProcessor::onTeachNet() {
     DataProcess::InputData *one = new DataProcess::InputData();
     one->values.resize(3);
     one->values[0] = 1;
-    one->values[1] = 0;
+    one->values[1] = 1;
     one->values[2] = 0;
-
-    DataProcess::InputData *two = new DataProcess::InputData();
-    two->values.resize(3);
-    two->values[0] = 0;
-    two->values[1] = 0;
-    two->values[2] = 1;
 
     DataProcess::OutputData *oneOut = new DataProcess::OutputData();
     oneOut->values.resize(2);
     oneOut->values[0] = 1;
     oneOut->values[1] = 0;
+
+
+
+    DataProcess::InputData *two = new DataProcess::InputData();
+    two->values.resize(3);
+    two->values[0] = 1;
+    two->values[1] = 0;
+    two->values[2] = 1;
+
+
 
     DataProcess::OutputData *twoOut = new DataProcess::OutputData();
     twoOut->values.resize(2);
