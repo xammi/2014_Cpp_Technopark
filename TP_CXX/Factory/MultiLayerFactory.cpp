@@ -141,8 +141,6 @@ MultiLayerNet *MultiLayerFactory::allocMemory(MultiLayerNet *bpNewNet) {
 
 
 void MultiLayerFactory::assembly(NeuVec &prevLayer, NeuVec &curLayer, int layerPos)  {
-    uint offset = 0;
-
     uint prevNeuCount = prevLayer.size(), curNeuCount = curLayer.size();
     for(uint i = 0; i < prevNeuCount; ++i){
         int curWeight = 0;
@@ -152,7 +150,6 @@ void MultiLayerFactory::assembly(NeuVec &prevLayer, NeuVec &curLayer, int layerP
             if(currentMode)
                 weight = get_random(MIN_SYNAPSE_VAL, MAX_SYNAPSE_VAL);
             else{
-//                weight = weights[layerPos - 1][i + j + offset]; //
                 weight = weights[layerPos - 1][j + i + curWeight]; //
             }
 
@@ -161,8 +158,6 @@ void MultiLayerFactory::assembly(NeuVec &prevLayer, NeuVec &curLayer, int layerP
             curLayer[j]->setSynapse(bufSynapse);
             curWeight += (prevNeuCount - 1);
         }
-
-        offset++;
     }
 }
 

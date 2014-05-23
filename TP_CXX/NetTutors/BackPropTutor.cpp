@@ -108,7 +108,7 @@ void BackPropTutor::processLayer(NeuNets::Iterator &it, DataProcess::OutputData 
 
 bool BackPropTutor::isNormalyzed(DataProcess::OutputData &error)
 {
-    const double maxErr = 0.005;  // must be in neunet
+    const double maxErr = 0.005;  // must be somewhere
     for(int i = 0; i < error.values.size(); ++i){
         if(fabs(error.values[i]) > maxErr)
             return false;
@@ -125,7 +125,7 @@ bool BackPropTutor::start(const TuteData &data){
     // можно выводить первую ошибку каждого пуска и сравнивать с минимальной
     //
     // один RunData для одного образа
-    int maxIter = 100;
+    int maxIter = 300;
     for(int k = 0; k < maxIter; ++k){
         for(int i = 0; i < data.runData.size(); ++i){
             if(data.runData[i].inputs.size() != data.runData[i].outputs.size())
@@ -135,15 +135,94 @@ bool BackPropTutor::start(const TuteData &data){
         }
     }
     DataProcess::InputData checker;
-    checker.values.resize(3);
-    checker.values[0] = 1;
-    checker.values[1] = 0;
+    checker.values.resize(21);
+    checker.values[0] = 0;
+    checker.values[1] = 1;
     checker.values[2] = 1;
+    checker.values[3] = 1;
+
+    checker.values[4] = 0;
+    checker.values[5] = 1;
+    checker.values[6] = 0;
+    checker.values[7] = 0;
+
+    checker.values[8] = 0;
+    checker.values[9] = 1;
+    checker.values[10] = 1;
+    checker.values[11] = 1;
+
+    checker.values[12] = 0;
+    checker.values[13] = 0;
+    checker.values[14] = 0;
+    checker.values[15] = 1;
+
+    checker.values[16] = 0;
+    checker.values[17] = 1;
+    checker.values[18] = 1;
+    checker.values[19] = 1;
+
+    checker.values[20] = 1;
+
     DataProcess::OutputData checkerOut = currentNet->getResponse(checker);
+
     checker.values[0] = 1;
     checker.values[1] = 1;
-    checker.values[2] = 0;
+    checker.values[2] = 1;
+    checker.values[3] = 1;
+
+    checker.values[4] = 1;
+    checker.values[5] = 0;
+    checker.values[6] = 0;
+    checker.values[7] = 0;
+
+    checker.values[8] = 1;
+    checker.values[9] = 1;
+    checker.values[10] = 1;
+    checker.values[11] = 1;
+
+    checker.values[12] = 0;
+    checker.values[13] = 0;
+    checker.values[14] = 0;
+    checker.values[15] = 1;
+
+    checker.values[16] = 1;
+    checker.values[17] = 1;
+    checker.values[18] = 1;
+    checker.values[19] = 1;
+
+    checker.values[20] = 1;
+
     checkerOut = currentNet->getResponse(checker);
+
+    checker.values[0] = 1;
+    checker.values[1] = 0;
+    checker.values[2] = 0;
+    checker.values[3] = 1;
+
+    checker.values[4] = 1;
+    checker.values[5] = 0;
+    checker.values[6] = 0;
+    checker.values[7] = 1;
+
+    checker.values[8] = 1;
+    checker.values[9] = 1;
+    checker.values[10] = 1;
+    checker.values[11] = 1;
+
+    checker.values[12] = 0;
+    checker.values[13] = 0;
+    checker.values[14] = 0;
+    checker.values[15] = 1;
+
+    checker.values[16] = 1;
+    checker.values[17] = 1;
+    checker.values[18] = 1;
+    checker.values[19] = 1;
+
+    checker.values[20] = 1;
+
+    checkerOut = currentNet->getResponse(checker);
+
     return true;
 }
 

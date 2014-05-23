@@ -133,13 +133,38 @@ void NetProcessor::onTeachNet() {
     TuteData data;
     InOutDataSet pack;
 
-    // Смотрим сеть с композицией 3-2-2
+    // Смотрим сеть с композицией 3-2-2  WORKS
+    // Смотрим сеть с композицией 3-3-2  WORKS
+    // Смотрим сеть с композицией 5-4-2  WORKS
 
     DataProcess::InputData *one = new DataProcess::InputData();
-    one->values.resize(3);
+    one->values.resize(21);
     one->values[0] = 1;
     one->values[1] = 1;
-    one->values[2] = 0;
+    one->values[2] = 1;
+    one->values[3] = 1;
+
+    one->values[4] = 1;
+    one->values[5] = 0;
+    one->values[6] = 0;
+    one->values[7] = 0;
+
+    one->values[8] = 1;
+    one->values[9] = 1;
+    one->values[10] = 1;
+    one->values[11] = 1;
+
+    one->values[12] = 0;
+    one->values[13] = 0;
+    one->values[14] = 0;
+    one->values[15] = 1;
+
+    one->values[16] = 1;
+    one->values[17] = 1;
+    one->values[18] = 1;
+    one->values[19] = 1;
+
+    one->values[20] = 1;
 
     DataProcess::OutputData *oneOut = new DataProcess::OutputData();
     oneOut->values.resize(2);
@@ -149,10 +174,34 @@ void NetProcessor::onTeachNet() {
 
 
     DataProcess::InputData *two = new DataProcess::InputData();
-    two->values.resize(3);
+    two->values.resize(21);
     two->values[0] = 1;
     two->values[1] = 0;
-    two->values[2] = 1;
+    two->values[2] = 0;
+    two->values[3] = 1;
+
+    two->values[4] = 1;
+    two->values[5] = 0;
+    two->values[6] = 0;
+    two->values[7] = 1;
+
+    two->values[8] = 1;
+    two->values[9] = 1;
+    two->values[10] = 1;
+    two->values[11] = 1;
+
+    two->values[12] = 0;
+    two->values[13] = 0;
+    two->values[14] = 0;
+    two->values[15] = 1;
+
+    two->values[16] = 1;
+    two->values[17] = 1;
+    two->values[18] = 1;
+    two->values[19] = 1;
+
+    two->values[20] = 1;
+
 
 
 
