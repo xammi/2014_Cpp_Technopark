@@ -2,10 +2,15 @@
 #define ABSTRACTTUTOR_H
 
 #include "../includes.h"
-#include "TutitionData.h"
+#include "TuteData.h"
+
+#include "AbstractTutor.h"
+#include "../NetManagers/Tester.h"
 
 namespace NetTutors {
 
+using NetManagers::Tester;
+using NeuNets::AbstractNet;
 
 //-------------------------------------------------------------------------------------------------
 class AbstractTutor : public QObject {
@@ -15,6 +20,9 @@ public:
     virtual ~AbstractTutor() {}
     virtual void initialize() = 0;
     virtual bool start(const TuteData &) = 0;
+
+    virtual void setNet(AbstractNet *) = 0;
+    virtual void setTester(Tester *) = 0;
 };
 //-------------------------------------------------------------------------------------------------
 } // namespace NetTutors

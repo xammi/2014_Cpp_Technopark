@@ -1,9 +1,5 @@
-    #ifndef BACKPROPTUTOR_H
+#ifndef BACKPROPTUTOR_H
 #define BACKPROPTUTOR_H
-
-
-
-
 
 /*
 
@@ -14,18 +10,12 @@
   Просьба разобраться с этим как можно скорее.
  */
 
-
-
-
-
-
-
-
-
 #include "AbstractTutor.h"
 #include "../NeuNet/MultiLayerNet.h"
-#include "../NetManagers/Tester.h"
+
 namespace NetTutors {
+
+using namespace NeuNets;
 
 //-------------------------------------------------------------------------------------------------
 class BackPropTutor : public AbstractTutor {
@@ -36,27 +26,28 @@ signals:
 
 public:
     BackPropTutor() : currentNet(0), currentTester(0) {}
-    BackPropTutor(NetManagers::Tester *test): currentNet(0), currentTester(test) {}
+    BackPropTutor(Tester *test): currentNet(0), currentTester(test) {}
+
 
     void initialize() {}
     bool start(const TuteData &data);
 
-
-    void setNet(NeuNets::AbstractNet *aNet);
-    void setTester(NetManagers::Tester *test);
+    void setNet(AbstractNet *aNet);
+    void setTester(Tester *test);
 
 private:
     // For Max to set in NetProcessor
     double maxError;
-    NeuNets::MultiLayerNet *currentNet;
-    NetManagers::Tester *currentTester;
+    MultiLayerNet *currentNet;
+    Tester *currentTester;
 
-    void getMidLayerErrors(DataProcess::OutputData &oldErrors, DataProcess::OutputData &newErrors, NeuNets::Iterator &it);
-    void processImage(const PackedData &image);
-    void processLayer(NeuNets::Iterator &it, DataProcess::OutputData &error);
+    void getMidLayerErrors(OutputData &oldErrors, OutputData &newErrors, Iterator &it);
+    void processImage(const InOutDataSet &image);
+    void processLayer(Iterator &it, OutputData &error);
+
     double propagate() {return 0;}
     void backPropagate() {}
-    bool isNormalyzed(DataProcess::OutputData &error);
+    bool isNormalyzed(OutputData &error);
 
 };
 //-------------------------------------------------------------------------------------------------

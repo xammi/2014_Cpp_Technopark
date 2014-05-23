@@ -46,7 +46,6 @@ HEADERS  += \
 \
     NetTutors/BackPropTutor.h \
     NetTutors/AbstractTutor.h \
-    NetTutors/TutitionData.h \
 \
     Factory/MultiLayerFactory.h \
     Factory/MultiLayerDestroyer.h \
@@ -59,7 +58,8 @@ HEADERS  += \
     NeuNet/AbstractNet.h \
     NetFunction.h \
     Factory/AbstractDestroyer.h \
-    Factory/AbstractFactory.h
+    Factory/AbstractFactory.h \
+    NetTutors/TuteData.h
 
 
 FORMS    +=   NetManagers/neunetui.ui \

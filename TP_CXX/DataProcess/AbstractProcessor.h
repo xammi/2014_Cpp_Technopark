@@ -5,13 +5,23 @@
 
 namespace DataProcess {
 
+class InputData;
+class OutputData;
+
+//-------------------------------------------------------------------------------------------------
+struct AbstractProcessor : public QObject {
+    virtual ~AbstractProcessor() {}
+    virtual InputData * prepareData(QPixmap &) = 0;
+};
+//-------------------------------------------------------------------------------------------------
 class InputData
 {
 public:
     InputData() {}
-    QVector <int> values;
+    QVector <double> values;
     bool operator == (const InputData &) { return true; }
 };
+typedef QVector<InputData *> InputDataSet;
 
 class OutputData
 {
@@ -20,12 +30,7 @@ public:
     QVector <double> values;
     bool operator == (const OutputData &) { return true; }
 };
-
-//-------------------------------------------------------------------------------------------------
-struct AbstractProcessor : public QObject {
-    virtual ~AbstractProcessor() {}
-    virtual InputData * prepareData(QPixmap &) = 0;
-};
+typedef QVector<OutputData *> OutputDataSet;
 //-------------------------------------------------------------------------------------------------
 } // namespace DataProcess
 
