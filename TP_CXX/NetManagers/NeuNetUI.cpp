@@ -1,6 +1,7 @@
 #include "NeuNetUI.h"
 #include "ui_neunetui.h"
 #include "ui_createNet.h"
+#include "ui_addSet.h"
 
 namespace NetManagers {
 
@@ -9,16 +10,23 @@ NeuNetUI::NeuNetUI(QWidget *parent) :
       QMainWindow(parent), ui(new Ui::NeuNetUI),
       openDlg(new QFileDialog),
       createUi(new Ui::CreateNetUI), createDlg(new QDialog),
-      createValidator(new QRegExpValidator(QRegExp("([1-9]+,|[1-9]+-[1-9]+,)+")))
+      createValidator(new QRegExpValidator(QRegExp("([1-9]{1}[0-9]*,|[1-9]{1}[0-9]*-[1-9]{1}[0-9]*,)+"))),
+      addSetUi(new Ui::AddSetUI), addSetDlg(new QDialog),
+      addSetValidator(new QRegExpValidator(QRegExp("[A-Za-z ]+")))
 {
     ui->setupUi(this);
     createUi->setupUi(createDlg);
+    addSetUi->setupUi(addSetDlg);
 
     this->adjustUi();
     this->setWindowState(Qt::WindowMaximized);
+
+    this->updateUI();
 }
 
 void NeuNetUI::adjustUi() {
+    openDlg->setDirectory(DEFAULT_NETS_DIR);
+
     connect(ui->netCreate, SIGNAL(clicked()), SLOT(onCreateShow()));
     connect(createUi->ok, SIGNAL(clicked()), SLOT(onCreateNets()));
     connect(createUi->cancel, SIGNAL(clicked()), createDlg, SLOT(hide()));
@@ -29,9 +37,16 @@ void NeuNetUI::adjustUi() {
     connect(ui->netSave, SIGNAL(clicked()), SLOT(onSaveNets()));
     connect(ui->netRemove, SIGNAL(clicked()), SLOT(onRemoveNets()));
 
-    connect(ui->tute, SIGNAL(clicked()), SLOT(onTeachNet()));
+    connect(ui->dataAdd, SIGNAL(clicked()), SLOT(onAddShow()));
+    connect(addSetUi->ok, SIGNAL(clicked()), SLOT(onAddData()));
+    connect(addSetUi->cancel, SIGNAL(clicked()), addSetDlg, SLOT(hide()));
+    addSetUi->dataSet->setValidator(addSetValidator);
 
-    createUi->ok->setFocus();
+    connect(ui->dataRefresh, SIGNAL(clicked()), SLOT(onRefreshData()));
+    connect(ui->dataRemove, SIGNAL(clicked()), SLOT(onRemoveData()));
+    connect(ui->dataCombine, SIGNAL(clicked()), SLOT(onCombineData()));
+
+    connect(ui->tute, SIGNAL(clicked()), SLOT(onTeachNets()));
 }
 
 NeuNetUI::~NeuNetUI() {
@@ -40,7 +55,19 @@ NeuNetUI::~NeuNetUI() {
 
     delete createUi;
     delete createValidator;
+
+    delete addSetUi;
+    delete addSetDlg;
+    delete addSetValidator;
 }
+
+ QTreeWidget * NeuNetUI::getDataView() const {
+    return ui->data;
+ }
+
+ QTableWidget * NeuNetUI::getNetsView() const {
+     return ui->nets;
+ }
 //-------------------------------------------------------------------------------------------------
 void NeuNetUI::onShowInfo(QString info) {
     QMessageBox msgBox;
@@ -60,7 +87,7 @@ void NeuNetUI::onShowDebug(QString msg) {
 void NeuNetUI::onLoadNets(QStringList files) {
     ui->messages->setText("");
 
-    foreach (QString file, files)
+    for (QString file : files)
         if (file.contains(".net")) {
             emit loadNet(file);
         } else {
@@ -68,17 +95,15 @@ void NeuNetUI::onLoadNets(QStringList files) {
             msgBox.setText("You can only load .net files.");
             msgBox.exec();
         }
-    this->updateUI();
+    emit updateNets(ui->nets);
 }
 
 void NeuNetUI::onSaveNets() {
     ui->messages->setText("");
 
-    foreach (QTableWidgetItem * item, ui->nets->selectedItems())
+    for (QTableWidgetItem * item : ui->nets->selectedItems())
         if (item->column() == 0)
             emit saveNet(item->text() + ".net", item->row());
-
-    this->updateUI();
 }
 
 void NeuNetUI::onRemoveNets() {
@@ -93,7 +118,7 @@ void NeuNetUI::onRemoveNets() {
             items[I + 1] = NULL;
         }
 
-    this->updateUI();
+    emit updateNets(ui->nets);
 }
 
 
@@ -102,6 +127,7 @@ void NeuNetUI::onCreateShow() {
     createUi->name->setText("");
     createUi->layersCnt->setValue(1);
     createUi->neurons->setText("");
+    createUi->ok->setFocus();
     createDlg->show();
 }
 
@@ -153,7 +179,7 @@ void NeuNetUI::onCreateNets() {
     emit createNets(name, funcName, neuronsCnt);
     createDlg->hide();
 
-    this->updateUI();
+    emit updateNets(ui->nets);
 }
 //-------------------------------------------------------------------------------------------------
 void NeuNetUI::updateUI() {
@@ -161,8 +187,56 @@ void NeuNetUI::updateUI() {
     emit updateData(ui->data);
 }
 
-void NeuNetUI::onTeachNet() {
-    emit teachNet();
+void NeuNetUI::onTeachNets() {
+    ui->messages->setText("");
+
+    QList<QTableWidgetItem *> nets = ui->nets->selectedItems();
+    Ints netIds;
+
+    for (int I = 0; I < nets.size(); ++I)
+        if (nets[I] && nets[I]->column() == 0)
+            netIds.append(I);
+
+    emit teachNets();
 }
+//-------------------------------------------------------------------------------------------------
+void NeuNetUI::onAddShow() {
+    addSetUi->overlay->setText("");
+    addSetUi->ok->setFocus();
+    addSetDlg->show();
+}
+
+void NeuNetUI::onAddData() {
+    QString newName = addSetUi->dataSet->text();
+
+    for (int I = 0; I < ui->data->topLevelItemCount(); ++I) {
+        QTreeWidgetItem * ptwi = ui->data->topLevelItem(I);
+        if (ptwi->childCount() != 0)
+            if (ptwi->text(0) == newName) {
+                addSetUi->overlay->setText("Name of set already exists");
+                return;
+            }
+    }
+
+    emit addData(newName);
+    emit updateData(ui->data);
+    addSetDlg->hide();
+}
+
+void NeuNetUI::onRemoveData() {
+    // TODO: removing
+    emit updateData(ui->data);
+}
+
+void NeuNetUI::onCombineData() {
+    // TODO: combining
+    emit updateData(ui->data);
+}
+
+void NeuNetUI::onRefreshData() {
+    emit refreshData();
+    emit updateData(ui->data);
+}
+//-------------------------------------------------------------------------------------------------
 
 } // namespace NetManagers

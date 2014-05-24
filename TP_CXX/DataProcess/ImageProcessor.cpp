@@ -6,7 +6,7 @@ namespace DataProcess {
 ImageProcessor::ImageProcessor()
 {}
 
-InputData * ImageProcessor::prepareData(QPixmap &) {
+InputData * ImageProcessor::prepareData(QImage &) {
     return NULL;
 }
 

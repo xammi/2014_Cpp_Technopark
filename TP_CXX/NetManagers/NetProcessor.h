@@ -4,7 +4,7 @@
 #include "NeuNetUI.h"
 #include "Tester.h"
 
-#include "../DataProcess/ImageStorage.h"
+#include "../DataProcess/FileStorage.h"
 #include "../DataProcess/ImageProcessor.h"
 
 #include "../NetTutors/BackPropTutor.h"
@@ -33,16 +33,13 @@ private slots:
     void onCreateNets(QString, QString, NCounts);
 
     void onUpdateNets(QTableWidget *);
-    void onUpdateData(QTreeWidget *);
 
-    void onAddData();
+    void onAddData(QString);
     void onRemoveData();
     void onFormDataSet();
 
-    void onTestNetSingle();
-    void onTestNetDataSet();
-
-    void onTeachNet();
+    void onTestNets();
+    void onTeachNets();
 
 signals:
     void showInfo(QString);
@@ -53,18 +50,21 @@ public:
     static const NetProcessor & get_self();
 
 protected:
-    NetProcessor();
+    NetProcessor(QString dir = DEFAULT_NETS_DIR);
     ~NetProcessor();
 
+    void loadAllNets();
     void setDefaultConf();
     void connectUI();
 
 private:
+    const QString netsCatalog;
+
     NeuNetUI *gui;
     Tester *tester;
     AbstractTutor *tutor;
 
-    AbstractStorage *dataStore;
+    FileStorage *dataStore;
     AbstractProcessor *dataProc;
 
     PtrVector<AbstractNet> nets;

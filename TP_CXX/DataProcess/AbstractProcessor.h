@@ -11,7 +11,7 @@ class OutputData;
 //-------------------------------------------------------------------------------------------------
 struct AbstractProcessor : public QObject {
     virtual ~AbstractProcessor() {}
-    virtual InputData * prepareData(QPixmap &) = 0;
+    virtual InputData * prepareData(QImage &) = 0;
 };
 //-------------------------------------------------------------------------------------------------
 class InputData

@@ -15,11 +15,14 @@
 namespace Ui {
     class NeuNetUI;
     class CreateNetUI;
+    class AddSetUI;
 }
 
 namespace NetManagers {
 
     using namespace BuildData;
+
+    const QString DEFAULT_NETS_DIR = "../TP_CXX/Nets data";
 
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
@@ -35,13 +38,13 @@ signals:
     void updateNets(QTableWidget *);
     void updateData(QTreeWidget *);
 
-    void addData();
+    void addData(QString);
     void removeData();
     void formDataSet();
+    void refreshData();
 
-    void testNetSingle();
-    void testNetDataSet();
-    void teachNet();
+    void testNets();
+    void teachNets();
 
 public slots:
     void onShowInfo(QString);
@@ -56,11 +59,20 @@ private slots:
     void onSaveNets();
     void onRemoveNets();
 
-    void onTeachNet();
+    void onAddShow();
+    void onAddData();
+    void onRefreshData();
+    void onRemoveData();
+    void onCombineData();
+
+    void onTeachNets();
 
 public:
     explicit NeuNetUI(QWidget *parent = 0);
     virtual ~NeuNetUI();
+
+    QTreeWidget * getDataView() const;
+    QTableWidget * getNetsView() const;
     
 private:
     void adjustUi();
@@ -72,6 +84,10 @@ private:
     Ui::CreateNetUI *createUi;
     QDialog *createDlg;
     QRegExpValidator *createValidator;
+
+    Ui::AddSetUI *addSetUi;
+    QDialog *addSetDlg;
+    QRegExpValidator *addSetValidator;
 };
 //-------------------------------------------------------------------------------------------------
 } // namespace NetManagers
