@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>824</width>
-    <height>477</height>
+    <width>927</width>
+    <height>501</height>
    </rect>
   </property>
   <property name="font">
@@ -249,6 +249,11 @@
             <string>Topology</string>
            </property>
           </column>
+          <column>
+           <property name="text">
+            <string>Rec Area</string>
+           </property>
+          </column>
          </widget>
         </item>
        </layout>
@@ -282,13 +287,6 @@
             </property>
             <property name="text">
              <string>Test</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="setLimits">
-            <property name="text">
-             <string>Limits</string>
             </property>
            </widget>
           </item>
@@ -342,8 +340,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>824</width>
-     <height>18</height>
+     <width>927</width>
+     <height>25</height>
     </rect>
    </property>
   </widget>

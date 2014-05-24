@@ -1,9 +1,12 @@
 #include "NeuNetUI.h"
+#include "../NetTutors/TuteData.h"
 #include "ui_neunetui.h"
 #include "ui_createNet.h"
 #include "ui_addLimits.h"
 
 namespace NetManagers {
+
+using NetTutors::TutorBoundaries;
 
 //-------------------------------------------------------------------------------------------------
 NeuNetUI::NeuNetUI(QWidget *parent) :
@@ -39,9 +42,10 @@ void NeuNetUI::adjustUi() {
     connect(ui->dataRefresh, SIGNAL(clicked()), SLOT(onRefreshData()));
 
     connect(ui->tute, SIGNAL(clicked()), SLOT(onLimitsShow()));
-//    connect(addLimitsUi->ok, )
+    connect(addLimitsUi->ok, SIGNAL(clicked()), SLOT(onProcessNets()));
+    connect(addLimitsUi->cancel, SIGNAL(clicked()), addLimitsDlg, SLOT(hide()));
+
     connect(ui->test, SIGNAL(clicked()), SLOT(onProcessNets()));
-    connect(ui->tute, SIGNAL(clicked()), SLOT(onProcessNets()));
 }
 
 NeuNetUI::~NeuNetUI() {
@@ -117,10 +121,14 @@ void NeuNetUI::onRemoveNets() {
 
 
 //-------------------------------------------------------------------------------------------------
-
-void NeuNetUI::onLimitsShow()
-{
-    addLimitsDlg->show();
+void NeuNetUI::onLimitsShow() {
+    if (ui->nets->selectedItems().size() > 0)
+        if (ui->data->selectedItems().size() > 0)
+            addLimitsDlg->show();
+        else
+            ui->messages->setText("Choose data for teaching");
+    else
+        ui->messages->setText("Choose nets for teaching");
 }
 
 void NeuNetUI::onCreateShow() {
@@ -201,19 +209,19 @@ void NeuNetUI::onProcessNets() {
 
     QStringList keySet;
     for (QTreeWidgetItem * item : ui->data->selectedItems()) {
-        if (item->childCount() == 0)
-            keySet.append(item->text(0));
-        else
-            for (QTreeWidgetItem * child : item->takeChildren())
-                keySet.append(item->text(0) + "/" + child->text(0));
+        keySet.append(item->text(0));
         item->setSelected(false);
     }
-    keySet.removeDuplicates();
 
-    if (sender() == ui->tute) {
-        emit teachNets(netIds, keySet, TutorBoundaries());
+    if (sender() == addLimitsUi->ok) {
+        TutorBoundaries tutitionLimits( addLimitsUi->netError->value(), addLimitsUi->layerError->value()
+                                      , addLimitsUi->netIter->value(), addLimitsUi->layerIter->value()
+                                      , addLimitsUi->speed->value() );
+        emit teachNets(netIds, keySet, tutitionLimits);
     } else if (sender() == ui->test)
         emit testNets(netIds, keySet);
+
+    addLimitsDlg->hide();
 }
 
 void NeuNetUI::onRefreshData() {

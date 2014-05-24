@@ -28,6 +28,7 @@ MultiLayerFactory::~MultiLayerFactory() {}
 // Формат входного файла.
 /* Строка 0: Магическое число
  * Строка 1: Функция активации
+ * Строка 1а: Область узнавания
 
  * Строка 2: Количество слоев сети
  * Строка 3: Количество нейронов на 0 слое. Set i = 1;
@@ -46,6 +47,7 @@ void MultiLayerFactory::parseFile(const QString &filename) {
     if(!file.open(QIODevice::ReadOnly))
         throw ReadFileNotFound();
 
+    recArea = "";
     QTextStream stream(&file);
     quint32 magicNumber;
 
@@ -56,10 +58,10 @@ void MultiLayerFactory::parseFile(const QString &filename) {
     nnInfo.clear();
 
     stream >> nnInfo.funcName;
+    stream >> recArea;
     stream >> nnInfo.layersCount;
 
     // Проверка на правильность входных данных??
-
 
     uint bufLayerCount;
     stream >> bufLayerCount;
@@ -158,6 +160,7 @@ MultiLayerNet *MultiLayerFactory::createFromFile(const QString &filename) {
     MultiLayerNet *bpNewNet = 0;
     parseFile(filename);
     bpNewNet = allocMemory(bpNewNet);
+    bpNewNet->setRecArea(recArea);
     return bpNewNet;
 }
 

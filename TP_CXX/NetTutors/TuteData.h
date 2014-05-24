@@ -8,11 +8,6 @@ namespace NetTutors {
 
 using namespace DataProcess;
 
-struct InOutData {
-    InputData in;
-    OutputData out;
-};
-
 struct TutorBoundaries{
 
     TutorBoundaries() {}

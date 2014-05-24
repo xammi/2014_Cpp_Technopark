@@ -18,6 +18,8 @@ class MultiLayerFactory: public AbstractFactory
 
 private:
     BuildInfo nnInfo;
+    QString recArea;
+
 //    NeuNets::MultiLayerNet *bpNewNet;
     SynapseWeights weights;
 

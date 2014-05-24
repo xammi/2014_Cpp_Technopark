@@ -29,16 +29,24 @@ public:
     OutputData() {}
     OutputData(int size) { values.resize(size); }
     QVector <double> values;
+
     void swapVecs(OutputData &from) {
         this->values.clear();
         this->values.resize(from.values.size());
         this->values = from.values;
     }
+
     void clearAndFill() { this->values.resize(1); this->values.fill(1); }
 
     bool operator == (const OutputData &) { return true; }
 };
 typedef QVector<OutputData *> OutputDataSet;
+
+//-------------------------------------------------------------------------------------------------
+struct InOutData {
+    InputData in;
+    OutputData out;
+};
 
 struct InOutDataSet {
     QVector<InputData *> inputs;
