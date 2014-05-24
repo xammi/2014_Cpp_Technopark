@@ -286,13 +286,6 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="setLimits">
-            <property name="text">
-             <string>Limits</string>
-            </property>
-           </widget>
-          </item>
-          <item>
            <widget class="QPushButton" name="tute">
             <property name="font">
              <font>

@@ -10,6 +10,11 @@
     <height>238</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <pointsize>12</pointsize>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Creating of new net</string>
   </property>

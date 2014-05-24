@@ -1,9 +1,12 @@
 #include "NeuNetUI.h"
+#include "../NetTutors/TuteData.h"
 #include "ui_neunetui.h"
 #include "ui_createNet.h"
 #include "ui_addLimits.h"
 
 namespace NetManagers {
+
+using NetTutors::TutorBoundaries;
 
 //-------------------------------------------------------------------------------------------------
 NeuNetUI::NeuNetUI(QWidget *parent) :
@@ -39,9 +42,9 @@ void NeuNetUI::adjustUi() {
     connect(ui->dataRefresh, SIGNAL(clicked()), SLOT(onRefreshData()));
 
     connect(ui->tute, SIGNAL(clicked()), SLOT(onLimitsShow()));
-//    connect(addLimitsUi->ok, )
+    connect(addLimitsUi->ok, SIGNAL(clicked()), SLOT(onProcessNets()));
+    connect(addLimitsUi->cancel, SIGNAL(clicked()), addLimitsDlg, SLOT(hide()));
     connect(ui->test, SIGNAL(clicked()), SLOT(onProcessNets()));
-    connect(ui->tute, SIGNAL(clicked()), SLOT(onProcessNets()));
 }
 
 NeuNetUI::~NeuNetUI() {
@@ -210,9 +213,12 @@ void NeuNetUI::onProcessNets() {
     }
     keySet.removeDuplicates();
 
-    if (sender() == ui->tute)
-        emit teachNets(netIds, keySet);
-    else if (sender() == ui->test)
+    if (sender() == ui->tute) {
+        NetTutors::TutorBoundaries tutitionLimits(  addLimitsUi->netError->value(), addLimitsUi->layerError->value()
+                                      , addLimitsUi->netIter->value(), addLimitsUi->layerIter->value()
+                                      , addLimitsUi->speed->value() );
+//        emit teachNets(netIds, keySet, tutitionLimits);
+    } else if (sender() == ui->test)
         emit testNets(netIds, keySet);
 }
 
