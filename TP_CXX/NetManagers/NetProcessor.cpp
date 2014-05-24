@@ -72,8 +72,8 @@ void NetProcessor::connectUI() {
     connect(tester, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
     connect(tutor, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
 
-    connect(gui, SIGNAL(testNets()), SLOT(onTestNets()));
-    connect(gui, SIGNAL(teachNets()), SLOT(onTeachNets()));
+    connect(gui, SIGNAL(testNets(Ints, QStringList)), SLOT(onTestNets(Ints, QStringList)));
+    connect(gui, SIGNAL(teachNets(Ints, QStringList)), SLOT(onTeachNets(Ints, QStringList)));
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -128,41 +128,33 @@ void NetProcessor::onUpdateNets(QTableWidget * view) {
 }
 
 //-------------------------------------------------------------------------------------------------
-void NetProcessor::onTestNets() {}
+void NetProcessor::onTestNets(Ints, QStringList) {
+
+}
 
 
-void NetProcessor::onTeachNets() {
+void NetProcessor::onTeachNets(Ints, QStringList) {
+
+}
+
+void NetProcessor::internalTest() {
     if (nets.size() == 0) return;
 
     tester->setTarget(nets[0]);
     tutor->setNet(nets[0]);
 
-    TuteData data;
-    InOutDataSet pack;
-
     // Смотрим сеть с композицией 3-2-2
 
-    DataProcess::InputData *one = new DataProcess::InputData();
-    one->values.resize(3);
-    one->values[0] = 1;
-    one->values[1] = 0;
-    one->values[2] = 0;
+    InputData *one, *two = new InputData();
+    one->values = {1,0,0};
+    two->values = {0,0,1};
 
-    DataProcess::InputData *two = new DataProcess::InputData();
-    two->values.resize(3);
-    two->values[0] = 0;
-    two->values[1] = 0;
-    two->values[2] = 1;
+    OutputData *oneOut, *twoOut = new OutputData();
+    oneOut->values = {1,0};
+    twoOut->values = {0,1};
 
-    DataProcess::OutputData *oneOut = new DataProcess::OutputData();
-    oneOut->values.resize(2);
-    oneOut->values[0] = 1;
-    oneOut->values[1] = 0;
-
-    DataProcess::OutputData *twoOut = new DataProcess::OutputData();
-    twoOut->values.resize(2);
-    twoOut->values[0] = 0;
-    twoOut->values[1] = 1;
+    TuteData data;
+    InOutDataSet pack;
 
     pack.inputs.append(one);
     pack.outputs.append(oneOut);
@@ -178,5 +170,6 @@ void NetProcessor::onTeachNets() {
 
     tutor->start(data);
 }
+
 //-------------------------------------------------------------------------------------------------
 } // namespace NetManagers

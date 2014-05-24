@@ -88,7 +88,7 @@ public:
         return keys[index];
     }
 
-    size_t count() const { return keys.size(); }
+    int count() const { return keys.size(); }
 
 private:
     QString setName;
@@ -112,10 +112,13 @@ public:
     FileStorage(const QString & dir = DEFAULT_CATALOG);
     virtual ~FileStorage();
 
-    PathSet & operator() (const StrKey &);
+    PathSet & operator() (const QString &);
 
     PathSet & createSet(const QString &);
     void deleteSet(const StrKey &);
+
+    template <class FileLoader>
+    bool loadItem(FileLoader &, const StrKey &);
 
 private:
     Index findSet(const StrKey &) const;
@@ -123,6 +126,29 @@ private:
     const QString catalog;
     PathSets sets;
     PathSet uppers;
+};
+//-------------------------------------------------------------------------------------------------
+template <typename Goal>
+struct FileLoader {
+    FileLoader(Goal &_goal) : goal(_goal)  {}
+
+    virtual void load(const QString &) = 0;
+
+    Goal &goal;
+};
+
+struct ImageLoader : public FileLoader<QImage> {
+    ImageLoader(QImage &_goal) : FileLoader(_goal)  {}
+
+    void load(const QString &path) {
+        this->goal.load(path);
+    }
+};
+
+struct TextLoader : public FileLoader<QString> {
+    TextLoader(QString &_goal) : FileLoader(_goal)  {}
+
+    void load(const QString &);
 };
 //-------------------------------------------------------------------------------------------------
 struct UnknownSetKey : public Exception {
@@ -141,6 +167,9 @@ struct NotUniqueKey : public Exception {
     QString toString() { return "Передан не уникальный ключ"; }
 };
 
+struct OpenFileError : public Exception {
+    QString toString() { return "Не удалось открыть файл"; }
+};
 //-------------------------------------------------------------------------------------------------
 } // namespace DataProcess
 #endif // IMAGESTORAGE_H

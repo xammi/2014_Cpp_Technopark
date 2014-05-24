@@ -33,7 +33,7 @@ void FileStorage::onRefreshData() {
 FileStorage::~FileStorage()
 {}
 //-------------------------------------------------------------------------------------------------
-Index FileStorage::findSet(const StrKey &key) const {
+Index FileStorage::findSet(const QString &key) const {
     for (Index I = 0; I < sets.size(); ++I)
         if (sets[I]->name() == key)
             return I;
@@ -100,5 +100,31 @@ void FileStorage::onUpdate(QTreeWidget *treeView) {
     treeView->expandAll();
 }
 //-------------------------------------------------------------------------------------------------
+template <class FileLoader>
+bool FileStorage::loadItem(FileLoader &loader, const StrKey &str) {
+    NumKey index = uppers.find(str);
+    if (index != NO_KEY) {
+        loader.load(uppers[index]);
+        return true;
+    }
+
+    for (PathSet * set : sets) {
+        index = set->find(str);
+        if (index != NO_KEY) {
+            loader.load(set[index]);
+            return true;
+        }
+    }
+    return false;
+}
+
+void TextLoader::load(const QString &path) {
+    QFile file(path);
+    if (! file.open(QIODevice::ReadOnly))
+        throw OpenFileError();
+
+    QTextStream in(& file);
+    this->goal = in.readAll();
+}
 //-------------------------------------------------------------------------------------------------
 } // namespace DataProcess

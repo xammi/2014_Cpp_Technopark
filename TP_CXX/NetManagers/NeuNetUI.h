@@ -39,8 +39,8 @@ signals:
 
     void refreshData();
 
-    void testNets();
-    void teachNets();
+    void testNets(Ints, QStringList);
+    void teachNets(Ints, QStringList);
 
 public slots:
     void onShowInfo(QString);
@@ -57,7 +57,7 @@ private slots:
 
     void onRefreshData();
 
-    void onTeachNets();
+    void onProcessNets();
 
 public:
     explicit NeuNetUI(QWidget *parent = 0);

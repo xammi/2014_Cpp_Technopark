@@ -34,8 +34,8 @@ private slots:
 
     void onUpdateNets(QTableWidget *);
 
-    void onTestNets();
-    void onTeachNets();
+    void onTestNets(Ints, QStringList);
+    void onTeachNets(Ints, QStringList);
 
 signals:
     void showInfo(QString);
@@ -52,6 +52,8 @@ protected:
     void loadAllNets();
     void setDefaultConf();
     void connectUI();
+
+    void internalTest();
 
 private:
     const QString netsCatalog;

@@ -35,7 +35,8 @@ void NeuNetUI::adjustUi() {
 
     connect(ui->dataRefresh, SIGNAL(clicked()), SLOT(onRefreshData()));
 
-    connect(ui->tute, SIGNAL(clicked()), SLOT(onTeachNets()));
+    connect(ui->test, SIGNAL(clicked()), SLOT(onProcessNets()));
+    connect(ui->tute, SIGNAL(clicked()), SLOT(onProcessNets()));
 }
 
 NeuNetUI::~NeuNetUI() {
@@ -172,17 +173,33 @@ void NeuNetUI::updateUI() {
     emit updateData(ui->data);
 }
 
-void NeuNetUI::onTeachNets() {
+void NeuNetUI::onProcessNets() {
     ui->messages->setText("");
 
     QList<QTableWidgetItem *> nets = ui->nets->selectedItems();
     Ints netIds;
 
-    for (int I = 0; I < nets.size(); ++I)
+    for (int I = 0; I < nets.size(); ++I) {
         if (nets[I] && nets[I]->column() == 0)
             netIds.append(I);
+        nets[I]->setSelected(false);
+    }
 
-    emit teachNets();
+    QStringList keySet;
+    for (QTreeWidgetItem * item : ui->data->selectedItems()) {
+        if (item->childCount() == 0)
+            keySet.append(item->text(0));
+        else
+            for (QTreeWidgetItem * child : item->takeChildren())
+                keySet.append(child->text(0));
+        item->setSelected(false);
+    }
+    keySet.removeDuplicates();
+
+    if (sender() == ui->tute)
+        emit teachNets(netIds, keySet);
+    else if (sender() == ui->test)
+        emit testNets(netIds, keySet);
 }
 
 void NeuNetUI::onRefreshData() {
