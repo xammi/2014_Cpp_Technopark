@@ -135,38 +135,48 @@ void NetProcessor::onUpdateNets(QTableWidget * view) {
 
 //-------------------------------------------------------------------------------------------------
 void NetProcessor::onTestNets(Ints indexes, QStringList keySet) {
-//    qDebug() << "ura, test";
+    qDebug() << "ura, test";
 
-//    try {
-//        InOutDataSet data;
-//        formInOutDataSet(data, keySet);
+    try {
+        InOutDataSet data;
+        formInOutDataSet(data, keySet);
 
-//        for (int index : indexes) {
-//            tester->setTarget(nets[index]);
-//            tester->test(data);
-//        }
-//    } catch (Exception &exc) {
-//        emit showException(exc.toString());
-//    }
+        for (int index : indexes) {
+            tester->setTarget(nets[index]);
+            tester->test(data);
+        }
+    } catch (Exception &exc) {
+        emit showException(exc.toString());
+    }
 }
 
 void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TutorBoundaries boundaries) {
-//    qDebug() << "ura, teach";
+    qDebug() << "ura, teach";
 
-//    try {
-//        TuteData data;
-//        formTuteData(data, keySet);
+    try {
+        TuteData data;
+        formTuteData(data, keySet);
 
-//        for (int index : indexes) {
-//            tester->setTarget(nets[index]);
-//            tutor->setNet(nets[index]);
+        for (int index : indexes) {
+            tester->setTarget(nets[index]);
+            tutor->setNet(nets[index]);
 
-//            tutor->setLimits(boundaries);
-//            tutor->start(data);
-//        }
-//    }  catch (Exception &exc) {
-//        emit showException(exc.toString());
-//    }
+            for (QString folder : keySet) {
+//                QList<QImage> imgs;
+//                QVector<QString> strs;
+//                InputDataSet inputs;
+
+//                dataStore->load(folder);
+//                dataProc->prepareData(inputs, imgs);
+
+            }
+
+            tutor->setLimits(boundaries);
+            tutor->start(data);
+        }
+    }  catch (Exception &exc) {
+        emit showException(exc.toString());
+    }
 }
 
 void NetProcessor::formInOutDataSet(InOutDataSet &, const QStringList &) {

@@ -12,6 +12,9 @@ class OutputData;
 struct AbstractProcessor : public QObject {
     virtual ~AbstractProcessor() {}
     virtual InputData * prepareData(QImage &) = 0;
+    void prepareData(QList<QImage> &) {
+
+    }
 };
 //-------------------------------------------------------------------------------------------------
 class InputData
