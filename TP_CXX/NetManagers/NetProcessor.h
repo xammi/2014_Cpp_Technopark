@@ -35,7 +35,7 @@ private slots:
     void onUpdateNets(QTableWidget *);
 
     void onTestNets(Ints, QStringList);
-    void onTeachNets(Ints, QStringList);
+    void onTeachNets(Ints, QStringList, TutorBoundaries);
 
 signals:
     void showInfo(QString);
@@ -52,6 +52,9 @@ protected:
     void loadAllNets();
     void setDefaultConf();
     void connectUI();
+
+    void formInOutDataSet(InOutDataSet &, const QStringList &);
+    void formTuteData(TuteData &, const QStringList &);
 
     void internalTest();
 

@@ -205,14 +205,14 @@ void NeuNetUI::onProcessNets() {
             keySet.append(item->text(0));
         else
             for (QTreeWidgetItem * child : item->takeChildren())
-                keySet.append(child->text(0));
+                keySet.append(item->text(0) + "/" + child->text(0));
         item->setSelected(false);
     }
     keySet.removeDuplicates();
 
-    if (sender() == ui->tute)
-        emit teachNets(netIds, keySet);
-    else if (sender() == ui->test)
+    if (sender() == ui->tute) {
+        emit teachNets(netIds, keySet, TutorBoundaries());
+    } else if (sender() == ui->test)
         emit testNets(netIds, keySet);
 }
 

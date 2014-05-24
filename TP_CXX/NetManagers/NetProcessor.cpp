@@ -73,7 +73,7 @@ void NetProcessor::connectUI() {
     connect(tutor, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
 
     connect(gui, SIGNAL(testNets(Ints, QStringList)), SLOT(onTestNets(Ints, QStringList)));
-    connect(gui, SIGNAL(teachNets(Ints, QStringList)), SLOT(onTeachNets(Ints, QStringList)));
+    connect(gui, SIGNAL(teachNets(Ints, QStringList, TutorBoundaries)), SLOT(onTeachNets(Ints, QStringList, TutorBoundaries)));
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -128,15 +128,50 @@ void NetProcessor::onUpdateNets(QTableWidget * view) {
 }
 
 //-------------------------------------------------------------------------------------------------
-void NetProcessor::onTestNets(Ints, QStringList) {
+void NetProcessor::onTestNets(Ints indexes, QStringList keySet) {
+    qDebug() << "ura, test";
 
+    try {
+        InOutDataSet data;
+        formInOutDataSet(data, keySet);
+
+        for (int index : indexes) {
+            tester->setTarget(nets[index]);
+            tester->test(data);
+        }
+    } catch (Exception &exc) {
+        emit showException(exc.toString());
+    }
 }
 
+void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TutorBoundaries boundaries) {
+    qDebug() << "ura, teach";
 
-void NetProcessor::onTeachNets(Ints, QStringList) {
+    try {
+        TuteData data;
+        formTuteData(data, keySet);
 
+        for (int index : indexes) {
+            tester->setTarget(nets[index]);
+            tutor->setNet(nets[index]);
+
+            tutor->setLimits(boundaries);
+            tutor->start(data);
+        }
+    }  catch (Exception &exc) {
+        emit showException(exc.toString());
+    }
 }
 
+void NetProcessor::formInOutDataSet(InOutDataSet &, const QStringList &) {
+    throw WrongFileFormat();
+}
+
+void NetProcessor::formTuteData(TuteData &, const QStringList &) {
+    throw WrongFileFormat();
+}
+
+//-------------------------------------------------------------------------------------------------
 void NetProcessor::internalTest() {
     if (nets.size() == 0) return;
 

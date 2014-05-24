@@ -39,6 +39,11 @@ public:
     bool operator == (const OutputData &) { return true; }
 };
 typedef QVector<OutputData *> OutputDataSet;
+
+struct InOutDataSet {
+    QVector<InputData *> inputs;
+    QVector<OutputData *> outputs;
+};
 //-------------------------------------------------------------------------------------------------
 } // namespace DataProcess
 
