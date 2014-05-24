@@ -62,5 +62,4 @@ HEADERS  += \
 
 
 FORMS    +=   NetManagers/neunetui.ui \
-    NetManagers/createNet.ui \
-    NetManagers/addSet.ui
+    NetManagers/createNet.ui

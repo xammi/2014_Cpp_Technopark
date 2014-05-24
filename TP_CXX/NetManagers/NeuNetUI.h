@@ -15,7 +15,6 @@
 namespace Ui {
     class NeuNetUI;
     class CreateNetUI;
-    class AddSetUI;
 }
 
 namespace NetManagers {
@@ -38,9 +37,6 @@ signals:
     void updateNets(QTableWidget *);
     void updateData(QTreeWidget *);
 
-    void addData(QString);
-    void removeData();
-    void formDataSet();
     void refreshData();
 
     void testNets();
@@ -59,11 +55,7 @@ private slots:
     void onSaveNets();
     void onRemoveNets();
 
-    void onAddShow();
-    void onAddData();
     void onRefreshData();
-    void onRemoveData();
-    void onCombineData();
 
     void onTeachNets();
 
@@ -84,10 +76,6 @@ private:
     Ui::CreateNetUI *createUi;
     QDialog *createDlg;
     QRegExpValidator *createValidator;
-
-    Ui::AddSetUI *addSetUi;
-    QDialog *addSetDlg;
-    QRegExpValidator *addSetValidator;
 };
 //-------------------------------------------------------------------------------------------------
 } // namespace NetManagers

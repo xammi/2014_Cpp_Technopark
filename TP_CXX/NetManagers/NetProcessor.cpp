@@ -72,11 +72,6 @@ void NetProcessor::connectUI() {
     connect(tester, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
     connect(tutor, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
 
-    connect(gui, SIGNAL(addData(QString)), SLOT(onAddData(QString)));
-    connect(gui, SIGNAL(refreshData()), dataStore, SLOT(onRefreshData()));
-    connect(gui, SIGNAL(removeData()), SLOT(onRemoveData()));
-    connect(gui, SIGNAL(formDataSet()), SLOT(onFormDataSet()));
-
     connect(gui, SIGNAL(testNets()), SLOT(onTestNets()));
     connect(gui, SIGNAL(teachNets()), SLOT(onTeachNets()));
 }
@@ -104,7 +99,7 @@ void NetProcessor::onCreateNets(QString name, QString funcName, NCounts cnts) {
 void NetProcessor::onSaveNet(QString filename, CIndex netIndex) {
     try {
         AbstractNet *toSave = nets[netIndex];
-        destroyer->writeNetToFile(toSave, filename);
+        destroyer->writeNetToFile(toSave, netsCatalog + filename);
         emit showInfo("Successfully saved");
     } catch (Exception &exc) {
         emit showException(exc.toString());
@@ -131,13 +126,6 @@ void NetProcessor::onUpdateNets(QTableWidget * view) {
         row++;
     }
 }
-//-------------------------------------------------------------------------------------------------
-void NetProcessor::onAddData(QString name) {
-    dataStore->createSet(name);
-}
-
-void NetProcessor::onRemoveData() {}
-void NetProcessor::onFormDataSet() {}
 
 //-------------------------------------------------------------------------------------------------
 void NetProcessor::onTestNets() {}

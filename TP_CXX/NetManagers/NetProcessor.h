@@ -34,10 +34,6 @@ private slots:
 
     void onUpdateNets(QTableWidget *);
 
-    void onAddData(QString);
-    void onRemoveData();
-    void onFormDataSet();
-
     void onTestNets();
     void onTeachNets();
 
