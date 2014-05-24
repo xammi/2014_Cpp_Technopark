@@ -72,13 +72,8 @@ void NetProcessor::connectUI() {
     connect(tester, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
     connect(tutor, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
 
-    connect(gui, SIGNAL(addData(QString)), SLOT(onAddData(QString)));
-    connect(gui, SIGNAL(refreshData()), dataStore, SLOT(onRefreshData()));
-    connect(gui, SIGNAL(removeData()), SLOT(onRemoveData()));
-    connect(gui, SIGNAL(formDataSet()), SLOT(onFormDataSet()));
-
-    connect(gui, SIGNAL(testNets()), SLOT(onTestNets()));
-    connect(gui, SIGNAL(teachNets()), SLOT(onTeachNets()));
+    connect(gui, SIGNAL(testNets(Ints, QStringList)), SLOT(onTestNets(Ints, QStringList)));
+    connect(gui, SIGNAL(teachNets(Ints, QStringList)), SLOT(onTeachNets(Ints, QStringList)));
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -104,7 +99,7 @@ void NetProcessor::onCreateNets(QString name, QString funcName, NCounts cnts) {
 void NetProcessor::onSaveNet(QString filename, CIndex netIndex) {
     try {
         AbstractNet *toSave = nets[netIndex];
-        destroyer->writeNetToFile(toSave, filename);
+        destroyer->writeNetToFile(toSave, netsCatalog + filename);
         emit showInfo("Successfully saved");
     } catch (Exception &exc) {
         emit showException(exc.toString());
@@ -131,122 +126,65 @@ void NetProcessor::onUpdateNets(QTableWidget * view) {
         row++;
     }
 }
+
 //-------------------------------------------------------------------------------------------------
-void NetProcessor::onAddData(QString name) {
-    dataStore->createSet(name);
+void NetProcessor::onTestNets(Ints, QStringList) {
+
 }
 
-void NetProcessor::onRemoveData() {}
-void NetProcessor::onFormDataSet() {}
 
-//-------------------------------------------------------------------------------------------------
-void NetProcessor::onTestNets() {}
+void NetProcessor::onTeachNets(Ints, QStringList) {
 
+}
 
-void NetProcessor::onTeachNets() {
+void NetProcessor::internalTest() {
     if (nets.size() == 0) return;
 
     tester->setTarget(nets[0]);
     tutor->setNet(nets[0]);
 
-
-    TuteData data;
-    InOutDataSet pack;
-
     // Смотрим сеть с композицией 3-2-2  WORKS
     // Смотрим сеть с композицией 3-3-2  WORKS
     // Смотрим сеть с композицией 5-4-2  WORKS
 
-    DataProcess::InputData *one = new DataProcess::InputData();
-    one->values.resize(21);
-    one->values[0] = 1;
-    one->values[1] = 1;
-    one->values[2] = 1;
-    one->values[3] = 1;
+    InputData *one = new InputData();
+    one->values = {1,1,1,1,
+                   1,0,0,0,
+                   1,1,1,1,
+                   0,0,0,1,
+                   1,1,1,1,
+                   1};
 
-    one->values[4] = 1;
-    one->values[5] = 0;
-    one->values[6] = 0;
-    one->values[7] = 0;
+    OutputData *oneOut = new OutputData();
+    oneOut->values = {1,0};
 
-    one->values[8] = 1;
-    one->values[9] = 1;
-    one->values[10] = 1;
-    one->values[11] = 1;
+    InputData *two = new InputData();
+    two->values = {1,0,0,1,
+                   1,0,0,1,
+                   1,1,1,1,
+                   0,0,0,1,
+                   0,0,0,1,
+                   1};
 
-    one->values[12] = 0;
-    one->values[13] = 0;
-    one->values[14] = 0;
-    one->values[15] = 1;
+    OutputData *twoOut = new OutputData();
+    twoOut->values = {0,1};
 
-    one->values[16] = 1;
-    one->values[17] = 1;
-    one->values[18] = 1;
-    one->values[19] = 1;
+    InOutDataSet packOne, packTwo;
 
-    one->values[20] = 1;
+    packOne.inputs = {one};
+    packOne.outputs = {oneOut};
 
-    DataProcess::OutputData *oneOut = new DataProcess::OutputData();
-    oneOut->values.resize(2);
-    oneOut->values[0] = 1;
-    oneOut->values[1] = 0;
+    packTwo.outputs = {twoOut};
+    packTwo.inputs = {two};
 
 
-
-    DataProcess::InputData *two = new DataProcess::InputData();
-    two->values.resize(21);
-    two->values[0] = 1;
-    two->values[1] = 0;
-    two->values[2] = 0;
-    two->values[3] = 1;
-
-    two->values[4] = 1;
-    two->values[5] = 0;
-    two->values[6] = 0;
-    two->values[7] = 1;
-
-    two->values[8] = 1;
-    two->values[9] = 1;
-    two->values[10] = 1;
-    two->values[11] = 1;
-
-    two->values[12] = 0;
-    two->values[13] = 0;
-    two->values[14] = 0;
-    two->values[15] = 1;
-
-    two->values[16] = 1;
-    two->values[17] = 1;
-    two->values[18] = 1;
-    two->values[19] = 1;
-
-    two->values[20] = 1;
-
-
-
-
-    DataProcess::OutputData *twoOut = new DataProcess::OutputData();
-    twoOut->values.resize(2);
-    twoOut->values[0] = 0;
-    twoOut->values[1] = 1;
-
-    pack.inputs.append(one);
-    pack.outputs.append(oneOut);
-    data.append(pack);
-
-
-    pack.inputs.clear();
-    pack.outputs.clear();
-
-    pack.outputs.append(twoOut);
-    pack.inputs.append(two);
-    data.append(pack);
-
+    TuteData data = {packOne, packTwo};
 
     TutorBoundaries b(0.001, 0.0001, 100, 100000000, 1);
 
     tutor->setLimits(b);
     tutor->start(data);
 }
+
 //-------------------------------------------------------------------------------------------------
 } // namespace NetManagers

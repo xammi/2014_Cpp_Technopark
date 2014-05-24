@@ -16,7 +16,6 @@ namespace Ui {
     class NeuNetUI;
     class CreateNetUI;
     class AddLimitsUI;
-    class AddSetUI;
 }
 
 namespace NetManagers {
@@ -39,13 +38,10 @@ signals:
     void updateNets(QTableWidget *);
     void updateData(QTreeWidget *);
 
-    void addData(QString);
-    void removeData();
-    void formDataSet();
     void refreshData();
 
-    void testNets();
-    void teachNets();
+    void testNets(Ints, QStringList);
+    void teachNets(Ints, QStringList);
 
 public slots:
     void onShowInfo(QString);
@@ -61,13 +57,9 @@ private slots:
     void onSaveNets();
     void onRemoveNets();
 
-    void onAddShow();
-    void onAddData();
     void onRefreshData();
-    void onRemoveData();
-    void onCombineData();
 
-    void onTeachNets();
+    void onProcessNets();
 
 public:
     explicit NeuNetUI(QWidget *parent = 0);
@@ -85,18 +77,10 @@ private:
 
     Ui::CreateNetUI *createUi;
     QDialog *createDlg;
+    QRegExpValidator *createValidator;
 
     Ui::AddLimitsUI *addLimitsUi;
     QDialog *addLimitsDlg;
-
-    QRegExpValidator *createValidator;
-
-
-    QRegExpValidator *addLimitsValidator;
-
-    Ui::AddSetUI *addSetUi;
-    QDialog *addSetDlg;
-    QRegExpValidator *addSetValidator;
 };
 //-------------------------------------------------------------------------------------------------
 } // namespace NetManagers
