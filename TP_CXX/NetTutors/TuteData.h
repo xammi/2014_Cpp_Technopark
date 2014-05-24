@@ -6,8 +6,7 @@
 
 namespace NetTutors {
 
-using DataProcess::InputData;
-using DataProcess::OutputData;
+using namespace DataProcess;
 
 struct InOutData {
     InputData in;
@@ -31,17 +30,7 @@ struct TutorBoundaries{
     double speed;
 };
 
-// Single Image
-struct InOutDataSet {
-    QVector<InputData *> inputs;
-    QVector<OutputData *> outputs;
-};
-
 typedef QVector <InOutDataSet> TuteData;
-
-struct CompResult {
-    QVector<double> comps;
-};
 
 } // namespace NetTutors
 

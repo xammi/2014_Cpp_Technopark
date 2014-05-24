@@ -9,8 +9,11 @@
 namespace NetManagers {
 
 using NeuNets::AbstractNet;
-using DataProcess::InputData;
-using DataProcess::OutputData;
+using namespace DataProcess;
+
+//struct CompResult {
+//    QVector<double> comps;
+//};
 
 typedef bool CompResult;
 //-------------------------------------------------------------------------------------------------
@@ -25,6 +28,7 @@ public:
     Tester(AbstractNet *);
 
     CompResult test(const InputData &, const OutputData &, OutputData &errors);
+    void test(const InOutDataSet &);
 
     void setTarget(AbstractNet *);
 

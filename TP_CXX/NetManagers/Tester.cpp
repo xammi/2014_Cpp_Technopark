@@ -26,5 +26,9 @@ void Tester::setTarget(AbstractNet *new_target) {
     this->target = new_target;
 }
 
+void Tester::test(const InOutDataSet &) {
+
+}
+
 //-------------------------------------------------------------------------------------------------
 } // namespace NetManagers

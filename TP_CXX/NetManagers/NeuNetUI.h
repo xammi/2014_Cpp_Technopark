@@ -10,6 +10,7 @@
 #include <QTreeWidget>
 
 #include "Factory/BuildInfo.h"
+#include "../NetTutors/TuteData.h"
 #include "../includes.h"
 
 namespace Ui {
@@ -21,6 +22,7 @@ namespace Ui {
 namespace NetManagers {
 
     using namespace BuildData;
+    using NetTutors::TutorBoundaries;
 
     const QString DEFAULT_NETS_DIR = "../TP_CXX/Nets data";
 
@@ -41,7 +43,7 @@ signals:
     void refreshData();
 
     void testNets(Ints, QStringList);
-    void teachNets(Ints, QStringList);
+    void teachNets(Ints, QStringList, TutorBoundaries);
 
 public slots:
     void onShowInfo(QString);

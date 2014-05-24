@@ -208,18 +208,21 @@ void NeuNetUI::onProcessNets() {
             keySet.append(item->text(0));
         else
             for (QTreeWidgetItem * child : item->takeChildren())
-                keySet.append(child->text(0));
+                keySet.append(item->text(0) + "/" + child->text(0));
         item->setSelected(false);
     }
     keySet.removeDuplicates();
 
     if (sender() == ui->tute) {
-        NetTutors::TutorBoundaries tutitionLimits(  addLimitsUi->netError->value(), addLimitsUi->layerError->value()
-                                      , addLimitsUi->netIter->value(), addLimitsUi->layerIter->value()
-                                      , addLimitsUi->speed->value() );
-//        emit teachNets(netIds, keySet, tutitionLimits);
+    NetTutors::TutorBoundaries tutitionLimits(  addLimitsUi->netError->value(), addLimitsUi->layerError->value()
+                                              , addLimitsUi->netIter->value(), addLimitsUi->layerIter->value()
+                                              , addLimitsUi->speed->value() );
+
+        emit teachNets(netIds, keySet, tutitionLimits);
     } else if (sender() == ui->test)
         emit testNets(netIds, keySet);
+
+    addLimitsDlg->hide();
 }
 
 void NeuNetUI::onRefreshData() {
