@@ -143,7 +143,47 @@ void NetProcessor::internalTest() {
     tester->setTarget(nets[0]);
     tutor->setNet(nets[0]);
 
+    // Смотрим сеть с композицией 3-2-2  WORKS
+    // Смотрим сеть с композицией 3-3-2  WORKS
+    // Смотрим сеть с композицией 5-4-2  WORKS
 
+    InputData *one = new InputData();
+    one->values = {1,1,1,1,
+                   1,0,0,0,
+                   1,1,1,1,
+                   0,0,0,1,
+                   1,1,1,1,
+                   1};
+
+    OutputData *oneOut = new OutputData();
+    oneOut->values = {1,0};
+
+    InputData *two = new InputData();
+    two->values = {1,0,0,1,
+                   1,0,0,1,
+                   1,1,1,1,
+                   0,0,0,1,
+                   0,0,0,1,
+                   1};
+
+    OutputData *twoOut = new OutputData();
+    twoOut->values = {0,1};
+
+    InOutDataSet packOne, packTwo;
+
+    packOne.inputs = {one};
+    packOne.outputs = {oneOut};
+
+    packTwo.outputs = {twoOut};
+    packTwo.inputs = {two};
+
+
+    TuteData data = {packOne, packTwo};
+
+    TutorBoundaries b(0.001, 0.0001, 100, 100000000, 1);
+
+    tutor->setLimits(b);
+    tutor->start(data);
 }
 
 //-------------------------------------------------------------------------------------------------

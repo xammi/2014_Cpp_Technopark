@@ -89,7 +89,7 @@ void MultiLayerFactory::parseFile(const QString &filename) {
         weights.append(bufArr);
     }
 
-    nnInfo.netName = filename;
+    nnInfo.netName = filename.split("/").last();
     nnInfo.netName.remove(".net");
 }
 

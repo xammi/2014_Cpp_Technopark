@@ -23,15 +23,11 @@ void BackPropTutor::setTester(Tester *test){
         currentTester = test;
 }
 
-void BackPropTutor::setLimits()
+void BackPropTutor::setLimits(TutorBoundaries &limits)
 {
-    // This code wil be somewhere else
-
-    TutorBoundaries newBound(0.001, 0.0001, 1000, 1000000, 1);
-
-//    limits = bound;
-    limits = newBound;
+    tuteLimits = limits;
 }
+
 //-------------------------------------------------------------------------------------------------
 
 void BackPropTutor::getMidLayerErrors(DataProcess::OutputData &oldErrors, DataProcess::OutputData &newErrors, NeuNets::Iterator &it)
@@ -52,7 +48,7 @@ void BackPropTutor::getMidLayerErrors(DataProcess::OutputData &oldErrors, DataPr
 void BackPropTutor::processImage(const InOutDataSet &image)
 {
     int iter = 0;
-    int maxIter = limits.maxLayerIter;
+    int maxIter = tuteLimits.maxLayerIter;
 
     DataProcess::OutputData curErrVec, neuResponseVec;
     for(int i = 0; i < image.inputs.size(); ++i){
@@ -92,7 +88,7 @@ void BackPropTutor::processImage(const InOutDataSet &image)
 
 void BackPropTutor::processLayer(NeuNets::Iterator &it, DataProcess::OutputData &error)
 {
-    double speed = limits.speed;
+    double speed = tuteLimits.speed;
     if(it.count() != error.values.count())
         throw NetResponseErrorsCountMismatch();
 
@@ -110,7 +106,7 @@ void BackPropTutor::processLayer(NeuNets::Iterator &it, DataProcess::OutputData 
 
 bool BackPropTutor::isNormalyzed(DataProcess::OutputData &error)
 {
-    const double maxErr = limits.maxLayerErr;
+    const double maxErr = tuteLimits.maxLayerErr;
     for(int i = 0; i < error.values.size(); ++i){
         if(fabs(error.values[i]) > maxErr)
             return false;
@@ -123,18 +119,17 @@ bool BackPropTutor::isNormalyzed(DataProcess::OutputData &error)
 
 bool BackPropTutor::start(const TuteData &data){
 
-    // NetProcessor
-    this->setLimits();
+
     // Нужно как-нибудь обрабатывать внешний цикл Сейчас стоит максимум итераций,
     // можно выводить первую ошибку каждого пуска и сравнивать с минимальной
     //
     // один RunData для одного образа
-    int maxIter = limits.maxNetIter;
+    int maxIter = tuteLimits.maxNetIter;
     for(int k = 0; k < maxIter; ++k){
-        for(int i = 0; i < data.runData.size(); ++i){
-            if(data.runData[i].inputs.size() != data.runData[i].outputs.size())
+        for(int i = 0; i < data.size(); ++i){
+            if(data[i].inputs.size() != data[i].outputs.size())
                 throw InputsOutputsCountMismatch();
-            processImage(data.runData[i]);
+            processImage(data[i]);
         }
     }
 

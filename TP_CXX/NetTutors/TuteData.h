@@ -14,19 +14,30 @@ struct InOutData {
     OutputData out;
 };
 
+struct TutorBoundaries{
+
+    TutorBoundaries() {}
+    TutorBoundaries( double netErr, double layerErr
+                   , int netIter, int layerIter
+                   , double curSpeed) :
+        maxNetErr(netErr), maxLayerErr(layerErr)
+      , maxNetIter(netIter), maxLayerIter(layerIter)
+      , speed(curSpeed) {}
+
+    double maxNetErr;
+    double maxLayerErr;
+    int maxNetIter;
+    int maxLayerIter;
+    double speed;
+};
+
 // Single Image
 struct InOutDataSet {
     QVector<InputData *> inputs;
     QVector<OutputData *> outputs;
 };
 
-struct TuteData{
-    QVector <InOutDataSet> runData;
-
-    long double maxErr;
-    long double minErr;
-    long int maxIter;
-};
+typedef QVector <InOutDataSet> TuteData;
 
 struct CompResult {
     QVector<double> comps;

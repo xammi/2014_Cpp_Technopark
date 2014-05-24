@@ -28,11 +28,13 @@ struct BuildInfo {
         netName.clear();
     }
 
+    QString netName;
+    QString funcName;
     uint layersCount;
     QVector<uint> neuronsPerLayer;
 
-    QString funcName;
-    QString netName;
+
+
 };
 //-------------------------------------------------------------------------------------------------
 } // namespace Factory

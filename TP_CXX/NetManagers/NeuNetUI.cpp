@@ -1,6 +1,7 @@
 #include "NeuNetUI.h"
 #include "ui_neunetui.h"
 #include "ui_createNet.h"
+#include "ui_addLimits.h"
 
 namespace NetManagers {
 
@@ -9,10 +10,12 @@ NeuNetUI::NeuNetUI(QWidget *parent) :
       QMainWindow(parent), ui(new Ui::NeuNetUI),
       openDlg(new QFileDialog),
       createUi(new Ui::CreateNetUI), createDlg(new QDialog),
-      createValidator(new QRegExpValidator(QRegExp("([1-9]{1}[0-9]*,|[1-9]{1}[0-9]*-[1-9]{1}[0-9]*,)+")))
+      createValidator(new QRegExpValidator(QRegExp("([1-9]{1}[0-9]*,|[1-9]{1}[0-9]*-[1-9]{1}[0-9]*,)+"))),
+      addLimitsUi(new Ui::AddLimitsUI), addLimitsDlg(new QDialog)
 {
     ui->setupUi(this);
     createUi->setupUi(createDlg);
+    addLimitsUi->setupUi(addLimitsDlg);
 
     this->adjustUi();
     this->setWindowState(Qt::WindowMaximized);
@@ -35,6 +38,8 @@ void NeuNetUI::adjustUi() {
 
     connect(ui->dataRefresh, SIGNAL(clicked()), SLOT(onRefreshData()));
 
+    connect(ui->tute, SIGNAL(clicked()), SLOT(onLimitsShow()));
+//    connect(addLimitsUi->ok, )
     connect(ui->test, SIGNAL(clicked()), SLOT(onProcessNets()));
     connect(ui->tute, SIGNAL(clicked()), SLOT(onProcessNets()));
 }
@@ -42,7 +47,9 @@ void NeuNetUI::adjustUi() {
 NeuNetUI::~NeuNetUI() {
     delete ui;
     delete createDlg;
+    delete addLimitsDlg;
 
+    delete addLimitsUi;
     delete createUi;
     delete createValidator;
 }
@@ -69,6 +76,7 @@ void NeuNetUI::onShowDebug(QString msg) {
     ui->lstProcess->addItem(msg);
     ui->lstProcess->scrollToBottom();
 }
+
 
 void NeuNetUI::onLoadNets(QStringList files) {
     ui->messages->setText("");
@@ -109,6 +117,12 @@ void NeuNetUI::onRemoveNets() {
 
 
 //-------------------------------------------------------------------------------------------------
+
+void NeuNetUI::onLimitsShow()
+{
+    addLimitsDlg->show();
+}
+
 void NeuNetUI::onCreateShow() {
     createUi->name->setText("");
     createUi->layersCnt->setValue(1);

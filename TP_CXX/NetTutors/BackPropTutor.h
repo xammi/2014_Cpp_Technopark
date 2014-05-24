@@ -7,22 +7,7 @@
 
 namespace NetTutors {
 
-struct TutorBoundaries{
 
-    TutorBoundaries() {}
-    TutorBoundaries( double netErr, double layerErr
-                   , int netIter, int layerIter
-                   , double curSpeed) :
-        maxNetErr(netErr), maxLayerErr(layerErr)
-      , maxNetIter(netIter), maxLayerIter(layerIter)
-      , speed(curSpeed) {}
-
-    double maxNetErr;
-    double maxLayerErr;
-    int maxNetIter;
-    int maxLayerIter;
-    double speed;
-};
 
 using namespace NeuNets;
 
@@ -43,7 +28,7 @@ public:
 
     void setNet(AbstractNet *aNet);
     void setTester(Tester *test);
-    void setLimits();
+    void setLimits(TutorBoundaries &limits);
 
 private:
 
@@ -55,7 +40,7 @@ private:
     //
 
     // For Max to set in NetProcessor
-    TutorBoundaries limits;
+    TutorBoundaries tuteLimits;
     MultiLayerNet *currentNet;
     Tester *currentTester;
 

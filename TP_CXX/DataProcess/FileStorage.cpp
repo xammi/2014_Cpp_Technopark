@@ -104,14 +104,14 @@ template <class FileLoader>
 bool FileStorage::loadItem(FileLoader &loader, const StrKey &str) {
     NumKey index = uppers.find(str);
     if (index != NO_KEY) {
-        loader.load(uppers[index]);
+        loader.load(uppers.item(index));
         return true;
     }
 
     for (PathSet * set : sets) {
         index = set->find(str);
         if (index != NO_KEY) {
-            loader.load(set[index]);
+            loader.load(set->item(index));
             return true;
         }
     }
