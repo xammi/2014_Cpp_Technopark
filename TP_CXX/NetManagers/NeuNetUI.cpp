@@ -2,6 +2,7 @@
 #include "ui_neunetui.h"
 #include "ui_createNet.h"
 #include "ui_addSet.h"
+#include "ui_addLimits.h"
 
 namespace NetManagers {
 
@@ -10,6 +11,9 @@ NeuNetUI::NeuNetUI(QWidget *parent) :
       QMainWindow(parent), ui(new Ui::NeuNetUI),
       openDlg(new QFileDialog),
       createUi(new Ui::CreateNetUI), createDlg(new QDialog),
+
+      addLimitsUi(new Ui::AddLimitsUI), addLimitsDlg(new QDialog),
+
       createValidator(new QRegExpValidator(QRegExp("([1-9]{1}[0-9]*,|[1-9]{1}[0-9]*-[1-9]{1}[0-9]*,)+"))),
       addSetUi(new Ui::AddSetUI), addSetDlg(new QDialog),
       addSetValidator(new QRegExpValidator(QRegExp("[A-Za-z ]+")))
@@ -17,6 +21,7 @@ NeuNetUI::NeuNetUI(QWidget *parent) :
     ui->setupUi(this);
     createUi->setupUi(createDlg);
     addSetUi->setupUi(addSetDlg);
+    addLimitsUi->setupUi(addLimitsDlg);
 
     this->adjustUi();
     this->setWindowState(Qt::WindowMaximized);
@@ -26,6 +31,8 @@ NeuNetUI::NeuNetUI(QWidget *parent) :
 
 void NeuNetUI::adjustUi() {
     openDlg->setDirectory(DEFAULT_NETS_DIR);
+
+
 
     connect(ui->netCreate, SIGNAL(clicked()), SLOT(onCreateShow()));
     connect(createUi->ok, SIGNAL(clicked()), SLOT(onCreateNets()));
@@ -46,13 +53,18 @@ void NeuNetUI::adjustUi() {
     connect(ui->dataRemove, SIGNAL(clicked()), SLOT(onRemoveData()));
     connect(ui->dataCombine, SIGNAL(clicked()), SLOT(onCombineData()));
 
+    connect(ui->tute, SIGNAL(clicked()), SLOT(onLimitsShow()));
+//    connect(addLimitsUi->ok, )
     connect(ui->tute, SIGNAL(clicked()), SLOT(onTeachNets()));
 }
 
 NeuNetUI::~NeuNetUI() {
     delete ui;
     delete createDlg;
+    delete addLimitsDlg;
 
+    delete addLimitsUi;
+    delete addLimitsValidator;
     delete createUi;
     delete createValidator;
 
@@ -83,6 +95,7 @@ void NeuNetUI::onShowDebug(QString msg) {
     ui->lstProcess->addItem(msg);
     ui->lstProcess->scrollToBottom();
 }
+
 
 void NeuNetUI::onLoadNets(QStringList files) {
     ui->messages->setText("");
@@ -123,6 +136,12 @@ void NeuNetUI::onRemoveNets() {
 
 
 //-------------------------------------------------------------------------------------------------
+
+void NeuNetUI::onLimitsShow()
+{
+    addLimitsDlg->show();
+}
+
 void NeuNetUI::onCreateShow() {
     createUi->name->setText("");
     createUi->layersCnt->setValue(1);

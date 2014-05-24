@@ -232,17 +232,20 @@ void NetProcessor::onTeachNets() {
 
     pack.inputs.append(one);
     pack.outputs.append(oneOut);
-    data.runData.append(pack);
+    data.append(pack);
+
 
     pack.inputs.clear();
     pack.outputs.clear();
 
     pack.outputs.append(twoOut);
     pack.inputs.append(two);
-    data.runData.append(pack);
+    data.append(pack);
 
 
-//    tutor->setLimits();
+    TutorBoundaries b(0.001, 0.0001, 100, 100000000, 1);
+
+    tutor->setLimits(b);
     tutor->start(data);
 }
 //-------------------------------------------------------------------------------------------------

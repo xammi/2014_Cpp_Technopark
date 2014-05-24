@@ -15,6 +15,7 @@
 namespace Ui {
     class NeuNetUI;
     class CreateNetUI;
+    class AddLimitsUI;
     class AddSetUI;
 }
 
@@ -52,6 +53,7 @@ public slots:
     void onShowDebug(QString);
 
 private slots:
+    void onLimitsShow();
     void onCreateShow();
     void onCreateNets();
 
@@ -83,7 +85,14 @@ private:
 
     Ui::CreateNetUI *createUi;
     QDialog *createDlg;
+
+    Ui::AddLimitsUI *addLimitsUi;
+    QDialog *addLimitsDlg;
+
     QRegExpValidator *createValidator;
+
+
+    QRegExpValidator *addLimitsValidator;
 
     Ui::AddSetUI *addSetUi;
     QDialog *addSetDlg;
