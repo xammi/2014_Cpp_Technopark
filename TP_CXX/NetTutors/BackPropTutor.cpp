@@ -22,6 +22,16 @@ void BackPropTutor::setTester(Tester *test){
     if((!test) && (currentTester))
         currentTester = test;
 }
+
+void BackPropTutor::setLimits()
+{
+    // This code wil be somewhere else
+
+    TutorBoundaries newBound(0.001, 0.0001, 1000, 1000000, 1);
+
+//    limits = bound;
+    limits = newBound;
+}
 //-------------------------------------------------------------------------------------------------
 
 void BackPropTutor::getMidLayerErrors(DataProcess::OutputData &oldErrors, DataProcess::OutputData &newErrors, NeuNets::Iterator &it)
@@ -42,63 +52,55 @@ void BackPropTutor::getMidLayerErrors(DataProcess::OutputData &oldErrors, DataPr
 void BackPropTutor::processImage(const InOutDataSet &image)
 {
     int iter = 0;
-
+    int maxIter = limits.maxLayerIter;
 
     DataProcess::OutputData curErrVec, neuResponseVec;
+    for(int i = 0; i < image.inputs.size(); ++i){
 
-        for(int i = 0; i < image.inputs.size(); ++i){
+        DataProcess::InputData input = *image.inputs[i];
+        DataProcess::OutputData output = *image.outputs[i];
 
-            DataProcess::InputData input = *image.inputs[i];
-            DataProcess::OutputData output = *image.outputs[i];
+        // Перед этим можно сравнивать какие-нибудь ошибки
+        neuResponseVec.clearAndFill();
 
-            neuResponseVec.values.resize(1);
-            neuResponseVec.values.fill(1);
+        while(( !isNormalyzed(neuResponseVec) ) && (iter < maxIter)) {
+            ++iter;
+            curErrVec.values.resize(output.values.size());
 
-            while(!isNormalyzed(neuResponseVec)){
-                iter++;
+            // Получили ощибки очередного Input'a
+            currentTester->test(input, output, curErrVec);
+            neuResponseVec.values = curErrVec.values;
 
-                curErrVec.values.resize(output.values.size());
+            NeuNets::Iterator from = currentNet->getOutLayer();
+            NeuNets::Iterator to = currentNet->getInLayer();
 
-                //NB Веса сети не меняются??
-                // Получили ощибки очередного Input'a
-                currentTester->test(input, output, curErrVec);
-                neuResponseVec.values = curErrVec.values;
+            while(from != to){
+                // изменение весов
+                processLayer(from, curErrVec);
+                // Forget-me-not
+                from.prevLayer();
 
-                NeuNets::Iterator from = currentNet->getOutLayer();
-                NeuNets::Iterator to = currentNet->getInLayer();
+                // Middle layer errors
+                DataProcess::OutputData bufErrVec(from.count());
+                getMidLayerErrors(curErrVec, bufErrVec, from);
 
-                while(from != to){
-                    // изменение весов
-                    processLayer(from, curErrVec);
-                    // Forget-me-not
-                    from.prevLayer();
-
-//                    curErrVec = getMidLayerErrors(curErrVec, from);
-
-                    // Middle layer errors
-                    DataProcess::OutputData bufErrVec;
-                    bufErrVec.values.resize(from.count());
-                    getMidLayerErrors(curErrVec, bufErrVec, from);
-                    // обычная замена одного вектора ошибок на другой
-                    curErrVec.values.clear();
-                    curErrVec.values.resize(bufErrVec.values.size());
-                    curErrVec.values = bufErrVec.values;
-                }
-
+                curErrVec.swapVecs(bufErrVec);
             }
         }
+    }
 }
 
 void BackPropTutor::processLayer(NeuNets::Iterator &it, DataProcess::OutputData &error)
 {
-//    const double speed = 1.0;
+    double speed = limits.speed;
     if(it.count() != error.values.count())
         throw NetResponseErrorsCountMismatch();
 
     for(int i = 0; i < it.count(); ++i){
         double neuronError = error.values[i];
-        NeuNets::SynapseAct action = [ neuronError ] (NeuNets::Synapse &synapse) {
-            double newWeight = synapse.weight + 1 * neuronError * synapse.from->getVal(); // Instead of 1 here needs to be speed
+
+        NeuNets::SynapseAct action = [ neuronError, speed ] (NeuNets::Synapse &synapse) {
+            double newWeight = synapse.weight + speed * neuronError * synapse.from->getVal();
             synapse.changeWeight(newWeight);
         };
 
@@ -108,7 +110,7 @@ void BackPropTutor::processLayer(NeuNets::Iterator &it, DataProcess::OutputData 
 
 bool BackPropTutor::isNormalyzed(DataProcess::OutputData &error)
 {
-    const double maxErr = 0.005;  // must be somewhere
+    const double maxErr = limits.maxLayerErr;
     for(int i = 0; i < error.values.size(); ++i){
         if(fabs(error.values[i]) > maxErr)
             return false;
@@ -121,19 +123,21 @@ bool BackPropTutor::isNormalyzed(DataProcess::OutputData &error)
 
 bool BackPropTutor::start(const TuteData &data){
 
+    // NetProcessor
+    this->setLimits();
     // Нужно как-нибудь обрабатывать внешний цикл Сейчас стоит максимум итераций,
     // можно выводить первую ошибку каждого пуска и сравнивать с минимальной
     //
     // один RunData для одного образа
-    int maxIter = 300;
+    int maxIter = limits.maxNetIter;
     for(int k = 0; k < maxIter; ++k){
         for(int i = 0; i < data.runData.size(); ++i){
             if(data.runData[i].inputs.size() != data.runData[i].outputs.size())
-
                 throw InputsOutputsCountMismatch();
             processImage(data.runData[i]);
         }
     }
+
     DataProcess::InputData checker;
     checker.values.resize(21);
     checker.values[0] = 0;

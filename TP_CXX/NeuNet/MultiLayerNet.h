@@ -27,11 +27,12 @@ public:
     const Func &getFunc() { return activationFunc; }
 
 private:
-    NeuVec outNeurons;
     NeuVec inNeurons;
+    NeuVec outNeurons;
+    Func activationFunc;
     uint inLayerNum, outLayerNum;
     uint layersCnt;
-    Func activationFunc;
+
 };
 
 

@@ -222,6 +222,7 @@ void NetProcessor::onTeachNet() {
     data.runData.append(pack);
 
 
+//    tutor->setLimits();
     tutor->start(data);
 }
 //-------------------------------------------------------------------------------------------------

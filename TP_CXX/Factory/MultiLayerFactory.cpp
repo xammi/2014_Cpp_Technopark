@@ -5,22 +5,16 @@
 
 namespace Factory{
 
-//const qint32 fileId = 0xA1B1C1D1;
+// Somewhere Else
 const qint32 fileId = 10;
 
 // Jawdropping randomness
-//---------------------------------
 const int MAX_SYNAPSE_VAL = 1;
 const int MIN_SYNAPSE_VAL = 0;
 
 double get_random(double left, double right) {
     return ((double) qrand() / (double) RAND_MAX * (right - left) + left);// Rand Max is very small, so хаполняются не все значащик юиты мантиссы числа, маленькая точность
 }
-
-//double get_random(void) {
-//    return abs(qrand()) % ((int)(MAX_SYNAPSE_VAL-MIN_SYNAPSE_VAL + 1)) + MIN_SYNAPSE_VAL + (abs(qrand()) % 1000000) / 1000000.0;
-//}
-//---------------------------------
 
 MultiLayerFactory::MultiLayerFactory(bool flag) {
     if (flag)
@@ -67,18 +61,18 @@ void MultiLayerFactory::parseFile(const QString &filename) {
     // Проверка на правильность входных данных??
 
 
-    uint bufIntVar; // Количество в слое
-
-    stream >> bufIntVar;
-    if(!(bufIntVar > 0))
+    uint bufLayerCount;
+    stream >> bufLayerCount;
+    if(!(bufLayerCount > 0))
         throw WrongFileFormat();
-    nnInfo.neuronsPerLayer.append(bufIntVar);
+
+    nnInfo.neuronsPerLayer.append(bufLayerCount);
 
     for(uint i = 1; i < nnInfo.layersCount; ++i){
-        stream >> bufIntVar;
-        if(!(bufIntVar > 0))
+        stream >> bufLayerCount;
+        if(!(bufLayerCount > 0))
             throw WrongFileFormat();
-        nnInfo.neuronsPerLayer.append(bufIntVar);
+        nnInfo.neuronsPerLayer.append(bufLayerCount);
         //
         int cur = nnInfo.neuronsPerLayer[i];
         int prev = nnInfo.neuronsPerLayer[i - 1];
@@ -88,7 +82,8 @@ void MultiLayerFactory::parseFile(const QString &filename) {
 
         for(int j = 0; j < cur * prev; ++j){
             stream >> bufArr[j];
-            if((bufArr[j] > MAX_SYNAPSE_VAL) || (bufArr[j] < MIN_SYNAPSE_VAL))
+
+            if(stream.atEnd())
                 throw WrongData();
         }
         weights.append(bufArr);
@@ -103,9 +98,6 @@ MultiLayerNet *MultiLayerFactory::allocMemory(MultiLayerNet *bpNewNet) {
 
     NeuVec *prevLayer;
     NeuVec *curLayer;
-//    Layer *prevLayer;
-//    Layer *curLayer;
-
     uint i, j;
 
     //---------------
@@ -120,12 +112,12 @@ MultiLayerNet *MultiLayerFactory::allocMemory(MultiLayerNet *bpNewNet) {
 
     prevLayer = firstLayer;
     //---------------
+
     NeuVec inToSend = *firstLayer;
 
     for(i = 1; i < nnInfo.layersCount; ++i){
         curLayer = new NeuNets::NeuVec();
         uint neuroCount = nnInfo.neuronsPerLayer[i];
-
 
         for(j = 0; j < neuroCount; ++j)
             curLayer->append(new Neuron);
@@ -187,7 +179,7 @@ void MultiLayerFactory::createFromInfo(const QString &name, const QString &funcN
 void MultiLayerFactory::createFromInfoRec(const NCounts &cnts, int I,
                                           BuildInfo &nnInfo,
                                           QVector<AbstractNet *> &nets) {
-    if ((uint)nnInfo.layersCount == I) {
+    if ((int)nnInfo.layersCount == I) {
         nets.append(createFromInfo(nnInfo));
         return;
     }
