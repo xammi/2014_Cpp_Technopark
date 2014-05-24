@@ -1,19 +1,28 @@
 #ifndef BACKPROPTUTOR_H
 #define BACKPROPTUTOR_H
 
-/*
-
-  Небольшая проблема.
-  Поскольку Tutor работает с конкретной сетью, при создании его в NetProcessor'е происходит ошибка
-  Там хранятся только Абстрактные сети.
-  Если делать Тутор рассчитанным на абстрактные сети, то пропадает возможность некоторых методов (getInLayer, getOutLayer)
-  Просьба разобраться с этим как можно скорее.
- */
 
 #include "AbstractTutor.h"
 #include "../NeuNet/MultiLayerNet.h"
 
 namespace NetTutors {
+
+struct TutorBoundaries{
+
+    TutorBoundaries() {}
+    TutorBoundaries( double netErr, double layerErr
+                   , int netIter, int layerIter
+                   , double curSpeed) :
+        maxNetErr(netErr), maxLayerErr(layerErr)
+      , maxNetIter(netIter), maxLayerIter(layerIter)
+      , speed(curSpeed) {}
+
+    double maxNetErr;
+    double maxLayerErr;
+    int maxNetIter;
+    int maxLayerIter;
+    double speed;
+};
 
 using namespace NeuNets;
 
@@ -25,16 +34,28 @@ signals:
     void toDebug(QString);
 
 public:
-    BackPropTutor();
-    BackPropTutor(Tester *test): currentTester(test) {}
+    BackPropTutor() : currentNet(0), currentTester(0) {}
+    BackPropTutor(Tester *test): currentNet(0), currentTester(test) {}
+
 
     void initialize() {}
     bool start(const TuteData &data);
 
     void setNet(AbstractNet *aNet);
     void setTester(Tester *test);
+    void setLimits();
 
 private:
+
+
+    //
+
+
+
+    //
+
+    // For Max to set in NetProcessor
+    TutorBoundaries limits;
     MultiLayerNet *currentNet;
     Tester *currentTester;
 

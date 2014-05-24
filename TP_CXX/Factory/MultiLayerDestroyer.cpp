@@ -67,7 +67,7 @@ void MultiLayerDestroyer::writeNetToFile(AbstractNet *aNet, const QString &filen
 
     // FILEID?
     //
-    // Program crashes when net is saved, then removed. BugReport
+    // Program crashes when net is saved, then removed. Sometimes
 
     //
     //

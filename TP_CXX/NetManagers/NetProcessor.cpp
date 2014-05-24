@@ -143,32 +143,7 @@ void NetProcessor::internalTest() {
     tester->setTarget(nets[0]);
     tutor->setNet(nets[0]);
 
-    // Смотрим сеть с композицией 3-2-2
 
-    InputData *one, *two = new InputData();
-    one->values = {1,0,0};
-    two->values = {0,0,1};
-
-    OutputData *oneOut, *twoOut = new OutputData();
-    oneOut->values = {1,0};
-    twoOut->values = {0,1};
-
-    TuteData data;
-    InOutDataSet pack;
-
-    pack.inputs.append(one);
-    pack.outputs.append(oneOut);
-    data.runData.append(pack);
-
-    pack.inputs.clear();
-    pack.outputs.clear();
-
-    pack.outputs.append(twoOut);
-    pack.inputs.append(two);
-    data.runData.append(pack);
-
-
-    tutor->start(data);
 }
 
 //-------------------------------------------------------------------------------------------------

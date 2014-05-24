@@ -33,7 +33,7 @@ public:
 
 private:
     FuncDisp() {
-        _REG_((1 / (1 + exp(-0.5 * X))), "Sigmoid");
+        _REG_((1 / (1 + exp(-1 * X))), "Sigmoid");
         _REG_((tanh(X / 1)), "HypTan");
     }
 
