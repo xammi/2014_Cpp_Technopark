@@ -14,7 +14,6 @@ CONFIG += c++11
 
 SOURCES += main.cpp \
     DataProcess/ImageProcessor.cpp \
-    DataProcess/ImageStorage.cpp \
 \
     NetManagers/NetProcessor.cpp \
     NetManagers/NeuNetUI.cpp \
@@ -29,16 +28,15 @@ SOURCES += main.cpp \
     NeuNet/Iterator.cpp \
     NeuNet/MultiLayerNet.cpp \
     NetFunction.cpp \
-    Factory/BuildInfo.cpp
+    Factory/BuildInfo.cpp \
+    DataProcess/FileStorage.cpp
 
 HEADERS  += \
     includes.h \
     PtrVector.h \
 \
     DataProcess/AbstractProcessor.h \
-    DataProcess/AbstractStorage.h \
     DataProcess/ImageProcessor.h \
-    DataProcess/ImageStorage.h \
 \
     NetManagers/NetProcessor.h \
     NetManagers/NeuNetUI.h \
@@ -59,8 +57,10 @@ HEADERS  += \
     NetFunction.h \
     Factory/AbstractDestroyer.h \
     Factory/AbstractFactory.h \
-    NetTutors/TuteData.h
+    NetTutors/TuteData.h \
+    DataProcess/FileStorage.h
 
 
 FORMS    +=   NetManagers/neunetui.ui \
-    NetManagers/createNet.ui
+    NetManagers/createNet.ui \
+    NetManagers/addSet.ui

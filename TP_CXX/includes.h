@@ -6,6 +6,7 @@
 
 #include <QVector>
 #include <QString>
+#include <QStringList>
 #include <QDialog>
 
 #include <QObject>

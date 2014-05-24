@@ -12,11 +12,11 @@ class ImageProcessor : public AbstractProcessor {
 public:
     ImageProcessor();
 
-    InputData * prepareData(QPixmap &);
+    InputData * prepareData(QImage &);
 
 private:
-    QPixmap iniImage;
-    QVector <QPixmap *> segments;
+    QImage iniImage;
+    QVector <QImage *> segments;
 
     void binarize() {}
     void segment() {}

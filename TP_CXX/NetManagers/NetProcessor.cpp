@@ -3,12 +3,29 @@
 namespace NetManagers {
 
 //-------------------------------------------------------------------------------------------------
-NetProcessor::NetProcessor()
-    :   gui(new NeuNetUI)
+NetProcessor::NetProcessor(QString dir)
+    :   netsCatalog(dir), gui(new NeuNetUI)
 {
     this->setDefaultConf();
     this->connectUI();
+
+    this->loadAllNets();
     gui->show();
+}
+
+void NetProcessor::loadAllNets() {
+    QDir qdir(netsCatalog);
+    QStringList listFiles = qdir.entryList(QDir::Files);
+
+    try {
+        for (QString file : listFiles)
+            if (file.contains(".net"))
+                nets.append(factory->createFromFile(qdir.absoluteFilePath(file)));
+    } catch (Exception & exc) {
+        emit showException(exc.toString());
+    }
+
+    this->onUpdateNets(gui->getNetsView());
 }
 
 NetProcessor::~NetProcessor() {
@@ -29,13 +46,15 @@ const NetProcessor & NetProcessor::get_self() {
 }
 
 void NetProcessor::setDefaultConf() {
-    dataStore = new DataProcess::ImageStorage;
+    dataStore = new DataProcess::FileStorage;
     dataProc = new DataProcess::ImageProcessor;
 
     tester = new Tester;
     tutor = new NetTutors::BackPropTutor(tester);
     factory = new Factory::MultiLayerFactory;
     destroyer = new Factory::MultiLayerDestroyer;
+
+    dataStore->onUpdate(gui->getDataView());
 }
 
 void NetProcessor::connectUI() {
@@ -45,7 +64,7 @@ void NetProcessor::connectUI() {
     connect(gui, SIGNAL(removeNet(CIndex)), SLOT(onRemoveNet(CIndex)));
 
     connect(gui, SIGNAL(updateNets(QTableWidget*)), SLOT(onUpdateNets(QTableWidget*)));
-    connect(gui, SIGNAL(updateData(QTreeWidget*)), SLOT(onUpdateData(QTreeWidget*)));
+    connect(gui, SIGNAL(updateData(QTreeWidget*)), dataStore, SLOT(onUpdate(QTreeWidget*)));
 
     connect(this, SIGNAL(showInfo(QString)), gui, SLOT(onShowInfo(QString)));
     connect(this, SIGNAL(showException(QString)), gui, SLOT(onShowException(QString)));
@@ -53,13 +72,13 @@ void NetProcessor::connectUI() {
     connect(tester, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
     connect(tutor, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
 
-    connect(gui, SIGNAL(addData()), SLOT(onAddData()));
+    connect(gui, SIGNAL(addData(QString)), SLOT(onAddData(QString)));
+    connect(gui, SIGNAL(refreshData()), dataStore, SLOT(onRefreshData()));
     connect(gui, SIGNAL(removeData()), SLOT(onRemoveData()));
     connect(gui, SIGNAL(formDataSet()), SLOT(onFormDataSet()));
 
-    connect(gui, SIGNAL(testNetSingle()), SLOT(onTestNetSingle()));
-    connect(gui, SIGNAL(testNetDataSet()), SLOT(onTestNetDataSet()));
-    connect(gui, SIGNAL(teachNet()), SLOT(onTeachNet()));
+    connect(gui, SIGNAL(testNets()), SLOT(onTestNets()));
+    connect(gui, SIGNAL(teachNets()), SLOT(onTeachNets()));
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -113,17 +132,18 @@ void NetProcessor::onUpdateNets(QTableWidget * view) {
     }
 }
 //-------------------------------------------------------------------------------------------------
-void NetProcessor::onAddData() {}
+void NetProcessor::onAddData(QString name) {
+    dataStore->createSet(name);
+}
+
 void NetProcessor::onRemoveData() {}
 void NetProcessor::onFormDataSet() {}
-void NetProcessor::onUpdateData(QTreeWidget *) {}
 
 //-------------------------------------------------------------------------------------------------
-void NetProcessor::onTestNetSingle() {}
-void NetProcessor::onTestNetDataSet() {}
+void NetProcessor::onTestNets() {}
 
 
-void NetProcessor::onTeachNet() {
+void NetProcessor::onTeachNets() {
     if (nets.size() == 0) return;
 
     tester->setTarget(nets[0]);
