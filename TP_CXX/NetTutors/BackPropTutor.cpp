@@ -65,7 +65,7 @@ void BackPropTutor::processImage(const InputDataSet &inputs, const OutputDataSet
         while(( !isNormalyzed(neuResponseVec) ) && (iter < maxIter)) {
             ++iter;
             if(iter == maxIter)
-                currentTester->toDebug("Количество итераций для одного из образов оказалось равно макcимальному");
+                emit toDebug("Количество итераций для одного из образов оказалось равно макcимальному");
             
 
             // Получили ощибки очередного Input'a
@@ -79,7 +79,7 @@ void BackPropTutor::processImage(const InputDataSet &inputs, const OutputDataSet
                 for(double error: curErrVec.values){
                     firstInput.sprintf("%lf ", error);
                 }
-                currentTester->toDebug(firstInput);
+                emit toDebug(firstInput);
                 addEveryImageError(curErrVec);
             }
 

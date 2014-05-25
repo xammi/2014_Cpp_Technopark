@@ -82,8 +82,6 @@ void NetProcessor::connectUI() {
     connect(this, SIGNAL(showDebug(QString)), gui, SLOT(onShowDebug(QString)));
 
     connect(tester, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
-
-    // Этот сигнал в принципе не нужен
     connect(tutor, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
 
     connect(gui, SIGNAL(testNets(Ints, QStringList)), SLOT(onTestNets(Ints, QStringList)));
@@ -172,37 +170,45 @@ void NetProcessor::onTestNets(Ints indexes, QStringList keySet) {
 
 void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TutorBoundaries boundaries) {
     try {
-        TuteData ttdata;
-        dataStore->load(ttdata.inputs, keySet);
 
-        Ints amounts;
-        amounts.fill(0, ttdata.inputs.size());
-        for (int I = 0; I < ttdata.inputs.size(); ++I)
-            amounts[I] = ttdata.inputs[I].size();
+           TuteData ttdata;
+           dataStore->load(ttdata.inputs, keySet);
 
-        for (int index : indexes) {
+           Ints amounts;
+           amounts.fill(0, ttdata.inputs.size());
+           for (int I = 0; I < ttdata.inputs.size(); ++I)
+               amounts[I] = ttdata.inputs[I].size();
 
-            QString recArea;
-            for (QString folder : keySet)
-                if(!recArea.contains(folder[0]))
-                    recArea.append(folder[0]);
+           for (int index : indexes) {
 
-            nets[index]->setRecArea(recArea);
+               QString recArea;
+               for (QString folder : keySet)
+                   if(!recArea.contains(folder[0]))
+                       recArea.append(folder[0]);
 
-            OutputDataSet outputs;
-            nets[index]->getOutDataSet(outputs, recArea);
+               nets[index]->setRecArea(recArea);
 
-            OutputDataSet duplicOutputs;
-            for (int I = 0; I < outputs.size(); ++I)
-                for (int J = 0; J < amounts[I]; ++J)
-                    duplicOutputs.append(outputs[I]);
+               OutputDataSet outputs;
+               nets[index]->getOutDataSet(outputs, recArea);
 
-            ttdata.outputs.append(duplicOutputs);
-        }
+               OutputDataSet duplicOutputs;
+               for (int I = 0; I < outputs.size(); ++I)
+                   for (int J = 0; J < amounts[I]; ++J)
+                       duplicOutputs.append(outputs[I]);
 
-    }  catch (Exception &exc) {
-        emit showException(exc.toString());
-    }
+               ttdata.outputs.append(duplicOutputs);
+           }
+
+           for (int index : indexes) {
+               tester->setTarget(nets[index]);
+               tutor->setNet(nets[index]);
+               tutor->setLimits(boundaries);
+               tutor->start(ttdata);
+           }
+
+       }  catch (Exception &exc) {
+           emit showException(exc.toString());
+       }
 }
 
 //-------------------------------------------------------------------------------------------------
