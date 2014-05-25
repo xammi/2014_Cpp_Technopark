@@ -72,6 +72,7 @@ public:
     
 private:
     void adjustUi();
+    void setDefaultConf();
     void updateUI();
 
     Ui::NeuNetUI *ui;

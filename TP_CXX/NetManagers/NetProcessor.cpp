@@ -1,4 +1,5 @@
 #include "NetProcessor.h"
+#include <iostream>
 
 namespace NetManagers {
 
@@ -29,15 +30,15 @@ void NetProcessor::loadAllNets() {
 }
 
 NetProcessor::~NetProcessor() {
-    delete dataStore;
-    delete dataProc;
+    if (dataStore) delete dataStore;
+    if (dataProc) delete dataProc;
 
-    delete gui;
-    delete tester;
-    delete tutor;
+    if (gui) delete gui;
+    if (tester) delete tester;
+    if (tutor) delete tutor;
 
-    delete factory;
-    delete destroyer;
+    if (factory) delete factory;
+    if (destroyer) delete destroyer;
 }
 //-------------------------------------------------------------------------------------------------
 const NetProcessor & NetProcessor::get_self() {
@@ -46,16 +47,25 @@ const NetProcessor & NetProcessor::get_self() {
 }
 
 void NetProcessor::setDefaultConf() {
-    ImageProcessor * imgProc = new DataProcess::ImageProcessor;
-    dataStore = new DataProcess::FileStorage(imgProc);
-    dataProc = imgProc;
+    try {
+        ImageProcessor * imgProc = new DataProcess::ImageProcessor;
+        dataStore = new DataProcess::FileStorage(imgProc);
+        dataProc = imgProc;
 
-    tester = new Tester;
-    tutor = new NetTutors::BackPropTutor(tester);
-    factory = new Factory::MultiLayerFactory;
-    destroyer = new Factory::MultiLayerDestroyer;
+        tester = new Tester;
+        tutor = new NetTutors::BackPropTutor(tester);
+        factory = new Factory::MultiLayerFactory;
+        destroyer = new Factory::MultiLayerDestroyer;
 
-    dataStore->onUpdate(gui->getDataView());
+        dataStore->onUpdate(gui->getDataView());
+
+    } catch (Exception &) {
+        this->~NetProcessor();
+        throw;
+    } catch (std::bad_alloc &) {
+        this->~NetProcessor();
+        throw;
+    }
 }
 
 void NetProcessor::connectUI() {
@@ -76,7 +86,6 @@ void NetProcessor::connectUI() {
 
     connect(gui, SIGNAL(testNets(Ints, QStringList)), SLOT(onTestNets(Ints, QStringList)));
     connect(gui, SIGNAL(teachNets(Ints, QStringList, TutorBoundaries)), SLOT(onTeachNets(Ints, QStringList, TutorBoundaries)));
-
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -153,20 +162,8 @@ void NetProcessor::onTestNets(Ints indexes, QStringList keySet) {
 }
 
 void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TutorBoundaries boundaries) {
-    qDebug() << "ura, teach";
-
     try {
-        TuteData ttdata;
-        QList<InputDataSet> inputs;
-        dataStore->load(inputs, keySet);
 
-        for (int index : indexes) {
-            tester->setTarget(nets[index]);
-            tutor->setNet(nets[index]);
-
-            tutor->setLimits(boundaries);
-            tutor->start(ttdata);
-        }
 
     }  catch (Exception &exc) {
         emit showException(exc.toString());

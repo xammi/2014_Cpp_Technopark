@@ -4,6 +4,7 @@ namespace NetManagers {
 
 //-------------------------------------------------------------------------------------------------
 Tester::Tester()
+    :   target(NULL)
 {}
 
 Tester::Tester(AbstractNet * _target)
@@ -11,6 +12,9 @@ Tester::Tester(AbstractNet * _target)
 {}
 
 CompResult Tester::test(const InputData & in_data, const OutputData & expect, OutputData &errors) {
+    if (target == NULL)
+        throw TargetNotFound();
+
     OutputData test_data = target->getResponse(in_data);
     if(test_data.values.size() != errors.values.size())
         throw SizeMismatch();

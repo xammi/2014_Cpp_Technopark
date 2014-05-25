@@ -36,7 +36,9 @@ private:
     AbstractNet *target;
 };
 //-------------------------------------------------------------------------------------------------
-
+struct TargetNotFound : public Exception {
+    QString toString() { return "Для tester не задана нейронная сеть"; }
+};
 
 struct SizeMismatch : public Exception {
     QString toString() { return "Размеры вектора ошибок и выхода разные"; }
