@@ -24,7 +24,7 @@ namespace NetManagers {
     using namespace BuildData;
     using NetTutors::TutorBoundaries;
 
-    const QString DEFAULT_NETS_DIR = "../TP_CXX/Nets data";
+    const QString DEFAULT_NETS_DIR = "../TP_CXX/Nets data/";
 
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------

@@ -169,6 +169,7 @@ MultiLayerNet *MultiLayerFactory::createFromInfo(const BuildInfo &newInfo) {
     MultiLayerNet *bpNewNet = 0;
     nnInfo = newInfo;
     bpNewNet = allocMemory(bpNewNet);
+    bpNewNet->setRecArea("&");
     return bpNewNet;
 }
 

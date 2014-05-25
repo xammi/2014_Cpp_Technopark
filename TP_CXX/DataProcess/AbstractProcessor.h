@@ -11,6 +11,15 @@ class InputData
 {
 public:
     InputData() {}
+
+    //
+    InputData(QString &textData) {
+        this->values.resize(textData.length());
+        for(int i = 0; i < textData.length(); ++i) {
+            this->values[i] = 1.0 * (int)(textData[i].toLatin1());
+        }
+    }
+
     QVector <double> values;
     bool operator == (const InputData &) { return true; }
 };

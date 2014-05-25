@@ -55,8 +55,8 @@ void NeuNetUI::adjustUi() {
     connect(ui->netRemove, SIGNAL(clicked()), SLOT(onRemoveNets()));
 
     connect(ui->dataRefresh, SIGNAL(clicked()), SLOT(onRefreshData()));
-
     connect(ui->tute, SIGNAL(clicked()), SLOT(onLimitsShow()));
+
     connect(addLimitsUi->ok, SIGNAL(clicked()), SLOT(onProcessNets()));
     connect(addLimitsUi->cancel, SIGNAL(clicked()), addLimitsDlg, SLOT(hide()));
 
@@ -237,6 +237,7 @@ void NeuNetUI::onProcessNets() {
         emit testNets(netIds, keySet);
 
     addLimitsDlg->hide();
+    emit updateNets(ui->nets);
 }
 
 void NeuNetUI::onRefreshData() {

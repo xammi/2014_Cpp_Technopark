@@ -11,10 +11,6 @@ namespace NetManagers {
 using NeuNets::AbstractNet;
 using namespace DataProcess;
 
-//struct CompResult {
-//    QVector<double> comps;
-//};
-
 typedef bool CompResult;
 //-------------------------------------------------------------------------------------------------
 class Tester : public QObject {
@@ -28,12 +24,13 @@ public:
     Tester(AbstractNet *);
 
     CompResult test(const InputData &, const OutputData &, OutputData &errors);
-    void test(const InOutDataSet &);
+    QString test(const InputDataSet &);
 
     void setTarget(AbstractNet *);
 
 private:
     AbstractNet *target;
+    int findMax(const OutputData &out);
 };
 //-------------------------------------------------------------------------------------------------
 struct TargetNotFound : public Exception {
@@ -42,6 +39,26 @@ struct TargetNotFound : public Exception {
 
 struct SizeMismatch : public Exception {
     QString toString() { return "Размеры вектора ошибок и выхода разные"; }
+};
+
+struct InputsOutputsMismatch : public Exception {
+    QString toString() { return "Количество входных образов должно быть равно количеству выходных"; }
+};
+
+struct InputsNeuNetInLayerSizeMismatch : public Exception {
+    QString toString() { return "Размеры входного образа не подходят под размеры входного слоя сети"; }
+};
+
+struct OutputsNeuNetOutLayerSizeMismatch : public Exception {
+    QString toString() { return "Размеры выходного вектора не подходят под размеры выходного слоя сети"; }
+};
+
+struct OutputDataIsEmpty : public Exception {
+    QString toString() { return "Выходной вектор пуст. Операции невозможны"; }
+};
+
+struct NetNotTuted : public Exception {
+    QString toString() { return "Выходной вектор пуст. Операции невозможны"; }
 };
 
 } // namespace Tester

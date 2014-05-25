@@ -55,7 +55,7 @@ void FileStorage::load(QList<InputDataSet> & data, const QStringList &keys) {
     }
 }
 
-void FileStorage::load(InputDataSet & inputSet, const StrKey & folder) {
+int FileStorage::load(InputDataSet & inputSet, const StrKey & folder) {
     if (processor == NULL)
         throw ImgProcessorNotFound();
 
@@ -78,6 +78,8 @@ void FileStorage::load(InputDataSet & inputSet, const StrKey & folder) {
 
         inputSet.append(input);
     }
+
+    return dir.entryList(QDir::Files).size();
 }
 
 void FileStorage::loadImage(QImage & img, const StrKey & str) {

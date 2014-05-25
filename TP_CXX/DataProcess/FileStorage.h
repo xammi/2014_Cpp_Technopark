@@ -29,7 +29,7 @@ public:
     QDir & findDir(const StrKey &);
 
     void load(QList<InputDataSet> &, const QStringList & keys);
-    void load(InputDataSet &, const StrKey &);
+    int load(InputDataSet &, const StrKey &);
 
 private:
     void loadImage(QImage &, const StrKey &);

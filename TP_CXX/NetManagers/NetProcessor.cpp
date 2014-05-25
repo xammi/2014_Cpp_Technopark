@@ -82,6 +82,8 @@ void NetProcessor::connectUI() {
     connect(this, SIGNAL(showDebug(QString)), gui, SLOT(onShowDebug(QString)));
 
     connect(tester, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
+
+    // Этот сигнал в принципе не нужен
     connect(tutor, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
 
     connect(gui, SIGNAL(testNets(Ints, QStringList)), SLOT(onTestNets(Ints, QStringList)));
@@ -149,6 +151,12 @@ void NetProcessor::onUpdateNets(QTableWidget * view) {
 void NetProcessor::onTestNets(Ints indexes, QStringList keySet) {
     qDebug() << "ura, test";
 
+    // WARNING! ONLY FOR DEBUG
+
+    internalTest();
+
+
+    /*
     try {
         InOutDataSet data;
 
@@ -159,11 +167,50 @@ void NetProcessor::onTestNets(Ints indexes, QStringList keySet) {
     } catch (Exception &exc) {
         emit showException(exc.toString());
     }
+    */
 }
 
 void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TutorBoundaries boundaries) {
     try {
+        Ints amounts;
+        TuteData ttdata;
+        InOutDataSet fullSet;
+        InputDataSet inputSet;
 
+
+        for (QString key : keySet) {
+            inputSet.clear();
+            int tmp = dataStore->load(inputSet, key);
+            amounts.append(tmp);
+            fullSet.inputs = inputSet;
+
+            for (int index : indexes) {
+                QString recArea;
+                for (QString folder : keySet) {
+                    if(!recArea.contains(folder[0])){
+                        recArea.append(folder[0]);
+                    }
+                }
+
+                nets[index]->setRecArea(recArea);
+
+                fullSet.outputs.clear();
+                OutputDataSet outputs = static_cast<OutputDataSet>(nets[index]->getOutDataSet(recArea));
+                for (int I = 0; I < outputs.size(); ++I)
+                    for (int J = 0; J < amounts[I]; ++J)
+                        fullSet.outputs.append(outputs[I]);
+            }
+
+            ttdata.append(fullSet);
+        }
+
+
+        for (int index : indexes) {
+            tester->setTarget(nets[index]);
+            tutor->setNet(nets[index]);
+            tutor->setLimits(boundaries);
+            tutor->start(ttdata);
+        }
 
     }  catch (Exception &exc) {
         emit showException(exc.toString());
@@ -177,9 +224,6 @@ void NetProcessor::internalTest() {
     tester->setTarget(nets[0]);
     tutor->setNet(nets[0]);
 
-    // Смотрим сеть с композицией 3-2-2  WORKS
-    // Смотрим сеть с композицией 3-3-2  WORKS
-    // Смотрим сеть с композицией 5-4-2  WORKS
 
     InputData *one = new InputData();
     one->values = {1,1,1,1,
@@ -217,6 +261,42 @@ void NetProcessor::internalTest() {
 
     tutor->setLimits(b);
     tutor->start(data);
+
+    DataProcess::InputData checker;
+    InputDataSet ins;
+    checker.values.resize(21);
+
+    checker.values = {0,1,1,1,
+                      0,1,0,0,
+                      0,1,1,1,
+                      0,0,0,1,
+                      0,1,1,1,
+                      1};
+    ins.append(&checker);
+
+
+    DataProcess::InputData checker1;
+    checker1.values = {1,1,1,1,
+                      1,0,0,0,
+                      1,1,1,1,
+                      0,0,0,1,
+                      1,1,1,1,
+                      1};
+    ins.append(&checker1);
+
+
+    DataProcess::InputData checker2;
+    checker2.values = {1,0,0,1,
+                      1,0,0,1,
+                      1,0,0,1,
+                      1,1,1,1,
+                      0,0,0,1,
+                      1};
+
+    ins.append(&checker2);
+
+    QString answer = tester->test(ins);
+    qDebug() << answer << endl;
 }
 
 //-------------------------------------------------------------------------------------------------

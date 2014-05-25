@@ -17,3 +17,7 @@ int main(int argc, char *argv[]) {
 
     return a.exec();
 }
+
+/*
+ * Отстойное сохранение сети
+ */
