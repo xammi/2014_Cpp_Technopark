@@ -24,7 +24,7 @@ public:
 
 
     void initialize() {}
-    bool start(const TuteData &data);
+    bool start(const TuteData &data, const QString &recArea);
 
     void setNet(AbstractNet *aNet);
     void setTester(Tester *test);
@@ -43,11 +43,14 @@ private:
     TutorBoundaries tuteLimits;
     MultiLayerNet *currentNet;
     Tester *currentTester;
+    QList<OutputData> everyImageErrors;
 
     void getMidLayerErrors(OutputData &oldErrors, OutputData &newErrors, Iterator &it);
     void processImage(const InOutDataSet &image);
     void processLayer(Iterator &it, OutputData &error);
 
+    bool checkEveryImageError();
+    void addEveryImageError(OutputData &newError);
     double propagate() {return 0;}
     void backPropagate() {}
     bool isNormalyzed(OutputData &error);
@@ -56,11 +59,15 @@ private:
 //-------------------------------------------------------------------------------------------------
 
 struct InputsOutputsCountMismatch : public Exception {
-    QString toString() { return "Количество входов для символа не равно количеству выходов"; }
+    QString toString() { return "Количество входных начертаний для символа не равно количеству выходных"; }
+};
+
+struct InputOutputNeuNetCountMismatch : public Exception {
+    QString toString() { return "Кол-во входов символа не равно кол-ву входов сети и/или кол-во выходов не равно кол-ву выходов сети"; }
 };
 
 struct NetResponseErrorsCountMismatch : public Exception {
-    QString toString() { return "Количество входов для символа не равно количеству выходов"; }
+    QString toString() { return "Разсер ответа сети не совпадает с размером ожидаемого вектора ошибок"; }
 };
 
 struct NetNotFound : public Exception {

@@ -41,8 +41,13 @@ void NeuNetUI::adjustUi() {
 
     connect(ui->dataRefresh, SIGNAL(clicked()), SLOT(onRefreshData()));
 
-    connect(ui->tute, SIGNAL(clicked()), SLOT(onLimitsShow()));
-    connect(addLimitsUi->ok, SIGNAL(clicked()), SLOT(onProcessNets()));
+    /*
+        connect(ui->tute, SIGNAL(clicked()), SLOT(onLimitsShow()));
+        connect(addLimitsUi->ok, SIGNAL(clicked()), SLOT(onProcessNets()));
+    */
+    // Для тестов
+    connect(ui->tute, SIGNAL(clicked()), SLOT(onProcessNets()));
+
     connect(addLimitsUi->cancel, SIGNAL(clicked()), addLimitsDlg, SLOT(hide()));
 
     connect(ui->test, SIGNAL(clicked()), SLOT(onProcessNets()));
@@ -220,6 +225,30 @@ void NeuNetUI::onProcessNets() {
         emit teachNets(netIds, keySet, tutitionLimits);
     } else if (sender() == ui->test)
         emit testNets(netIds, keySet);
+
+    /*
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     */
+
+
+    // WARNING! ONLY FOR DEBUG
+        emit testNets(netIds, keySet);
+
+    //
 
     addLimitsDlg->hide();
 }

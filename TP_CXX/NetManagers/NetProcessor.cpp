@@ -70,6 +70,8 @@ void NetProcessor::connectUI() {
     connect(this, SIGNAL(showException(QString)), gui, SLOT(onShowException(QString)));
     connect(this, SIGNAL(showDebug(QString)), gui, SLOT(onShowDebug(QString)));
     connect(tester, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
+
+    // Этот сигнал в принципе не нужен
     connect(tutor, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
 
     connect(gui, SIGNAL(testNets(Ints, QStringList)), SLOT(onTestNets(Ints, QStringList)));
@@ -137,6 +139,33 @@ void NetProcessor::onUpdateNets(QTableWidget * view) {
 void NetProcessor::onTestNets(Ints indexes, QStringList keySet) {
     qDebug() << "ura, test";
 
+
+
+    /*
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     */
+
+
+    // WARNING! ONLY FOR DEBUG
+
+    internalTest();
+
+
+    /*
     try {
         InOutDataSet data;
         formInOutDataSet(data, keySet);
@@ -148,6 +177,7 @@ void NetProcessor::onTestNets(Ints indexes, QStringList keySet) {
     } catch (Exception &exc) {
         emit showException(exc.toString());
     }
+    */
 }
 
 void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TutorBoundaries boundaries) {
@@ -172,7 +202,9 @@ void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TutorBoundaries
             }
 
             tutor->setLimits(boundaries);
-            tutor->start(data);
+
+            // Needs to be correct!
+            tutor->start(data, "&");
         }
     }  catch (Exception &exc) {
         emit showException(exc.toString());
@@ -194,9 +226,6 @@ void NetProcessor::internalTest() {
     tester->setTarget(nets[0]);
     tutor->setNet(nets[0]);
 
-    // Смотрим сеть с композицией 3-2-2  WORKS
-    // Смотрим сеть с композицией 3-3-2  WORKS
-    // Смотрим сеть с композицией 5-4-2  WORKS
 
     InputData *one = new InputData();
     one->values = {1,1,1,1,
@@ -234,7 +263,43 @@ void NetProcessor::internalTest() {
     TutorBoundaries b(0.001, 0.0001, 100, 100000000, 1);
 
     tutor->setLimits(b);
-    tutor->start(data);
+    tutor->start(data, "54");
+
+    DataProcess::InputData checker;
+    InputDataSet ins;
+    checker.values.resize(21);
+
+    checker.values = {0,1,1,1,
+                      0,1,0,0,
+                      0,1,1,1,
+                      0,0,0,1,
+                      0,1,1,1,
+                      1};
+    ins.append(&checker);
+
+
+    DataProcess::InputData checker1;
+    checker1.values = {1,1,1,1,
+                      1,0,0,0,
+                      1,1,1,1,
+                      0,0,0,1,
+                      1,1,1,1,
+                      1};
+    ins.append(&checker1);
+
+
+    DataProcess::InputData checker2;
+    checker2.values = {1,0,0,1,
+                      1,0,0,1,
+                      1,0,0,1,
+                      1,1,1,1,
+                      0,0,0,1,
+                      1};
+
+    ins.append(&checker2);
+
+    QString answer = tester->test(ins);
+    qDebug() << answer << endl;
 }
 
 //-------------------------------------------------------------------------------------------------

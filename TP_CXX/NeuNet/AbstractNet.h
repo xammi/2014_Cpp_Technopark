@@ -18,6 +18,9 @@ public:
     virtual Iterator getInLayer() const = 0;
     virtual Iterator getOutLayer() const = 0;
 
+    virtual int getInSize() = 0;
+    virtual int getOutSize() = 0;
+
     virtual OutputData getResponse(const InputData &) const = 0;
 
     virtual QString topology() const = 0;
@@ -33,11 +36,14 @@ public:
         return iter;
     }
 
+    virtual void clear() = 0;
+
     QString name() const { return _name; }
     void setName(const QString &netName) { _name = netName; }
 
     const QString &getRecArea() const { return recArea; }
-    void setRecArea(const QString &value) { recArea = value; }
+    // void setRecArea(const QString &value) { recArea = value; }
+    virtual void setRecArea(const QString &value) = 0;
 
 protected:
     QString _name;

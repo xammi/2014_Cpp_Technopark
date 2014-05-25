@@ -26,8 +26,36 @@ void Tester::setTarget(AbstractNet *new_target) {
     this->target = new_target;
 }
 
-void Tester::test(const InOutDataSet &) {
+int Tester::findMax(const OutputData &out)
+{
+    if(out.values.isEmpty())
+        throw OutputDataIsEmpty();
+    double max = out.values[0];
+    int maxPos = 0;
+    for(int i = 1; i < out.values.size(); ++i)
+        if(max < out.values[i]){
+            max = out.values[i];
+            maxPos = i;
+        }
+    return maxPos;
+}
 
+QString Tester::test(const InputDataSet &dataSet) {
+    if(target->getRecArea()[0] == '&')
+        throw NetNotTuted();
+
+    QString answer("Ответы для образов: ");
+    for(int i = 0; i < dataSet.size(); ++i) {
+        InputData in = *dataSet[i];
+        if(dataSet[i]->values.size() != target->getInSize())
+            throw InputsNeuNetInLayerSizeMismatch();
+        OutputData out = target->getResponse(in);
+
+        int maxPos = findMax(out);
+        answer.append(target->getRecArea()[maxPos]);
+        answer.append(' ');
+    }
+    return answer;
 }
 
 //-------------------------------------------------------------------------------------------------
