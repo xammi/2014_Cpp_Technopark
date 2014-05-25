@@ -51,28 +51,26 @@ public:
     const QString &getRecArea() const { return recArea; }
     virtual void setRecArea(const QString &value) = 0;
 
-    OutputData *getDataFromSymbol(int pos, int length){
-        OutputData *data = new OutputData;
-        data->values.resize(length);
-        data->values.fill(0);
-        data->values[pos] = 1;
-        return data;
+    void getDataFromSymbol(OutputData & data, int pos, int length) {
+        data.values.fill(0, length);
+        data.values[pos] = 1;
     }
 
-    PtrVector <OutputData> getOutDataSet(QString strToParse){
-        PtrVector <OutputData> outVec;
-        OutputData *bufData = new OutputData();
+    void getOutDataSet(OutputDataSet & outVec, QString strToParse){
+        outVec.clear();
         int len = strToParse.length();
+        OutputData *bufData;
 
         for(QChar ch : strToParse){
+            bufData = new OutputData();
             int pos = recArea.indexOf(ch);
-            if(pos > 0)
-                bufData = getDataFromSymbol(pos, len);
-            else
+
+            if(pos == -1)
                 throw CharIsNotInRecArea();
+
+            getDataFromSymbol(*bufData, pos, len);
             outVec.append(bufData);
         }
-        return outVec;
     }
 
 protected:

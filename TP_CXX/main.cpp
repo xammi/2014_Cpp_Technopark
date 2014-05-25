@@ -12,7 +12,7 @@ int main(int argc, char *argv[]) {
     } catch (std::bad_alloc & exc) {
         std::cerr << "Problems with set of configuration\n" << exc.what();
     } catch (Exception & exc) {
-        std::cerr << "Problems with adjustment of configuration" << exc.toString();
+        std::cerr << "Problems with adjustment of configuration" << exc.toString().toStdString();
     }
 
     return a.exec();

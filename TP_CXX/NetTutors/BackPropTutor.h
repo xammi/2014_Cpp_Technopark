@@ -46,7 +46,7 @@ private:
     QList<OutputData> everyImageErrors;
 
     void getMidLayerErrors(OutputData &oldErrors, OutputData &newErrors, Iterator &it);
-    void processImage(const InOutDataSet &image);
+    void processImage(const InputDataSet &input, const OutputDataSet &output);
     void processLayer(Iterator &it, OutputData &error);
 
     bool checkEveryImageError();

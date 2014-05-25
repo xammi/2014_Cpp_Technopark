@@ -50,10 +50,7 @@ struct InOutData {
     OutputData out;
 };
 
-struct InOutDataSet {
-    InputDataSet inputs;
-    OutputDataSet outputs;
-};
+
 
 //-------------------------------------------------------------------------------------------------
 struct AbstractProcessor : public QObject {

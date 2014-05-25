@@ -45,15 +45,15 @@ void BackPropTutor::getMidLayerErrors(DataProcess::OutputData &oldErrors, DataPr
     }
 }
 
-void BackPropTutor::processImage(const InOutDataSet &image)
+void BackPropTutor::processImage(const InputDataSet &inputs, const OutputDataSet &outputs)
 {
     int iter = 0;
     int maxIter = tuteLimits.maxLayerIter;
     DataProcess::OutputData curErrVec, neuResponseVec;
 
-    for(int i = 0; i < image.inputs.size(); ++i){
-        DataProcess::InputData input = *image.inputs[i];
-        DataProcess::OutputData output = *image.outputs[i];
+    for(int i = 0; i < inputs.size(); ++i){
+        DataProcess::InputData input = *inputs[i];
+        DataProcess::OutputData output = *outputs[i];
         neuResponseVec.clearAndFill();
 
         if( (input.values.size() != currentNet->getInSize()) ||
@@ -153,10 +153,10 @@ bool BackPropTutor::isNormalyzed(DataProcess::OutputData &error)
 bool BackPropTutor::start(const TuteData &data){
     int maxIter = tuteLimits.maxNetIter;
     for(int k = 0; k < maxIter; ++k){
-        for(int i = 0; i < data.size(); ++i){
-            if(data[i].inputs.size() != data[i].outputs.size())
+        for(int i = 0; i < data.inputs.size(); ++i){
+            if(data.inputs[i].size() != data.outputs[i].size())
                 throw InputsOutputsCountMismatch();
-            processImage(data[i]);
+            processImage(data.inputs[i], data.outputs[i]);
         }
         if( checkEveryImageError() == true ) // Если ошибки всех векторов сети - нормальные
             break;
