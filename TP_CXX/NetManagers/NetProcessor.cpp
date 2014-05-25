@@ -82,8 +82,6 @@ void NetProcessor::connectUI() {
     connect(this, SIGNAL(showDebug(QString)), gui, SLOT(onShowDebug(QString)));
 
     connect(tester, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
-
-    // Этот сигнал в принципе не нужен
     connect(tutor, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
 
     connect(gui, SIGNAL(testNets(Ints, QStringList)), SLOT(onTestNets(Ints, QStringList)));
@@ -175,7 +173,7 @@ void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TutorBoundaries
         Ints amounts;
         TuteData ttdata;
         InOutDataSet fullSet;
-        InputDataSet inputSet;
+        InputDataSet inputSet;        
 
 
         for (QString key : keySet) {
@@ -195,7 +193,8 @@ void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TutorBoundaries
                 nets[index]->setRecArea(recArea);
 
                 fullSet.outputs.clear();
-                OutputDataSet outputs = static_cast<OutputDataSet>(nets[index]->getOutDataSet(recArea));
+                OutputDataSet outputs;
+                nets[index]->getOutDataSet(outputs, recArea);
                 for (int I = 0; I < outputs.size(); ++I)
                     for (int J = 0; J < amounts[I]; ++J)
                         fullSet.outputs.append(outputs[I]);
