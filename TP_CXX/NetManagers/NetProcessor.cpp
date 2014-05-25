@@ -46,8 +46,9 @@ const NetProcessor & NetProcessor::get_self() {
 }
 
 void NetProcessor::setDefaultConf() {
-    dataStore = new DataProcess::FileStorage;
-    dataProc = new DataProcess::ImageProcessor;
+    ImageProcessor * imgProc = new DataProcess::ImageProcessor;
+    dataStore = new DataProcess::FileStorage(imgProc);
+    dataProc = imgProc;
 
     tester = new Tester;
     tutor = new NetTutors::BackPropTutor(tester);
@@ -69,11 +70,13 @@ void NetProcessor::connectUI() {
     connect(this, SIGNAL(showInfo(QString)), gui, SLOT(onShowInfo(QString)));
     connect(this, SIGNAL(showException(QString)), gui, SLOT(onShowException(QString)));
     connect(this, SIGNAL(showDebug(QString)), gui, SLOT(onShowDebug(QString)));
+
     connect(tester, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
     connect(tutor, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
 
     connect(gui, SIGNAL(testNets(Ints, QStringList)), SLOT(onTestNets(Ints, QStringList)));
     connect(gui, SIGNAL(teachNets(Ints, QStringList, TutorBoundaries)), SLOT(onTeachNets(Ints, QStringList, TutorBoundaries)));
+
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -139,7 +142,6 @@ void NetProcessor::onTestNets(Ints indexes, QStringList keySet) {
 
     try {
         InOutDataSet data;
-        formInOutDataSet(data, keySet);
 
         for (int index : indexes) {
             tester->setTarget(nets[index]);
@@ -154,37 +156,21 @@ void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TutorBoundaries
     qDebug() << "ura, teach";
 
     try {
-        TuteData data;
-        formTuteData(data, keySet);
+        TuteData ttdata;
+        QList<InputDataSet> inputs;
+        dataStore->load(inputs, keySet);
 
         for (int index : indexes) {
             tester->setTarget(nets[index]);
             tutor->setNet(nets[index]);
 
-            for (QString folder : keySet) {
-//                QList<QImage> imgs;
-//                QVector<QString> strs;
-//                InputDataSet inputs;
-
-//                dataStore->load(folder);
-//                dataProc->prepareData(inputs, imgs);
-
-            }
-
             tutor->setLimits(boundaries);
-            tutor->start(data);
+            tutor->start(ttdata);
         }
+
     }  catch (Exception &exc) {
         emit showException(exc.toString());
     }
-}
-
-void NetProcessor::formInOutDataSet(InOutDataSet &, const QStringList &) {
-    throw WrongFileFormat();
-}
-
-void NetProcessor::formTuteData(TuteData &, const QStringList &) {
-    throw WrongFileFormat();
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -222,12 +208,11 @@ void NetProcessor::internalTest() {
 
     InOutDataSet packOne, packTwo;
 
-    packOne.inputs = {one};
-    packOne.outputs = {oneOut};
+    packOne.inputs.append(one);
+    packOne.outputs.append(oneOut);
 
-    packTwo.outputs = {twoOut};
-    packTwo.inputs = {two};
-
+    packTwo.outputs.append(twoOut);
+    packTwo.inputs.append(two);
 
     TuteData data = {packOne, packTwo};
 

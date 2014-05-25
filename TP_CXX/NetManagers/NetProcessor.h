@@ -53,9 +53,6 @@ protected:
     void setDefaultConf();
     void connectUI();
 
-    void formInOutDataSet(InOutDataSet &, const QStringList &);
-    void formTuteData(TuteData &, const QStringList &);
-
     void internalTest();
 
 private:
