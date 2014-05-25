@@ -191,7 +191,11 @@ void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TutorBoundaries
             tester->setTarget(nets[index]);
             tutor->setNet(nets[index]);
 
+            QString recArea;
             for (QString folder : keySet) {
+                if(!recArea.contains(folder[0])){
+                    recArea.append(folder[0]);
+                }
 //                QList<QImage> imgs;
 //                QVector<QString> strs;
 //                InputDataSet inputs;
@@ -200,6 +204,7 @@ void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TutorBoundaries
 //                dataProc->prepareData(inputs, imgs);
 
             }
+            nets[index]->setRecArea(recArea);
 
             tutor->setLimits(boundaries);
 

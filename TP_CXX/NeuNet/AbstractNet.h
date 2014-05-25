@@ -7,6 +7,12 @@
 
 namespace NeuNets {
 
+
+//----------------------------------------------
+struct  CharIsNotInRecArea: public Exception {
+    QString toString() { return "Recognition area doesn't suit this neuron net. Please, create a new NN"; }
+};
+//----------------------------------------------
 using DataProcess::InputData;
 using DataProcess::OutputData;
 
@@ -45,10 +51,34 @@ public:
     // void setRecArea(const QString &value) { recArea = value; }
     virtual void setRecArea(const QString &value) = 0;
 
+    OutputData getDataFromSymbol(int pos, int length){
+        OutputData data;
+        data.values.resize(length);
+        data.values.fill(0);
+        data.values[pos] = 1;
+        return data;
+    }
+
+    QVector <OutputData> getOutDataSet(QString strToParse){
+        QVector <OutputData> outVec;
+        OutputData bufData;
+        int len = strToParse.length();
+
+        for(QChar ch : strToParse){
+            int pos = recArea.indexOf(ch);
+            if(pos > 0)
+                bufData = getDataFromSymbol(pos, len);
+            else
+                throw CharIsNotInRecArea();
+            outVec.append(bufData);
+        }
+    }
+
 protected:
     QString _name;
     QString recArea; // empty = &
 };
+
 
 
 }//namespace NeuNets {
