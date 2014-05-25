@@ -12,7 +12,7 @@ class ImageProcessor : public AbstractProcessor {
 public:
     ImageProcessor();
 
-    InputData * prepareData(QImage &);
+    void processData(InputData &, const QImage &) {}
 
 private:
     QImage iniImage;

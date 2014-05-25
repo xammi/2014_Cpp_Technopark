@@ -5,6 +5,7 @@
 #include <QTreeWidget>
 
 #include "includes.h"
+#include "ImageProcessor.h"
 #include "PtrVector.h"
 
 namespace DataProcess {
@@ -23,17 +24,27 @@ public slots:
     void onUpdate(QTreeWidget *);
 
 public:
-    FileStorage(const QString & dir = DEFAULT_CATALOG);
+    FileStorage(ImageProcessor *, const QString & dir = DEFAULT_CATALOG);
 
-    void load(const StrKey & folder);
+    QDir & findDir(const StrKey &);
+
+    void load(QList<InputDataSet> &, const QStringList & keys);
+    int load(InputDataSet &, const StrKey &);
+
+private:
     void loadImage(QImage &, const StrKey &);
     void loadText(QString &, const StrKey &);
 
 private:
     const QString catalog;
     QVector<QDir> folders;
+    ImageProcessor *processor;
 };
 //-------------------------------------------------------------------------------------------------
+struct ImgProcessorNotFound : public Exception {
+    QString toString() { return "Процессор картинок не задан"; }
+};
+
 struct NotUniqueKey : public Exception {
     QString toString() { return "Передан не уникальный ключ"; }
 };
@@ -41,6 +52,11 @@ struct NotUniqueKey : public Exception {
 struct OpenFileError : public Exception {
     QString toString() { return "Не удалось открыть файл"; }
 };
+
+struct UnknownStrKey : public Exception {
+    QString toString() { return "Неизвестный строковый ключ"; }
+};
+
 //-------------------------------------------------------------------------------------------------
 } // namespace DataProcess
 #endif // IMAGESTORAGE_H

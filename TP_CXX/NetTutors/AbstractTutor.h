@@ -19,7 +19,7 @@ class AbstractTutor : public QObject {
 public:
     virtual ~AbstractTutor() {}
     virtual void initialize() = 0;
-    virtual bool start(const TuteData &, const QString &recArea) = 0;
+    virtual bool start(const TuteData &) = 0;
 
     virtual void setNet(AbstractNet *) = 0;
     virtual void setTester(Tester *) = 0;

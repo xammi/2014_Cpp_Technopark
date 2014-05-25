@@ -8,8 +8,6 @@ template <typename Value>
 class PtrVector : public QVector<Value *>
 {
 public:
-    PtrVector() {}
-
     ~PtrVector() {
         this->clear();
     }

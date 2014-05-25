@@ -24,7 +24,7 @@ public:
 
 
     void initialize() {}
-    bool start(const TuteData &data, const QString &recArea);
+    bool start(const TuteData &data);
 
     void setNet(AbstractNet *aNet);
     void setTester(Tester *test);

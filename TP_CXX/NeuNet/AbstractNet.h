@@ -48,20 +48,19 @@ public:
     void setName(const QString &netName) { _name = netName; }
 
     const QString &getRecArea() const { return recArea; }
-    // void setRecArea(const QString &value) { recArea = value; }
     virtual void setRecArea(const QString &value) = 0;
 
-    OutputData getDataFromSymbol(int pos, int length){
-        OutputData data;
-        data.values.resize(length);
-        data.values.fill(0);
-        data.values[pos] = 1;
+    OutputData *getDataFromSymbol(int pos, int length){
+        OutputData *data = new OutputData;
+        data->values.resize(length);
+        data->values.fill(0);
+        data->values[pos] = 1;
         return data;
     }
 
-    QVector <OutputData> getOutDataSet(QString strToParse){
-        QVector <OutputData> outVec;
-        OutputData bufData;
+    PtrVector <OutputData> getOutDataSet(QString strToParse){
+        PtrVector <OutputData> outVec;
+        OutputData *bufData = new OutputData();
         int len = strToParse.length();
 
         for(QChar ch : strToParse){
@@ -72,6 +71,7 @@ public:
                 throw CharIsNotInRecArea();
             outVec.append(bufData);
         }
+        return outVec;
     }
 
 protected:

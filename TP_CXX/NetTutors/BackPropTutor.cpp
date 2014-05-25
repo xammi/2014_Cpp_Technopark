@@ -150,7 +150,7 @@ bool BackPropTutor::isNormalyzed(DataProcess::OutputData &error)
     return true;
 }
 
-bool BackPropTutor::start(const TuteData &data, const QString &recArea){
+bool BackPropTutor::start(const TuteData &data){
     int maxIter = tuteLimits.maxNetIter;
     for(int k = 0; k < maxIter; ++k){
         for(int i = 0; i < data.size(); ++i){
@@ -163,7 +163,6 @@ bool BackPropTutor::start(const TuteData &data, const QString &recArea){
         if( k == maxIter - 1)
             currentTester->toDebug("Количество итераций для сети - максимальное!");
     }
-    currentNet->setRecArea(recArea);
     return true;
 }
 
