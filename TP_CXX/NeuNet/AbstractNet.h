@@ -36,8 +36,14 @@ public:
     QString name() const { return _name; }
     void setName(const QString &netName) { _name = netName; }
 
+    const QString &getRecArea() const { return recArea; }
+    void setRecArea(const QString &value) { recArea = value; }
+
 protected:
     QString _name;
+    QString recArea; // empty = &
 };
+
+
 }//namespace NeuNets {
 #endif // ABSTRNET_H

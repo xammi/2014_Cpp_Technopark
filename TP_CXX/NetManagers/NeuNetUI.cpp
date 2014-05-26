@@ -44,6 +44,7 @@ void NeuNetUI::adjustUi() {
     connect(ui->tute, SIGNAL(clicked()), SLOT(onLimitsShow()));
     connect(addLimitsUi->ok, SIGNAL(clicked()), SLOT(onProcessNets()));
     connect(addLimitsUi->cancel, SIGNAL(clicked()), addLimitsDlg, SLOT(hide()));
+
     connect(ui->test, SIGNAL(clicked()), SLOT(onProcessNets()));
 }
 
@@ -120,10 +121,14 @@ void NeuNetUI::onRemoveNets() {
 
 
 //-------------------------------------------------------------------------------------------------
-
-void NeuNetUI::onLimitsShow()
-{
-    addLimitsDlg->show();
+void NeuNetUI::onLimitsShow() {
+    if (ui->nets->selectedItems().size() > 0)
+        if (ui->data->selectedItems().size() > 0)
+            addLimitsDlg->show();
+        else
+            ui->messages->setText("Choose data for teaching");
+    else
+        ui->messages->setText("Choose nets for teaching");
 }
 
 void NeuNetUI::onCreateShow() {
@@ -204,20 +209,22 @@ void NeuNetUI::onProcessNets() {
 
     QStringList keySet;
     for (QTreeWidgetItem * item : ui->data->selectedItems()) {
-        if (item->childCount() == 0)
-            keySet.append(item->text(0));
-        else
-            for (QTreeWidgetItem * child : item->takeChildren())
-                keySet.append(item->text(0) + "/" + child->text(0));
+        keySet.append(item->text(0));
         item->setSelected(false);
     }
-    keySet.removeDuplicates();
 
+<<<<<<< HEAD
     if (sender() == ui->tute) {
     NetTutors::TutorBoundaries tutitionLimits(  addLimitsUi->netError->value(), addLimitsUi->layerError->value()
                                               , addLimitsUi->netIter->value(), addLimitsUi->layerIter->value()
                                               , addLimitsUi->speed->value() );
 
+=======
+    if (sender() == addLimitsUi->ok) {
+        TutorBoundaries tutitionLimits( addLimitsUi->netError->value(), addLimitsUi->layerError->value()
+                                      , addLimitsUi->netIter->value(), addLimitsUi->layerIter->value()
+                                      , addLimitsUi->speed->value() );
+>>>>>>> 80b352f71ca9822e937f449fe5a3681b8ba6464f
         emit teachNets(netIds, keySet, tutitionLimits);
     } else if (sender() == ui->test)
         emit testNets(netIds, keySet);

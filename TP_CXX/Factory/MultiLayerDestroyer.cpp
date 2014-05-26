@@ -73,6 +73,7 @@ void MultiLayerDestroyer::writeNetToFile(AbstractNet *aNet, const QString &filen
     //
     stream << fileId << endl;
     stream << nNet->getFunc().name() << endl;
+    stream << nNet->getRecArea() << endl;
     stream << nNet->count() << endl;
 
     stream << from.count() << endl;

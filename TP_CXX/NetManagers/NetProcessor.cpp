@@ -121,8 +121,14 @@ void NetProcessor::onUpdateNets(QTableWidget * view) {
 
     int row = 0;
     for (AbstractNet *net: nets) {
+
+        QString recArea;
+        for (QChar ch : net->getRecArea())
+            recArea = recArea + ch +  ", ";
+
         view->setItem(row, 0, new QTableWidgetItem(net->name()));
         view->setItem(row, 1, new QTableWidgetItem(net->topology()));
+        view->setItem(row, 2, new QTableWidgetItem(recArea));
         row++;
     }
 }
@@ -149,11 +155,30 @@ void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TutorBoundaries
 
     try {
         TuteData data;
+        QString folderLetters;
         formTuteData(data, keySet);
 
         for (int index : indexes) {
             tester->setTarget(nets[index]);
+            tutor->setTester(tester);
             tutor->setNet(nets[index]);
+
+            for (QString folder : keySet) {
+
+                QList<QImage> imgs;
+                QList<QString> strs;
+
+                dataStore->load(folder, imgs, strs);
+
+                InputDataSet singleData = dataProc->prepareData(imgs, strs);
+                folderLetters.append(folder[0]);
+                for(int i = 0; i < indexes.size(); ++i){
+
+                }
+
+            }
+
+
 
             tutor->setLimits(boundaries);
             tutor->start(data);

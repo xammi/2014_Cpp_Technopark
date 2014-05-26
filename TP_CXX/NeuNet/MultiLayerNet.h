@@ -32,7 +32,6 @@ private:
     Func activationFunc;
     uint inLayerNum, outLayerNum;
     uint layersCnt;
-
 };
 
 
