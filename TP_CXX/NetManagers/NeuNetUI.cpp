@@ -10,12 +10,11 @@ using NetTutors::TutorBoundaries;
 
 //-------------------------------------------------------------------------------------------------
 NeuNetUI::NeuNetUI(QWidget *parent) :
-      QMainWindow(parent), ui(new Ui::NeuNetUI),
-      openDlg(new QFileDialog),
-      createUi(new Ui::CreateNetUI), createDlg(new QDialog),
-      createValidator(new QRegExpValidator(QRegExp("([1-9]{1}[0-9]*,|[1-9]{1}[0-9]*-[1-9]{1}[0-9]*,)+"))),
-      addLimitsUi(new Ui::AddLimitsUI), addLimitsDlg(new QDialog)
+    QMainWindow(parent), ui(NULL), openDlg(NULL), createUi(NULL), createDlg(NULL),createValidator(NULL),
+    addLimitsDlg(NULL),addLimitsUi(NULL)
 {
+    this->setDefaultConf();
+
     ui->setupUi(this);
     createUi->setupUi(createDlg);
     addLimitsUi->setupUi(addLimitsDlg);
@@ -24,6 +23,22 @@ NeuNetUI::NeuNetUI(QWidget *parent) :
     this->setWindowState(Qt::WindowMaximized);
 
     this->updateUI();
+}
+
+void NeuNetUI::setDefaultConf() {
+    try {
+        ui = new Ui::NeuNetUI;
+        openDlg = new QFileDialog;
+        createUi = new Ui::CreateNetUI;
+        createDlg = new QDialog;
+        createValidator = new QRegExpValidator(QRegExp("([1-9]{1}[0-9]*,|[1-9]{1}[0-9]*-[1-9]{1}[0-9]*,)+"));
+        addLimitsUi = new Ui::AddLimitsUI;
+        addLimitsDlg = new QDialog;
+
+    } catch (std::bad_alloc &) {
+        this->~NeuNetUI();
+        throw;
+    }
 }
 
 void NeuNetUI::adjustUi() {
@@ -40,8 +55,8 @@ void NeuNetUI::adjustUi() {
     connect(ui->netRemove, SIGNAL(clicked()), SLOT(onRemoveNets()));
 
     connect(ui->dataRefresh, SIGNAL(clicked()), SLOT(onRefreshData()));
-
     connect(ui->tute, SIGNAL(clicked()), SLOT(onLimitsShow()));
+
     connect(addLimitsUi->ok, SIGNAL(clicked()), SLOT(onProcessNets()));
     connect(addLimitsUi->cancel, SIGNAL(clicked()), addLimitsDlg, SLOT(hide()));
 
@@ -49,22 +64,22 @@ void NeuNetUI::adjustUi() {
 }
 
 NeuNetUI::~NeuNetUI() {
-    delete ui;
-    delete createDlg;
-    delete addLimitsDlg;
+    if (ui) delete ui;
+    if (createDlg) delete createDlg;
+    if (addLimitsDlg) delete addLimitsDlg;
 
-    delete addLimitsUi;
-    delete createUi;
-    delete createValidator;
+    if (addLimitsUi) delete addLimitsUi;
+    if (createUi) delete createUi;
+    if (createValidator) delete createValidator;
 }
 
- QTreeWidget * NeuNetUI::getDataView() const {
+QTreeWidget * NeuNetUI::getDataView() const {
     return ui->data;
- }
+}
 
- QTableWidget * NeuNetUI::getNetsView() const {
-     return ui->nets;
- }
+QTableWidget * NeuNetUI::getNetsView() const {
+    return ui->nets;
+}
 //-------------------------------------------------------------------------------------------------
 void NeuNetUI::onShowInfo(QString info) {
     QMessageBox msgBox;
@@ -213,23 +228,16 @@ void NeuNetUI::onProcessNets() {
         item->setSelected(false);
     }
 
-<<<<<<< HEAD
-    if (sender() == ui->tute) {
-    NetTutors::TutorBoundaries tutitionLimits(  addLimitsUi->netError->value(), addLimitsUi->layerError->value()
-                                              , addLimitsUi->netIter->value(), addLimitsUi->layerIter->value()
-                                              , addLimitsUi->speed->value() );
-
-=======
     if (sender() == addLimitsUi->ok) {
         TutorBoundaries tutitionLimits( addLimitsUi->netError->value(), addLimitsUi->layerError->value()
-                                      , addLimitsUi->netIter->value(), addLimitsUi->layerIter->value()
-                                      , addLimitsUi->speed->value() );
->>>>>>> 80b352f71ca9822e937f449fe5a3681b8ba6464f
+                                        , addLimitsUi->netIter->value(), addLimitsUi->layerIter->value()
+                                        , addLimitsUi->speed->value() );
         emit teachNets(netIds, keySet, tutitionLimits);
     } else if (sender() == ui->test)
         emit testNets(netIds, keySet);
 
     addLimitsDlg->hide();
+    emit updateNets(ui->nets);
 }
 
 void NeuNetUI::onRefreshData() {

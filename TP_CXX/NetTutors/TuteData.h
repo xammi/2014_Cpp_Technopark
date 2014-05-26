@@ -25,7 +25,10 @@ struct TutorBoundaries{
     double speed;
 };
 
-typedef QVector <InOutDataSet> TuteData;
+struct TuteData{
+    QList<InputDataSet> inputs;
+    QList <OutputDataSet> outputs;
+};
 
 } // namespace NetTutors
 

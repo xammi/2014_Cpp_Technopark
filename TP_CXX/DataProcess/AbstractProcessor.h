@@ -2,29 +2,28 @@
 #define ABSTRACTPROCESSOR_H
 
 #include "../includes.h"
+#include "PtrVector.h"
 
 namespace DataProcess {
 
-class InputData;
-class OutputData;
-
-//-------------------------------------------------------------------------------------------------
-struct AbstractProcessor : public QObject {
-    virtual ~AbstractProcessor() {}
-    virtual InputData * prepareData(QImage &) = 0;
-    void prepareData(QList<QImage> &) {
-
-    }
-};
 //-------------------------------------------------------------------------------------------------
 class InputData
 {
 public:
     InputData() {}
+
+    //
+    InputData(QString &textData) {
+        this->values.resize(textData.length());
+        for(int i = 0; i < textData.length(); ++i) {
+            this->values[i] = 1.0 * (int)(textData[i].toLatin1());
+        }
+    }
+
     QVector <double> values;
     bool operator == (const InputData &) { return true; }
 };
-typedef QVector<InputData *> InputDataSet;
+typedef PtrVector<InputData> InputDataSet;
 
 class OutputData
 {
@@ -43,7 +42,7 @@ public:
 
     bool operator == (const OutputData &) { return true; }
 };
-typedef QVector<OutputData *> OutputDataSet;
+typedef PtrVector<OutputData> OutputDataSet;
 
 //-------------------------------------------------------------------------------------------------
 struct InOutData {
@@ -51,9 +50,22 @@ struct InOutData {
     OutputData out;
 };
 
-struct InOutDataSet {
-    QVector<InputData *> inputs;
-    QVector<OutputData *> outputs;
+
+
+//-------------------------------------------------------------------------------------------------
+struct AbstractProcessor : public QObject {
+    virtual ~AbstractProcessor() {}
+
+    virtual void processTxt(InputData & input, const QString & str) {
+        for (QChar ch : str) {
+            if (ch == '0')
+                input.values.append(0);
+            else if (ch == '1')
+                input.values.append(1);
+        }
+    }
+
+    virtual void processData(InputData &, const QImage &) = 0;
 };
 //-------------------------------------------------------------------------------------------------
 } // namespace DataProcess

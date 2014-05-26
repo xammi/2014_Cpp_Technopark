@@ -77,5 +77,22 @@ QString MultiLayerNet::topology() const {
     return description;
 }
 
+void MultiLayerNet::clear()
+{
+    Iterator inIter = getBeforeIn();
+    Iterator outIter = getAfterOut();
+
+    for(; inIter != outIter; inIter.nextLayer()){
+        SynapseAct sAct = [] (Synapse &synapse) {
+            synapse.changeWeight(0);
+        };
+        NeuronAct nAct = [ &sAct ] (Neuron &neuron) {
+            neuron.setVal(0);
+            neuron.apply(sAct, OUT);
+        };
+        inIter.apply(nAct);
+    }
+}
+
 } //namespace NeuNets
 
