@@ -6,7 +6,6 @@
 
 #include "includes.h"
 #include "ImageProcessor.h"
-#include "PtrVector.h"
 
 namespace DataProcess {
 

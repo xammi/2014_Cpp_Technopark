@@ -39,6 +39,10 @@ NetProcessor::~NetProcessor() {
 
     if (factory) delete factory;
     if (destroyer) delete destroyer;
+
+    for (AbstractNet * net : nets)
+        if (net)
+            delete net;
 }
 //-------------------------------------------------------------------------------------------------
 const NetProcessor & NetProcessor::get_self() {
@@ -170,45 +174,44 @@ void NetProcessor::onTestNets(Ints indexes, QStringList keySet) {
 
 void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TutorBoundaries boundaries) {
     try {
+        TuteData ttdata;
+        dataStore->load(ttdata.inputs, keySet);
 
-           TuteData ttdata;
-           dataStore->load(ttdata.inputs, keySet);
+        Ints amounts;
+        amounts.fill(0, ttdata.inputs.size());
+        for (int I = 0; I < ttdata.inputs.size(); ++I)
+            amounts[I] = ttdata.inputs[I].size();
 
-           Ints amounts;
-           amounts.fill(0, ttdata.inputs.size());
-           for (int I = 0; I < ttdata.inputs.size(); ++I)
-               amounts[I] = ttdata.inputs[I].size();
+        for (int index : indexes) {
 
-           for (int index : indexes) {
+            QString recArea;
+            for (QString folder : keySet)
+                if(!recArea.contains(folder[0]))
+                    recArea.append(folder[0]);
 
-               QString recArea;
-               for (QString folder : keySet)
-                   if(!recArea.contains(folder[0]))
-                       recArea.append(folder[0]);
+            nets[index]->setRecArea(recArea);
 
-               nets[index]->setRecArea(recArea);
+            OutputDataSet outputs;
+            nets[index]->getOutDataSet(outputs, recArea);
 
-               OutputDataSet outputs;
-               nets[index]->getOutDataSet(outputs, recArea);
+            OutputDataSet duplicOutputs;
+            for (int I = 0; I < outputs.size(); ++I)
+                for (int J = 0; J < amounts[I]; ++J)
+                    duplicOutputs.append(outputs[I]);
 
-               OutputDataSet duplicOutputs;
-               for (int I = 0; I < outputs.size(); ++I)
-                   for (int J = 0; J < amounts[I]; ++J)
-                       duplicOutputs.append(outputs[I]);
+            ttdata.outputs.append(duplicOutputs);
+        }
 
-               ttdata.outputs.append(duplicOutputs);
-           }
+        for (int index : indexes) {
+            tester->setTarget(nets[index]);
+            tutor->setNet(nets[index]);
+            tutor->setLimits(boundaries);
+            tutor->start(ttdata);
+        }
 
-           for (int index : indexes) {
-               tester->setTarget(nets[index]);
-               tutor->setNet(nets[index]);
-               tutor->setLimits(boundaries);
-               tutor->start(ttdata);
-           }
-
-       }  catch (Exception &exc) {
-           emit showException(exc.toString());
-       }
+    }  catch (Exception &exc) {
+        emit showException(exc.toString());
+    }
 }
 
 //-------------------------------------------------------------------------------------------------

@@ -2,7 +2,6 @@
 #define ABSTRACTPROCESSOR_H
 
 #include "../includes.h"
-#include "PtrVector.h"
 
 namespace DataProcess {
 
@@ -23,7 +22,7 @@ public:
     QVector <double> values;
     bool operator == (const InputData &) { return true; }
 };
-typedef PtrVector<InputData> InputDataSet;
+typedef QVector<InputData *> InputDataSet;
 
 class OutputData
 {
@@ -42,7 +41,7 @@ public:
 
     bool operator == (const OutputData &) { return true; }
 };
-typedef PtrVector<OutputData> OutputDataSet;
+typedef QVector<OutputData *> OutputDataSet;
 
 //-------------------------------------------------------------------------------------------------
 struct InOutData {
@@ -50,7 +49,12 @@ struct InOutData {
     OutputData out;
 };
 
-
+template <class Item>
+void deleteAll(QVector<Item *> & vector) {
+    for (Item * item : vector)
+        if (item)
+            delete item;
+}
 
 //-------------------------------------------------------------------------------------------------
 struct AbstractProcessor : public QObject {

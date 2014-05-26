@@ -11,7 +11,7 @@ using NetTutors::TutorBoundaries;
 //-------------------------------------------------------------------------------------------------
 NeuNetUI::NeuNetUI(QWidget *parent) :
       QMainWindow(parent), ui(NULL), openDlg(NULL), createUi(NULL), createDlg(NULL),createValidator(NULL),
-      addLimitsDlg(NULL),addLimitsUi(NULL)
+      addLimitsUi(NULL), addLimitsDlg(NULL)
 {
     this->setDefaultConf();
 

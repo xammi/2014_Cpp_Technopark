@@ -65,7 +65,7 @@ private:
     FileStorage *dataStore;
     AbstractProcessor *dataProc;
 
-    PtrVector<AbstractNet> nets;
+    QVector<AbstractNet *> nets;
 
     AbstractFactory *factory;
     AbstractDestroyer *destroyer;

@@ -33,7 +33,6 @@ SOURCES += main.cpp \
 
 HEADERS  += \
     includes.h \
-    PtrVector.h \
 \
     DataProcess/AbstractProcessor.h \
     DataProcess/ImageProcessor.h \
