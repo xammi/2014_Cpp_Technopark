@@ -37,7 +37,7 @@ public:
     int getOutSize() { return (int)outNeurons.size(); }
 
     void setRecArea(const QString &value) {
-        if((value.length() == getOutSize()) || (value[0] == '&')) { recArea = value; }
+        if (value.length() == getOutSize()) { recArea = value; }
         else throw RecAreaOutLayerSizeMismatch();
     }
     uint count() const { return layersCnt; }

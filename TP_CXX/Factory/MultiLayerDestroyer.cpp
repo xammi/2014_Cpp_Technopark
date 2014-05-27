@@ -65,12 +65,6 @@ void MultiLayerDestroyer::writeNetToFile(AbstractNet *aNet, const QString &filen
 
     QTextStream stream(&file);
 
-    // FILEID?
-    //
-    // Program crashes when net is saved, then removed. Sometimes
-
-    //
-    //
     stream << fileId << endl;
     stream << nNet->getFunc().name() << endl;
     stream << nNet->getRecArea() << endl;

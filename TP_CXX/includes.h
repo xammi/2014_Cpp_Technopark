@@ -11,6 +11,7 @@
 
 #include <QObject>
 #include <QPixmap>
+#include <QMetaType>
 
 #include <functional>
 
@@ -22,6 +23,9 @@ struct Exception {
 };
 
 typedef QVector<int> Ints;
+Q_DECLARE_METATYPE(Ints)
+
+
 typedef int Index;
 typedef const Index CIndex;
 //-------------------------------------------------------------------------------------------------

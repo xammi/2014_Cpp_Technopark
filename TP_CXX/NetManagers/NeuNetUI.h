@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QTableWidget>
 #include <QTreeWidget>
+#include <QTreeWidgetItem>
 
 #include "Factory/BuildInfo.h"
 #include "../NetTutors/TuteData.h"
@@ -61,7 +62,8 @@ private slots:
 
     void onRefreshData();
 
-    void onProcessNets();
+    void onTestNets();
+    void onTeachNets();
 
 public:
     explicit NeuNetUI(QWidget *parent = 0);

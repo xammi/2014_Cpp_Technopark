@@ -39,6 +39,10 @@ NetProcessor::~NetProcessor() {
 
     if (factory) delete factory;
     if (destroyer) delete destroyer;
+
+    for (AbstractNet * net : nets)
+        if (net)
+            delete net;
 }
 //-------------------------------------------------------------------------------------------------
 const NetProcessor & NetProcessor::get_self() {
@@ -149,30 +153,28 @@ void NetProcessor::onUpdateNets(QTableWidget * view) {
 void NetProcessor::onTestNets(Ints indexes, QStringList keySet) {
     qDebug() << "ura, test";
 
-    // WARNING! ONLY FOR DEBUG
-
-    internalTest();
-
-
-    /*
     try {
-        InOutDataSet data;
+        InputDataSet inputSet;
+        dataStore->loadFiles(inputSet, keySet);
 
         for (int index : indexes) {
             tester->setTarget(nets[index]);
-            tester->test(data);
+            tester->test(inputSet);
         }
+
+        for (InputData * input : inputSet)
+            if (input)
+                delete input;
+
     } catch (Exception &exc) {
         emit showException(exc.toString());
     }
-    */
 }
 
 void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TutorBoundaries boundaries) {
     try {
-
         TuteData ttdata;
-        dataStore->load(ttdata.inputs, keySet);
+        dataStore->loadDirs(ttdata.inputs, keySet);
 
         Ints amounts;
         amounts.fill(0, ttdata.inputs.size());
@@ -192,11 +194,12 @@ void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TutorBoundaries
             nets[index]->getOutDataSet(outputs, recArea);
 
             OutputDataSet duplicOutputs;
-            for (int I = 0; I < outputs.size(); ++I)
+            for (int I = 0; I < outputs.size(); ++I) {
+                duplicOutputs.clear();
                 for (int J = 0; J < amounts[I]; ++J)
                     duplicOutputs.append(outputs[I]);
-
-            ttdata.outputs.append(duplicOutputs);
+                ttdata.outputs.append(duplicOutputs);
+            }
         }
 
         for (int index : indexes) {
@@ -213,84 +216,84 @@ void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TutorBoundaries
 
 //-------------------------------------------------------------------------------------------------
 void NetProcessor::internalTest() {
-    //    if (nets.size() == 0) return;
+//    if (nets.size() == 0) return;
 
-    //    tester->setTarget(nets[0]);
-    //    tutor->setNet(nets[0]);
-
-
-    //    InputData *one = new InputData();
-    //    one->values = {1,1,1,1,
-    //                   1,0,0,0,
-    //                   1,1,1,1,
-    //                   0,0,0,1,
-    //                   1,1,1,1,
-    //                   1};
-
-    //    OutputData *oneOut = new OutputData();
-    //    oneOut->values = {1,0};
-
-    //    InputData *two = new InputData();
-    //    two->values = {1,0,0,1,
-    //                   1,0,0,1,
-    //                   1,1,1,1,
-    //                   0,0,0,1,
-    //                   0,0,0,1,
-    //                   1};
-
-    //    OutputData *twoOut = new OutputData();
-    //    twoOut->values = {0,1};
-
-    //    InOutDataSet packOne, packTwo;
-
-    //    packOne.inputs.append(one);
-    //    packOne.outputs.append(oneOut);
-
-    //    packTwo.outputs.append(twoOut);
-    //    packTwo.inputs.append(two);
-
-    //    TuteData data = {packOne, packTwo};
-
-    //    TutorBoundaries b(0.001, 0.0001, 100, 100000000, 1);
-
-    //    tutor->setLimits(b);
-    //    tutor->start(data);
-
-    //    DataProcess::InputData checker;
-    //    InputDataSet ins;
-    //    checker.values.resize(21);
-
-    //    checker.values = {0,1,1,1,
-    //                      0,1,0,0,
-    //                      0,1,1,1,
-    //                      0,0,0,1,
-    //                      0,1,1,1,
-    //                      1};
-    //    ins.append(&checker);
+//    tester->setTarget(nets[0]);
+//    tutor->setNet(nets[0]);
 
 
-    //    DataProcess::InputData checker1;
-    //    checker1.values = {1,1,1,1,
-    //                      1,0,0,0,
-    //                      1,1,1,1,
-    //                      0,0,0,1,
-    //                      1,1,1,1,
-    //                      1};
-    //    ins.append(&checker1);
+//    InputData *one = new InputData();
+//    one->values = {1,1,1,1,
+//                   1,0,0,0,
+//                   1,1,1,1,
+//                   0,0,0,1,
+//                   1,1,1,1,
+//                   1};
+
+//    OutputData *oneOut = new OutputData();
+//    oneOut->values = {1,0};
+
+//    InputData *two = new InputData();
+//    two->values = {1,0,0,1,
+//                   1,0,0,1,
+//                   1,1,1,1,
+//                   0,0,0,1,
+//                   0,0,0,1,
+//                   1};
+
+//    OutputData *twoOut = new OutputData();
+//    twoOut->values = {0,1};
+
+//    InOutDataSet packOne, packTwo;
+
+//    packOne.inputs.append(one);
+//    packOne.outputs.append(oneOut);
+
+//    packTwo.outputs.append(twoOut);
+//    packTwo.inputs.append(two);
+
+//    TuteData data = {packOne, packTwo};
+
+//    TutorBoundaries b(0.001, 0.0001, 100, 100000000, 1);
+
+//    tutor->setLimits(b);
+//    tutor->start(data);
+
+//    DataProcess::InputData checker;
+//    InputDataSet ins;
+//    checker.values.resize(21);
+
+//    checker.values = {0,1,1,1,
+//                      0,1,0,0,
+//                      0,1,1,1,
+//                      0,0,0,1,
+//                      0,1,1,1,
+//                      1};
+//    ins.append(&checker);
 
 
-    //    DataProcess::InputData checker2;
-    //    checker2.values = {1,0,0,1,
-    //                      1,0,0,1,
-    //                      1,0,0,1,
-    //                      1,1,1,1,
-    //                      0,0,0,1,
-    //                      1};
+//    DataProcess::InputData checker1;
+//    checker1.values = {1,1,1,1,
+//                      1,0,0,0,
+//                      1,1,1,1,
+//                      0,0,0,1,
+//                      1,1,1,1,
+//                      1};
+//    ins.append(&checker1);
 
-    //    ins.append(&checker2);
 
-    //    QString answer = tester->test(ins);
-    //    qDebug() << answer << endl;
+//    DataProcess::InputData checker2;
+//    checker2.values = {1,0,0,1,
+//                      1,0,0,1,
+//                      1,0,0,1,
+//                      1,1,1,1,
+//                      0,0,0,1,
+//                      1};
+
+//    ins.append(&checker2);
+
+//    QString answer = tester->test(ins);
+//    qDebug() << answer << endl;
 }
 
 //-------------------------------------------------------------------------------------------------

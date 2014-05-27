@@ -45,7 +45,7 @@ int Tester::findMax(const OutputData &out)
 }
 
 QString Tester::test(const InputDataSet &dataSet) {
-    if (target->getRecArea()[0] == '&')
+    if (target->getRecArea() == "")
         throw NetNotTuted();
 
     QString answer("Ответы для образов: ");
@@ -59,6 +59,7 @@ QString Tester::test(const InputDataSet &dataSet) {
         answer.append(target->getRecArea()[maxPos]);
         answer.append(' ');
     }
+    emit toDebug(answer);
     return answer;
 }
 

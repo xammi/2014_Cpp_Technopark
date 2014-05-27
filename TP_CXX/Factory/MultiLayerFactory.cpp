@@ -6,7 +6,7 @@
 namespace Factory{
 
 // Somewhere Else
-const qint32 fileId = 10;
+const quint32 fileId = 10;
 
 // Jawdropping randomness
 const int MAX_SYNAPSE_VAL = 1;
@@ -29,6 +29,7 @@ MultiLayerFactory::~MultiLayerFactory() {}
 /* Строка 0: Магическое число
  * Строка 1: Функция активации
  * Строка 1а: Область узнавания
+ *         if сеть не обучена, то пустая строка
 
  * Строка 2: Количество слоев сети
  * Строка 3: Количество нейронов на 0 слое. Set i = 1;
@@ -51,14 +52,14 @@ void MultiLayerFactory::parseFile(const QString &filename) {
     QTextStream stream(&file);
     quint32 magicNumber;
 
-    stream >> magicNumber;
+    magicNumber = stream.readLine().toLongLong();
     if(magicNumber != fileId)
         throw WrongFileFormat();
 
     nnInfo.clear();
 
-    stream >> nnInfo.funcName;
-    stream >> recArea;
+    nnInfo.funcName = stream.readLine();
+    recArea = stream.readLine();
     stream >> nnInfo.layersCount;
 
     // Проверка на правильность входных данных??
@@ -75,12 +76,10 @@ void MultiLayerFactory::parseFile(const QString &filename) {
         if(!(bufLayerCount > 0))
             throw WrongFileFormat();
         nnInfo.neuronsPerLayer.append(bufLayerCount);
-        //
         int cur = nnInfo.neuronsPerLayer[i];
         int prev = nnInfo.neuronsPerLayer[i - 1];
 
         double *bufArr = new double[cur * prev];
-
 
         for(int j = 0; j < cur * prev; ++j){
             stream >> bufArr[j];
@@ -160,7 +159,10 @@ MultiLayerNet *MultiLayerFactory::createFromFile(const QString &filename) {
     MultiLayerNet *bpNewNet = 0;
     parseFile(filename);
     bpNewNet = allocMemory(bpNewNet);
-    bpNewNet->setRecArea(recArea);
+
+    if (recArea != "")
+        bpNewNet->setRecArea(recArea);
+
     return bpNewNet;
 }
 
@@ -169,7 +171,6 @@ MultiLayerNet *MultiLayerFactory::createFromInfo(const BuildInfo &newInfo) {
     MultiLayerNet *bpNewNet = 0;
     nnInfo = newInfo;
     bpNewNet = allocMemory(bpNewNet);
-    bpNewNet->setRecArea("&");
     return bpNewNet;
 }
 

@@ -26,6 +26,13 @@ struct TutorBoundaries{
 };
 
 struct TuteData{
+    ~TuteData() {
+        for (InputDataSet & set : inputs)
+            deleteAll(set);
+        for (OutputDataSet & set : outputs)
+            deleteAll(set);
+    }
+
     QList<InputDataSet> inputs;
     QList <OutputDataSet> outputs;
 };
