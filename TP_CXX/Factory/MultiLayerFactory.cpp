@@ -6,7 +6,7 @@
 namespace Factory{
 
 // Somewhere Else
-const qint32 fileId = 10;
+const quint32 fileId = 10;
 
 // Jawdropping randomness
 const int MAX_SYNAPSE_VAL = 1;
@@ -29,6 +29,7 @@ MultiLayerFactory::~MultiLayerFactory() {}
 /* Строка 0: Магическое число
  * Строка 1: Функция активации
  * Строка 1а: Область узнавания
+ *         if сеть не обучена, то пустая строка
 
  * Строка 2: Количество слоев сети
  * Строка 3: Количество нейронов на 0 слое. Set i = 1;
@@ -58,7 +59,7 @@ void MultiLayerFactory::parseFile(const QString &filename) {
     nnInfo.clear();
 
     stream >> nnInfo.funcName;
-    stream >> recArea;
+    recArea = stream.readLine();
     stream >> nnInfo.layersCount;
 
     // Проверка на правильность входных данных??
@@ -160,7 +161,10 @@ MultiLayerNet *MultiLayerFactory::createFromFile(const QString &filename) {
     MultiLayerNet *bpNewNet = 0;
     parseFile(filename);
     bpNewNet = allocMemory(bpNewNet);
-    bpNewNet->setRecArea(recArea);
+
+    if (recArea != "")
+        bpNewNet->setRecArea(recArea);
+
     return bpNewNet;
 }
 
@@ -169,7 +173,6 @@ MultiLayerNet *MultiLayerFactory::createFromInfo(const BuildInfo &newInfo) {
     MultiLayerNet *bpNewNet = 0;
     nnInfo = newInfo;
     bpNewNet = allocMemory(bpNewNet);
-    bpNewNet->setRecArea("&");
     return bpNewNet;
 }
 
