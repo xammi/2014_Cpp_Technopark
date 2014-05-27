@@ -57,10 +57,10 @@ void NeuNetUI::adjustUi() {
     connect(ui->dataRefresh, SIGNAL(clicked()), SLOT(onRefreshData()));
     connect(ui->tute, SIGNAL(clicked()), SLOT(onLimitsShow()));
 
-    connect(addLimitsUi->ok, SIGNAL(clicked()), SLOT(onProcessNets()));
+    connect(addLimitsUi->ok, SIGNAL(clicked()), SLOT(onTeachNets()));
     connect(addLimitsUi->cancel, SIGNAL(clicked()), addLimitsDlg, SLOT(hide()));
 
-    connect(ui->test, SIGNAL(clicked()), SLOT(onProcessNets()));
+    connect(ui->test, SIGNAL(clicked()), SLOT(onTestNets()));
 }
 
 NeuNetUI::~NeuNetUI() {
@@ -210,7 +210,45 @@ void NeuNetUI::updateUI() {
     emit updateData(ui->data);
 }
 
-void NeuNetUI::onProcessNets() {
+void NeuNetUI::onTestNets() {
+    ui->messages->setText("");
+
+    QList<QTableWidgetItem *> nets = ui->nets->selectedItems();
+    Ints netIds;
+
+    for (int I = 0; I < nets.size(); ++I) {
+        if (nets[I] && nets[I]->column() == 0)
+            netIds.append(I);
+        nets[I]->setSelected(false);
+    }
+
+    QStringList keySet;
+    for (QTreeWidgetItem * item : ui->data->selectedItems()) {
+
+        if (item->parent()) {
+            QString parentText;
+            parentText = item->parent()->text(0);
+            keySet.append(parentText + '/' + item->text(0));
+        }
+        else {
+            keySet.append(item->text(0));
+        }
+
+        if (item->childCount() != 0) {
+            ui->messages->setText("Folders are not permitted");
+            return;
+        }
+
+        item->setSelected(false);
+    }
+
+    emit testNets(netIds, keySet);
+
+    addLimitsDlg->hide();
+    emit updateNets(ui->nets);
+}
+
+void NeuNetUI::onTeachNets() {
     ui->messages->setText("");
 
     QList<QTableWidgetItem *> nets = ui->nets->selectedItems();
@@ -225,16 +263,19 @@ void NeuNetUI::onProcessNets() {
     QStringList keySet;
     for (QTreeWidgetItem * item : ui->data->selectedItems()) {
         keySet.append(item->text(0));
+
+        if (item->childCount() == 0) {
+            ui->messages->setText("Only folders are permitted");
+            return;
+        }
+
         item->setSelected(false);
     }
 
-    if (sender() == addLimitsUi->ok) {
-        TutorBoundaries tutitionLimits( addLimitsUi->netError->value(), addLimitsUi->layerError->value()
-                                      , addLimitsUi->netIter->value(), addLimitsUi->layerIter->value()
-                                      , addLimitsUi->speed->value() );
-        emit teachNets(netIds, keySet, tutitionLimits);
-    } else if (sender() == ui->test)
-        emit testNets(netIds, keySet);
+    TutorBoundaries tutitionLimits( addLimitsUi->netError->value(), addLimitsUi->layerError->value()
+                                    , addLimitsUi->netIter->value(), addLimitsUi->layerIter->value()
+                                    , addLimitsUi->speed->value() );
+    emit teachNets(netIds, keySet, tutitionLimits);
 
     addLimitsDlg->hide();
     emit updateNets(ui->nets);

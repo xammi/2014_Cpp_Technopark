@@ -153,29 +153,28 @@ void NetProcessor::onUpdateNets(QTableWidget * view) {
 void NetProcessor::onTestNets(Ints indexes, QStringList keySet) {
     qDebug() << "ura, test";
 
-    // WARNING! ONLY FOR DEBUG
-
-    internalTest();
-
-
-    /*
     try {
-        InOutDataSet data;
+        InputDataSet inputSet;
+        dataStore->loadFiles(inputSet, keySet);
 
         for (int index : indexes) {
             tester->setTarget(nets[index]);
-            tester->test(data);
+            tester->test(inputSet);
         }
+
+        for (InputData * input : inputSet)
+            if (input)
+                delete input;
+
     } catch (Exception &exc) {
         emit showException(exc.toString());
     }
-    */
 }
 
 void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TutorBoundaries boundaries) {
     try {
         TuteData ttdata;
-        dataStore->load(ttdata.inputs, keySet);
+        dataStore->loadDirs(ttdata.inputs, keySet);
 
         Ints amounts;
         amounts.fill(0, ttdata.inputs.size());
@@ -195,11 +194,12 @@ void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TutorBoundaries
             nets[index]->getOutDataSet(outputs, recArea);
 
             OutputDataSet duplicOutputs;
-            for (int I = 0; I < outputs.size(); ++I)
+            for (int I = 0; I < outputs.size(); ++I) {
+                duplicOutputs.clear();
                 for (int J = 0; J < amounts[I]; ++J)
                     duplicOutputs.append(outputs[I]);
-
-            ttdata.outputs.append(duplicOutputs);
+                ttdata.outputs.append(duplicOutputs);
+            }
         }
 
         for (int index : indexes) {

@@ -27,8 +27,11 @@ public:
 
     QDir & findDir(const StrKey &);
 
-    void load(QList<InputDataSet> &, const QStringList & keys);
-    int load(InputDataSet &, const StrKey &);
+    void loadFiles(InputDataSet &, const QStringList & keys);
+    void loadFile(InputData &, const QString &, const QString &);
+
+    void loadDirs(QList<InputDataSet> &, const QStringList & keys);
+    int loadDir(InputDataSet &, const StrKey &);
 
 private:
     void loadImage(QImage &, const StrKey &);

@@ -29,9 +29,15 @@ void FileStorage::onUpdate(QTreeWidget *treeView) {
     treeView->clear();
 
     QTreeWidgetItem * ptwi;
-    for (int I = 0; I < folders.count(); ++I) {
+    for (QDir & dir : folders) {
         ptwi = new QTreeWidgetItem(treeView);
-        ptwi->setText(0, folders[I].dirName());
+        ptwi->setText(0, dir.dirName());
+
+        QTreeWidgetItem * twi_file;
+        for (QString file : dir.entryList(QDir::Files)) {
+            twi_file = new QTreeWidgetItem(ptwi);
+            twi_file->setText(0, file);
+        }
     }
 }
 //-------------------------------------------------------------------------------------------------
@@ -42,7 +48,7 @@ QDir & FileStorage::findDir(const StrKey & folder) {
     throw UnknownStrKey();
 }
 
-void FileStorage::load(QList<InputDataSet> & data, const QStringList &keys) {
+void FileStorage::loadDirs(QList<InputDataSet> & data, const QStringList &keys) {
     if (processor == NULL)
         throw ImgProcessorNotFound();
 
@@ -50,36 +56,62 @@ void FileStorage::load(QList<InputDataSet> & data, const QStringList &keys) {
 
     for (QString key : keys) {
         inputSet.clear();
-        load(inputSet, key);
+        loadDir(inputSet, key);
         data.append(inputSet);
     }
 }
 
-int FileStorage::load(InputDataSet & inputSet, const StrKey & folder) {
+int FileStorage::loadDir(InputDataSet & inputSet, const StrKey & folder) {
     if (processor == NULL)
         throw ImgProcessorNotFound();
 
     QDir & dir = findDir(folder);
-    QImage image;
-    QString text;
 
     for (QString file : dir.entryList(QDir::Files)) {
         InputData *input = new InputData;
         QString filepath = dir.absoluteFilePath(file);
 
-        if (file.contains(".png")) {
-            loadImage(image, filepath);
-            processor->processData(*input, image);
-
-        } else if (file.contains(".txt") || ! file.contains(".")) {
-            loadText(text, filepath);
-            processor->processTxt(*input, text);
-        }
-
+        loadFile(*input, file, filepath);
         inputSet.append(input);
     }
 
     return dir.entryList(QDir::Files).size();
+}
+//-------------------------------------------------------------------------------------------------
+void FileStorage::loadFiles(InputDataSet & inputSet, const QStringList & keys) {
+    for (QString key : keys) {
+
+        QStringList parts = key.split('/');
+        QDir & dir = findDir(parts[0]);
+        QString filepath;
+
+        InputData *input = new InputData;
+
+        if (parts.size() == 2) {
+            filepath = dir.absoluteFilePath(parts[1]);
+            loadFile(*input, parts[1], filepath);
+
+        } else if (parts.size() == 1) {
+            filepath = QDir(catalog).absoluteFilePath(key);
+            loadFile(*input, key, filepath);
+        }
+
+        inputSet.append(input);
+    }
+}
+
+void FileStorage::loadFile(InputData & input, const QString & file, const QString & filepath) {
+    QImage image;
+    QString text;
+
+    if (file.contains(".png")) {
+        loadImage(image, filepath);
+        processor->processData(input, image);
+
+    } else if (file.contains(".txt") || ! file.contains(".")) {
+        loadText(text, filepath);
+        processor->processTxt(input, text);
+    }
 }
 
 void FileStorage::loadImage(QImage & img, const StrKey & str) {
