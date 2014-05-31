@@ -23,7 +23,7 @@ public:
 
     virtual void setNet(AbstractNet *) = 0;
     virtual void setTester(Tester *) = 0;
-    virtual void setLimits(TutorBoundaries &limits) = 0;
+    virtual void setLimits(const TuteBoundaries &limits) = 0;
 };
 //-------------------------------------------------------------------------------------------------
 } // namespace NetTutors

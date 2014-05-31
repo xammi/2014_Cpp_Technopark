@@ -8,10 +8,10 @@ namespace NetTutors {
 
 using namespace DataProcess;
 
-struct TutorBoundaries{
+struct TuteBoundaries{
 
-    TutorBoundaries() {}
-    TutorBoundaries( double netErr, double layerErr
+    TuteBoundaries() {}
+    TuteBoundaries( double netErr, double layerErr
                    , int netIter, int layerIter
                    , double curSpeed) :
         maxNetErr(netErr), maxLayerErr(layerErr)
@@ -26,16 +26,18 @@ struct TutorBoundaries{
 };
 
 struct TuteData{
-    ~TuteData() {
-        for (InputDataSet & set : inputs)
-            deleteAll(set);
-        for (OutputDataSet & set : outputs)
-            deleteAll(set);
-    }
-
     QList<InputDataSet> inputs;
     QList <OutputDataSet> outputs;
 };
+
+template <int X = 0>
+void clearTuteData(TuteData &ttdata) {
+    for (InputDataSet & set : ttdata.inputs)
+        deleteAll(set);
+
+    for (OutputDataSet & set : ttdata.outputs)
+        deleteAll(set);
+}
 
 } // namespace NetTutors
 

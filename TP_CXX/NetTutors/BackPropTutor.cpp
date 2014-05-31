@@ -23,7 +23,7 @@ void BackPropTutor::setTester(Tester *test){
         currentTester = test;
 }
 
-void BackPropTutor::setLimits(TutorBoundaries &limits)
+void BackPropTutor::setLimits(const TuteBoundaries &limits)
 {
     tuteLimits = limits;
 }

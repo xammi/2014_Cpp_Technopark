@@ -6,7 +6,7 @@
 
 namespace NetManagers {
 
-using NetTutors::TutorBoundaries;
+using NetTutors::TuteBoundaries;
 
 //-------------------------------------------------------------------------------------------------
 NeuNetUI::NeuNetUI(QWidget *parent) :
@@ -268,12 +268,13 @@ void NeuNetUI::onTeachNets() {
         item->setSelected(false);
     }
 
-    TutorBoundaries tutitionLimits( addLimitsUi->netError->value(), addLimitsUi->layerError->value()
+    TuteBoundaries tutitionLimits( addLimitsUi->netError->value(), addLimitsUi->layerError->value()
                                     , addLimitsUi->netIter->value(), addLimitsUi->layerIter->value()
                                     , addLimitsUi->speed->value() );
-    emit teachNets(netIds, keySet, tutitionLimits);
 
     addLimitsDlg->hide();
+    emit teachNets(netIds, keySet, tutitionLimits);
+
     emit updateNets(ui->nets);
 }
 
@@ -281,6 +282,11 @@ void NeuNetUI::onRefreshData() {
     emit refreshData();
     emit updateData(ui->data);
 }
+
+void NeuNetUI::onRequestUpdate() {
+    this->updateUI();
+}
+
 //-------------------------------------------------------------------------------------------------
 
 } // namespace NetManagers

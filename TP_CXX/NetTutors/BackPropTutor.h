@@ -28,19 +28,11 @@ public:
 
     void setNet(AbstractNet *aNet);
     void setTester(Tester *test);
-    void setLimits(TutorBoundaries &limits);
+    void setLimits(const TuteBoundaries &limits);
 
 private:
 
-
-    //
-
-
-
-    //
-
-    // For Max to set in NetProcessor
-    TutorBoundaries tuteLimits;
+    TuteBoundaries tuteLimits;
     MultiLayerNet *currentNet;
     Tester *currentTester;
     QList<OutputData> everyImageErrors;
@@ -54,7 +46,6 @@ private:
     double propagate() {return 0;}
     void backPropagate() {}
     bool isNormalyzed(OutputData &error);
-
 };
 //-------------------------------------------------------------------------------------------------
 

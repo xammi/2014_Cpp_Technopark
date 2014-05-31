@@ -8,9 +8,13 @@
 #include "../DataProcess/ImageProcessor.h"
 
 #include "../NetTutors/BackPropTutor.h"
+#include "../NetTutors/TuteModule.h"
+
 #include "../Factory/MultiLayerDestroyer.h"
 #include "../Factory/MultiLayerFactory.h"
 #include "../NeuNet/MultiLayerNet.h"
+
+#include <QThreadPool>
 
 namespace NetManagers {
 
@@ -35,12 +39,14 @@ private slots:
     void onUpdateNets(QTableWidget *);
 
     void onTestNets(Ints, QStringList);
-    void onTeachNets(Ints, QStringList, TutorBoundaries);
+    void onTeachNets(Ints, QStringList, TuteBoundaries);
 
 signals:
     void showInfo(QString);
     void showException(QString);
     void showDebug(QString);
+
+    void requestUpdate();
 
 public:
     static const NetProcessor & get_self();
@@ -53,13 +59,13 @@ protected:
     void setDefaultConf();
     void connectUI();
 
+    void prepareTuteData(TuteData &, const Ints &, const QStringList &);
     void internalTest();
 
 private:
     const QString netsCatalog;
 
     NeuNetUI *gui;
-    Tester *tester;
     AbstractTutor *tutor;
 
     FileStorage *dataStore;

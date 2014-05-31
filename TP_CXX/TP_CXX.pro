@@ -29,7 +29,8 @@ SOURCES += main.cpp \
     NeuNet/MultiLayerNet.cpp \
     NetFunction.cpp \
     Factory/BuildInfo.cpp \
-    DataProcess/FileStorage.cpp
+    DataProcess/FileStorage.cpp \
+    NetTutors/TuteModule.cpp
 
 HEADERS  += \
     includes.h \
@@ -57,7 +58,8 @@ HEADERS  += \
     Factory/AbstractDestroyer.h \
     Factory/AbstractFactory.h \
     NetTutors/TuteData.h \
-    DataProcess/FileStorage.h
+    DataProcess/FileStorage.h \
+    NetTutors/TuteModule.h
 
 
 FORMS    +=   NetManagers/neunetui.ui \

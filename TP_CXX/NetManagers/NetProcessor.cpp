@@ -34,8 +34,6 @@ NetProcessor::~NetProcessor() {
     if (dataProc) delete dataProc;
 
     if (gui) delete gui;
-    if (tester) delete tester;
-    if (tutor) delete tutor;
 
     if (factory) delete factory;
     if (destroyer) delete destroyer;
@@ -56,12 +54,11 @@ void NetProcessor::setDefaultConf() {
         dataStore = new DataProcess::FileStorage(imgProc);
         dataProc = imgProc;
 
-        tester = new Tester;
-        tutor = new NetTutors::BackPropTutor(tester);
         factory = new Factory::MultiLayerFactory;
         destroyer = new Factory::MultiLayerDestroyer;
 
-        dataStore->onUpdate(gui->getDataView());
+        emit requestUpdate();
+        // dataStore->onUpdate(gui->getDataView());
 
     } catch (Exception &) {
         this->~NetProcessor();
@@ -85,11 +82,10 @@ void NetProcessor::connectUI() {
     connect(this, SIGNAL(showException(QString)), gui, SLOT(onShowException(QString)));
     connect(this, SIGNAL(showDebug(QString)), gui, SLOT(onShowDebug(QString)));
 
-    connect(tester, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
-    connect(tutor, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
+    connect(this, SIGNAL(requestUpdate()), gui, SLOT(onRequestUpdate()));
 
     connect(gui, SIGNAL(testNets(Ints, QStringList)), SLOT(onTestNets(Ints, QStringList)));
-    connect(gui, SIGNAL(teachNets(Ints, QStringList, TutorBoundaries)), SLOT(onTeachNets(Ints, QStringList, TutorBoundaries)));
+    connect(gui, SIGNAL(teachNets(Ints, QStringList, TuteBoundaries)), SLOT(onTeachNets(Ints, QStringList, TuteBoundaries)));
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -154,12 +150,13 @@ void NetProcessor::onTestNets(Ints indexes, QStringList keySet) {
     qDebug() << "ura, test";
 
     try {
+        Tester tester;
         InputDataSet inputSet;
         dataStore->loadFiles(inputSet, keySet);
 
         for (int index : indexes) {
-            tester->setTarget(nets[index]);
-            tester->test(inputSet);
+            tester.setTarget(nets[index]);
+            tester.test(inputSet);
         }
 
         for (InputData * input : inputSet)
@@ -171,46 +168,55 @@ void NetProcessor::onTestNets(Ints indexes, QStringList keySet) {
     }
 }
 
-void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TutorBoundaries boundaries) {
+void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TuteBoundaries boundaries) {
     try {
         TuteData ttdata;
-        dataStore->loadDirs(ttdata.inputs, keySet);
+        prepareTuteData(ttdata, indexes, keySet);
 
-        Ints amounts;
-        amounts.fill(0, ttdata.inputs.size());
-        for (int I = 0; I < ttdata.inputs.size(); ++I)
-            amounts[I] = ttdata.inputs[I].size();
-
+        TuteModule *module;
         for (int index : indexes) {
+            module = new TuteModule <BackPropTutor> (nets[index], ttdata, boundaries);
 
-            QString recArea;
-            for (QString folder : keySet)
-                if(!recArea.contains(folder[0]))
-                    recArea.append(folder[0]);
+            connect(module, SIGNAL(toException(QString)), SIGNAL(showException(QString)));
+            connect(module, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
+            connect(module, SIGNAL(finished()), SIGNAL(requestUpdate()));
 
-            nets[index]->setRecArea(recArea);
-
-            OutputDataSet outputs;
-            nets[index]->getOutDataSet(outputs, recArea);
-
-            OutputDataSet duplicOutputs;
-            for (int I = 0; I < outputs.size(); ++I) {
-                duplicOutputs.clear();
-                for (int J = 0; J < amounts[I]; ++J)
-                    duplicOutputs.append(outputs[I]);
-                ttdata.outputs.append(duplicOutputs);
-            }
+            QThreadPool::globalInstance()->start(module);
         }
 
-        for (int index : indexes) {
-            tester->setTarget(nets[index]);
-            tutor->setNet(nets[index]);
-            tutor->setLimits(boundaries);
-            tutor->start(ttdata);
-        }
-
-    }  catch (Exception &exc) {
+    } catch (Exception &exc) {
         emit showException(exc.toString());
+    }
+}
+
+
+void NetProcessor::prepareTuteData(TuteData & ttdata, const Ints & indexes, const QStringList & keySet) {
+    dataStore->loadDirs(ttdata.inputs, keySet);
+
+    Ints amounts;
+    amounts.fill(0, ttdata.inputs.size());
+    for (int I = 0; I < ttdata.inputs.size(); ++I)
+        amounts[I] = ttdata.inputs[I].size();
+
+    for (int index : indexes) {
+
+        QString recArea;
+        for (QString folder : keySet)
+            if(!recArea.contains(folder[0]))
+                recArea.append(folder[0]);
+
+        nets[index]->setRecArea(recArea);
+
+        OutputDataSet outputs;
+        nets[index]->getOutDataSet(outputs, recArea);
+
+        OutputDataSet duplicOutputs;
+        for (int I = 0; I < outputs.size(); ++I) {
+            duplicOutputs.clear();
+            for (int J = 0; J < amounts[I]; ++J)
+                duplicOutputs.append(outputs[I]);
+            ttdata.outputs.append(duplicOutputs);
+        }
     }
 }
 

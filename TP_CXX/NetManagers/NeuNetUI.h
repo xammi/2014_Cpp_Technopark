@@ -23,7 +23,7 @@ namespace Ui {
 namespace NetManagers {
 
     using namespace BuildData;
-    using NetTutors::TutorBoundaries;
+    using NetTutors::TuteBoundaries;
 
     const QString DEFAULT_NETS_DIR = "../TP_CXX/Nets data/";
 
@@ -44,12 +44,14 @@ signals:
     void refreshData();
 
     void testNets(Ints, QStringList);
-    void teachNets(Ints, QStringList, TutorBoundaries);
+    void teachNets(Ints, QStringList, TuteBoundaries);
 
 public slots:
     void onShowInfo(QString);
     void onShowException(QString);
     void onShowDebug(QString);
+
+    void onRequestUpdate();
 
 private slots:
     void onLimitsShow();
