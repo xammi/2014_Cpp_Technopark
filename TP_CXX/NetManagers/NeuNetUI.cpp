@@ -259,6 +259,7 @@ void NeuNetUI::onTeachNets() {
 
         if (item->childCount() == 0) {
             ui->messages->setText("Only folders are permitted");
+
             addLimitsDlg->hide();
             return;
         }
