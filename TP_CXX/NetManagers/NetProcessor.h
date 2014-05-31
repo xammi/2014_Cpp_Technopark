@@ -66,7 +66,6 @@ private:
     const QString netsCatalog;
 
     NeuNetUI *gui;
-    AbstractTutor *tutor;
 
     FileStorage *dataStore;
     AbstractProcessor *dataProc;

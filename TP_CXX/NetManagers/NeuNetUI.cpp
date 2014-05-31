@@ -96,7 +96,6 @@ void NeuNetUI::onShowDebug(QString msg) {
     ui->lstProcess->scrollToBottom();
 }
 
-
 void NeuNetUI::onLoadNets(QStringList files) {
     ui->messages->setText("");
 
@@ -161,7 +160,7 @@ void NeuNetUI::onCreateNets() {
     if (name == "")
         name = "Net # " + QString::number(ui->nets->rowCount());
 
-    foreach (QTableWidgetItem * item, ui->nets->selectedItems())
+    for (QTableWidgetItem * item : ui->nets->selectedItems())
         if (item->column() == 0)
             if (name == item->text()) {
                 createUi->errors->setText("Name must be unique");
@@ -183,7 +182,7 @@ void NeuNetUI::onCreateNets() {
     }
 
     NCounts neuronsCnt;
-    foreach (QString item, nDataList) {
+    for (QString item : nDataList) {
         if (item.contains("-")) {
             int range_from = item.split("-")[0].toInt();
             int range_to = item.split("-")[1].toInt();
@@ -241,8 +240,6 @@ void NeuNetUI::onTestNets() {
     }
 
     emit testNets(netIds, keySet);
-
-    addLimitsDlg->hide();
     emit updateNets(ui->nets);
 }
 
@@ -262,6 +259,7 @@ void NeuNetUI::onTeachNets() {
 
         if (item->childCount() == 0) {
             ui->messages->setText("Only folders are permitted");
+            addLimitsDlg->hide();
             return;
         }
 
@@ -274,7 +272,6 @@ void NeuNetUI::onTeachNets() {
 
     addLimitsDlg->hide();
     emit teachNets(netIds, keySet, tutitionLimits);
-
     emit updateNets(ui->nets);
 }
 
@@ -284,6 +281,7 @@ void NeuNetUI::onRefreshData() {
 }
 
 void NeuNetUI::onRequestUpdate() {
+    this->onRefreshData();
     this->updateUI();
 }
 

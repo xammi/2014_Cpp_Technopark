@@ -13,14 +13,16 @@ void BackPropTutor::setNet(AbstractNet *aNet) {
         throw WrongKindOfNet();
     }
 
-    if((!nNet) && (currentNet))
+    if(! nNet)
         throw NetNotFound();
     currentNet = nNet;
 }
 
 void BackPropTutor::setTester(Tester *test){
-    if((!test) && (currentTester))
-        currentTester = test;
+    if (test == NULL)
+        throw TesterNotFound();
+
+    currentTester = test;
 }
 
 void BackPropTutor::setLimits(const TuteBoundaries &limits)

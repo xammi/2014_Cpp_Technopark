@@ -8,9 +8,11 @@ NetProcessor::NetProcessor(QString dir)
     :   netsCatalog(dir), gui(new NeuNetUI)
 {
     this->setDefaultConf();
-    this->connectUI();
+    this->connectUI();    
 
     this->loadAllNets();
+    emit requestUpdate();
+
     gui->show();
 }
 
@@ -25,8 +27,6 @@ void NetProcessor::loadAllNets() {
     } catch (Exception & exc) {
         emit showException(exc.toString());
     }
-
-    this->onUpdateNets(gui->getNetsView());
 }
 
 NetProcessor::~NetProcessor() {
@@ -56,9 +56,6 @@ void NetProcessor::setDefaultConf() {
 
         factory = new Factory::MultiLayerFactory;
         destroyer = new Factory::MultiLayerDestroyer;
-
-        emit requestUpdate();
-        // dataStore->onUpdate(gui->getDataView());
 
     } catch (Exception &) {
         this->~NetProcessor();
@@ -174,14 +171,17 @@ void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TuteBoundaries 
         prepareTuteData(ttdata, indexes, keySet);
 
         TuteModule *module;
+        QThreadPool *threadPool = QThreadPool::globalInstance();
+
         for (int index : indexes) {
-            module = new TuteModule <BackPropTutor> (nets[index], ttdata, boundaries);
+            module = new TuteModule;
+            module->configure <BackPropTutor> (nets[index], ttdata, boundaries);
 
-            connect(module, SIGNAL(toException(QString)), SIGNAL(showException(QString)));
-            connect(module, SIGNAL(toDebug(QString)), SIGNAL(showDebug(QString)));
-            connect(module, SIGNAL(finished()), SIGNAL(requestUpdate()));
+            connect(module, SIGNAL(toException(QString)), this, SIGNAL(showException(QString)));
+            connect(module, SIGNAL(toDebug(QString)), this, SIGNAL(showDebug(QString)));
+            connect(module, SIGNAL(finished()), this, SIGNAL(requestUpdate()));
 
-            QThreadPool::globalInstance()->start(module);
+            threadPool->start(module);
         }
 
     } catch (Exception &exc) {

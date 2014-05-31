@@ -7,8 +7,6 @@
 
 namespace NetTutors {
 
-
-
 using namespace NeuNets;
 
 //-------------------------------------------------------------------------------------------------
@@ -58,19 +56,19 @@ struct InputOutputNeuNetCountMismatch : public Exception {
 };
 
 struct NetResponseErrorsCountMismatch : public Exception {
-    QString toString() { return "Разсер ответа сети не совпадает с размером ожидаемого вектора ошибок"; }
+    QString toString() { return "Размер ответа сети не совпадает с размером ожидаемого вектора ошибок"; }
 };
 
 struct NetNotFound : public Exception {
-    QString toString() { return "Сеть не задана"; }
+    QString toString() { return "Сеть не задана на этапе Tutor"; }
 };
 
 struct TesterNotFound : public Exception {
-    QString toString() { return "Не найден тестер"; }
+    QString toString() { return "Не найден тестер на этапе Tutor"; }
 };
 
 struct WrongKindOfNet : public Exception {
-    QString toString() { return "Сеть недопустимого типа"; }
+    QString toString() { return "Сеть недопустимого типа на этапе Tutor"; }
 };
 
 } // namespace NetTutors
