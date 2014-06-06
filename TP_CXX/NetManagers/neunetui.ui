@@ -322,7 +322,7 @@
            <string notr="true">color: rgb(170, 0, 0);</string>
           </property>
           <property name="text">
-           <string>&gt;&gt; Process</string>
+           <string/>
           </property>
          </widget>
         </item>

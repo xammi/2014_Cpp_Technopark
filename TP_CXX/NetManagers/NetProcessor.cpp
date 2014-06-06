@@ -41,6 +41,11 @@ NetProcessor::~NetProcessor() {
     for (AbstractNet * net : nets)
         if (net)
             delete net;
+
+    bool waitResult = QThreadPool::globalInstance()->waitForDone();
+    if (! waitResult) {
+        qDebug() << "Problems with closing the threads";
+    }
 }
 //-------------------------------------------------------------------------------------------------
 const NetProcessor & NetProcessor::get_self() {
@@ -82,7 +87,10 @@ void NetProcessor::connectUI() {
     connect(this, SIGNAL(requestUpdate()), gui, SLOT(onRequestUpdate()));
 
     connect(gui, SIGNAL(testNets(Ints, QStringList)), SLOT(onTestNets(Ints, QStringList)));
-    connect(gui, SIGNAL(teachNets(Ints, QStringList, TuteBoundaries)), SLOT(onTeachNets(Ints, QStringList, TuteBoundaries)));
+    connect(gui, SIGNAL(tuteNets(Ints, QStringList, TuteBoundaries)), SLOT(onTuteNets(Ints, QStringList, TuteBoundaries)));
+
+    connect(this, SIGNAL(tuteStarted(Index)), gui, SLOT(onTuteStarted(Index)));
+    connect(this, SIGNAL(tuteFinished(Index)), gui, SLOT(onTuteFinished(Index)));
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -165,30 +173,38 @@ void NetProcessor::onTestNets(Ints indexes, QStringList keySet) {
     }
 }
 
-void NetProcessor::onTeachNets(Ints indexes, QStringList keySet, TuteBoundaries boundaries) {
+void NetProcessor::onTuteNets(Ints indexes, QStringList keySet, TuteBoundaries boundaries) {
     try {
         TuteData ttdata;
         prepareTuteData(ttdata, indexes, keySet);
 
-        TuteModule *module;
         QThreadPool *threadPool = QThreadPool::globalInstance();
 
-        for (int index : indexes) {
-            module = new TuteModule;
+        for (Index index : indexes) {
+            TuteModule *module = createTuteModule(index);
             module->configure <BackPropTutor> (nets[index], ttdata, boundaries);
-
-            connect(module, SIGNAL(toException(QString)), this, SIGNAL(showException(QString)));
-            connect(module, SIGNAL(toDebug(QString)), this, SIGNAL(showDebug(QString)));
-            connect(module, SIGNAL(finished()), this, SIGNAL(requestUpdate()));
-
             threadPool->start(module);
         }
+
+        clearTuteData(ttdata);
 
     } catch (Exception &exc) {
         emit showException(exc.toString());
     }
 }
 
+TuteModule * NetProcessor::createTuteModule(Index index) {
+    TuteModule *module = new TuteModule(index);
+
+    connect(module, SIGNAL(toException(QString)), this, SIGNAL(showException(QString)));
+    connect(module, SIGNAL(toDebug(QString)), this, SIGNAL(showDebug(QString)));
+
+    connect(module, SIGNAL(started(Index)), this, SIGNAL(tuteStarted(Index)));
+    connect(module, SIGNAL(finished(Index)), this, SIGNAL(tuteFinished(Index)));
+    connect(module, SIGNAL(finished(Index)), this, SIGNAL(requestUpdate()));
+
+    return module;
+}
 
 void NetProcessor::prepareTuteData(TuteData & ttdata, const Ints & indexes, const QStringList & keySet) {
     dataStore->loadDirs(ttdata.inputs, keySet);
@@ -218,88 +234,6 @@ void NetProcessor::prepareTuteData(TuteData & ttdata, const Ints & indexes, cons
             ttdata.outputs.append(duplicOutputs);
         }
     }
-}
-
-//-------------------------------------------------------------------------------------------------
-void NetProcessor::internalTest() {
-//    if (nets.size() == 0) return;
-
-//    tester->setTarget(nets[0]);
-//    tutor->setNet(nets[0]);
-
-
-//    InputData *one = new InputData();
-//    one->values = {1,1,1,1,
-//                   1,0,0,0,
-//                   1,1,1,1,
-//                   0,0,0,1,
-//                   1,1,1,1,
-//                   1};
-
-//    OutputData *oneOut = new OutputData();
-//    oneOut->values = {1,0};
-
-//    InputData *two = new InputData();
-//    two->values = {1,0,0,1,
-//                   1,0,0,1,
-//                   1,1,1,1,
-//                   0,0,0,1,
-//                   0,0,0,1,
-//                   1};
-
-//    OutputData *twoOut = new OutputData();
-//    twoOut->values = {0,1};
-
-//    InOutDataSet packOne, packTwo;
-
-//    packOne.inputs.append(one);
-//    packOne.outputs.append(oneOut);
-
-//    packTwo.outputs.append(twoOut);
-//    packTwo.inputs.append(two);
-
-//    TuteData data = {packOne, packTwo};
-
-//    TutorBoundaries b(0.001, 0.0001, 100, 100000000, 1);
-
-//    tutor->setLimits(b);
-//    tutor->start(data);
-
-//    DataProcess::InputData checker;
-//    InputDataSet ins;
-//    checker.values.resize(21);
-
-//    checker.values = {0,1,1,1,
-//                      0,1,0,0,
-//                      0,1,1,1,
-//                      0,0,0,1,
-//                      0,1,1,1,
-//                      1};
-//    ins.append(&checker);
-
-
-//    DataProcess::InputData checker1;
-//    checker1.values = {1,1,1,1,
-//                      1,0,0,0,
-//                      1,1,1,1,
-//                      0,0,0,1,
-//                      1,1,1,1,
-//                      1};
-//    ins.append(&checker1);
-
-
-//    DataProcess::InputData checker2;
-//    checker2.values = {1,0,0,1,
-//                      1,0,0,1,
-//                      1,0,0,1,
-//                      1,1,1,1,
-//                      0,0,0,1,
-//                      1};
-
-//    ins.append(&checker2);
-
-//    QString answer = tester->test(ins);
-//    qDebug() << answer << endl;
 }
 
 //-------------------------------------------------------------------------------------------------

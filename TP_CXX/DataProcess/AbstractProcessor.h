@@ -19,8 +19,10 @@ public:
         }
     }
 
+    bool operator == (const InputData &rhs) { return values==rhs.values; }
+
+public:
     QVector <double> values;
-    bool operator == (const InputData &) { return true; }
 };
 typedef QVector<InputData *> InputDataSet;
 
@@ -28,8 +30,7 @@ class OutputData
 {
 public:
     OutputData() {}
-    OutputData(int size) { values.resize(size); }
-    QVector <double> values;
+    OutputData(int size) { values.resize(size); }    
 
     void swapVecs(OutputData &from) {
         this->values.clear();
@@ -39,7 +40,10 @@ public:
 
     void clearAndFill() { this->values.resize(1); this->values.fill(1); }
 
-    bool operator == (const OutputData &) { return true; }
+    bool operator == (const OutputData &rhs) { return values == rhs.values; }
+
+public:
+    QVector <double> values;
 };
 typedef QVector<OutputData *> OutputDataSet;
 

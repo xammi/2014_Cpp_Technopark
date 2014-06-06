@@ -28,5 +28,6 @@ Q_DECLARE_METATYPE(Ints)
 
 typedef int Index;
 typedef const Index CIndex;
+Q_DECLARE_METATYPE(Index)
 //-------------------------------------------------------------------------------------------------
 #endif // INCLUDES_H

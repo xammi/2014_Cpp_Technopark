@@ -39,7 +39,7 @@ private slots:
     void onUpdateNets(QTableWidget *);
 
     void onTestNets(Ints, QStringList);
-    void onTeachNets(Ints, QStringList, TuteBoundaries);
+    void onTuteNets(Ints, QStringList, TuteBoundaries);
 
 signals:
     void showInfo(QString);
@@ -47,11 +47,13 @@ signals:
     void showDebug(QString);
 
     void requestUpdate();
+    void tuteStarted(Index);
+    void tuteFinished(Index);
 
 public:
     static const NetProcessor & get_self();
 
-protected:
+private:
     NetProcessor(QString dir = DEFAULT_NETS_DIR);
     ~NetProcessor();
 
@@ -59,8 +61,8 @@ protected:
     void setDefaultConf();
     void connectUI();
 
+    TuteModule * createTuteModule(Index);
     void prepareTuteData(TuteData &, const Ints &, const QStringList &);
-    void internalTest();
 
 private:
     const QString netsCatalog;

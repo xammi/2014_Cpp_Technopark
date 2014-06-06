@@ -57,7 +57,7 @@ void NeuNetUI::adjustUi() {
     connect(ui->dataRefresh, SIGNAL(clicked()), SLOT(onRefreshData()));
     connect(ui->tute, SIGNAL(clicked()), SLOT(onLimitsShow()));
 
-    connect(addLimitsUi->ok, SIGNAL(clicked()), SLOT(onTeachNets()));
+    connect(addLimitsUi->ok, SIGNAL(clicked()), SLOT(onTuteNets()));
     connect(addLimitsUi->cancel, SIGNAL(clicked()), addLimitsDlg, SLOT(hide()));
 
     connect(ui->test, SIGNAL(clicked()), SLOT(onTestNets()));
@@ -209,14 +209,30 @@ void NeuNetUI::updateUI() {
     emit updateData(ui->data);
 }
 
+void NeuNetUI::selectedNets(Ints & netIds) const {
+    netIds.clear();
+
+    for (QTableWidgetItem *item : ui->nets->selectedItems())
+        if (item && tuteNow.contains(item->row()))
+            throw AlreadyTute();
+
+    for (QTableWidgetItem *item : ui->nets->selectedItems()) {
+        if (item && item->column() == 0) {
+            int index = item->row();
+            netIds.append(index);
+        }
+        item->setSelected(false);
+    }
+}
+
 void NeuNetUI::onTestNets() {
     ui->messages->setText("");
 
     Ints netIds;
-    for (QTableWidgetItem *item : ui->nets->selectedItems()) {
-        if (item && item->column() == 0)
-            netIds.append(item->row());
-        item->setSelected(false);
+    try {
+        selectedNets(netIds);
+    } catch (Exception &exc) {
+        onShowException(exc.toString());
     }
 
     QStringList keySet;
@@ -243,14 +259,14 @@ void NeuNetUI::onTestNets() {
     emit updateNets(ui->nets);
 }
 
-void NeuNetUI::onTeachNets() {
+void NeuNetUI::onTuteNets() {
     ui->messages->setText("");
 
     Ints netIds;
-    for (QTableWidgetItem *item : ui->nets->selectedItems()) {
-        if (item && item->column() == 0)
-            netIds.append(item->row());
-        item->setSelected(false);
+    try {
+        selectedNets(netIds);
+    } catch (Exception &exc) {
+        onShowException(exc.toString());
     }
 
     QStringList keySet;
@@ -272,7 +288,7 @@ void NeuNetUI::onTeachNets() {
                                     , addLimitsUi->speed->value() );
 
     addLimitsDlg->hide();
-    emit teachNets(netIds, keySet, tutitionLimits);
+    emit tuteNets(netIds, keySet, tutitionLimits);
     emit updateNets(ui->nets);
 }
 
@@ -285,7 +301,47 @@ void NeuNetUI::onRequestUpdate() {
     this->onRefreshData();
     this->updateUI();
 }
+//-------------------------------------------------------------------------------------------------
+void NeuNetUI::onTuteStarted(Index index) {
+    qDebug() << "tute started";
 
+    if (tuteNow.isEmpty()) {
+        processTimer = startTimer(500);
+        ui->process->setText(">> Process: ");
+    }
+
+    tuteNow.insert(index);
+
+    for (int I = 0; I < 3; ++I)
+        ui->nets->item(index, I)->setBackgroundColor(Qt::yellow);
+}
+
+void NeuNetUI::onTuteFinished(Index index) {
+    qDebug() << "tute finished";
+
+    tuteNow.remove(index);
+    if (tuteNow.isEmpty()) {
+        killTimer(processTimer);
+        ui->process->setText("");
+    }
+
+    for (int I = 0; I < 3; ++I)
+        ui->nets->item(index, I)->setBackgroundColor(Qt::white);
+}
+
+void NeuNetUI::timerEvent(QTimerEvent *event) {
+    if (event->timerId() == processTimer) {
+        static int counter = 0;
+
+        if (counter == 14) {
+            counter = 0;
+            ui->process->setText(">> Process: ");
+        }
+
+        ui->process->setText(ui->process->text() + "=");
+        counter++;
+    }
+}
 //-------------------------------------------------------------------------------------------------
 
 } // namespace NetManagers

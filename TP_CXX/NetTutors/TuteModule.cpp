@@ -3,8 +3,9 @@
 
 namespace NetTutors {
 //-------------------------------------------------------------------------------------------------
-TuteModule::TuteModule() {
-}
+TuteModule::TuteModule(CIndex _index)
+    :   index(_index)
+{}
 
 TuteModule::~TuteModule() {
     if (tutor) delete tutor;
@@ -18,14 +19,16 @@ void TuteModule::run() {
     }
 
     try {
-        emit toDebug(" Обучение началось: " + net->name());
+        emit started(index);
+
+        // teaching of net here
         tutor->start(ttdata);
+
+        emit finished(index);
     }
     catch (Exception & exc) {
         emit toException(exc.toString());
     }
-
-    emit finished();
 }
 //-------------------------------------------------------------------------------------------------
 } // namespace NetTutors

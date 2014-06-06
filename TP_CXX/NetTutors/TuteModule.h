@@ -20,10 +20,11 @@ class TuteModule : public QObject, public QRunnable
 signals:
     void toException(QString);
     void toDebug(QString);
-    void finished();
+    void started(Index);
+    void finished(Index);
 
 public:
-    TuteModule();
+    TuteModule(CIndex);
 
     virtual ~TuteModule();
 
@@ -33,6 +34,7 @@ public:
     void run();
 
 private:
+    Index index;
     AbstractNet *net;
 
     Tester * tester;

@@ -9,6 +9,7 @@
 #include <QTableWidget>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include <QSet>
 
 #include "Factory/BuildInfo.h"
 #include "../NetTutors/TuteData.h"
@@ -32,6 +33,8 @@ namespace NetManagers {
 class NeuNetUI : public QMainWindow {
     Q_OBJECT
     
+    int processTimer;
+
 signals:
     void loadNet(QString);
     void createNets(QString, QString, NCounts);
@@ -44,7 +47,7 @@ signals:
     void refreshData();
 
     void testNets(Ints, QStringList);
-    void teachNets(Ints, QStringList, TuteBoundaries);
+    void tuteNets(Ints, QStringList, TuteBoundaries);
 
 public slots:
     void onShowInfo(QString);
@@ -52,6 +55,8 @@ public slots:
     void onShowDebug(QString);
 
     void onRequestUpdate();
+    void onTuteStarted(Index);
+    void onTuteFinished(Index);
 
 private slots:
     void onLimitsShow();
@@ -65,7 +70,7 @@ private slots:
     void onRefreshData();
 
     void onTestNets();
-    void onTeachNets();
+    void onTuteNets();
 
 public:
     explicit NeuNetUI(QWidget *parent = 0);
@@ -79,6 +84,9 @@ private:
     void setDefaultConf();
     void updateUI();
 
+    void timerEvent(QTimerEvent *);
+    void selectedNets(Ints &) const;
+
     Ui::NeuNetUI *ui;
     QFileDialog *openDlg;
 
@@ -88,7 +96,15 @@ private:
 
     Ui::AddLimitsUI *addLimitsUi;
     QDialog *addLimitsDlg;
+
+    QSet<int> tuteNow;
 };
+
+//-------------------------------------------------------------------------------------------------
+struct AlreadyTute : public Exception {
+    QString toString() { return QString("еть уже на обучении"); }
+};
+
 //-------------------------------------------------------------------------------------------------
 } // namespace NetManagers
 #endif // NEUNETUI_H
