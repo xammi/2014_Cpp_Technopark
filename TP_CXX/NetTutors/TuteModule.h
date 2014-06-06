@@ -20,8 +20,8 @@ class TuteModule : public QObject, public QRunnable
 signals:
     void toException(QString);
     void toDebug(QString);
-    void started(Index);
-    void finished(Index);
+    void started(int);
+    void finished(int);
 
 public:
     TuteModule(CIndex);

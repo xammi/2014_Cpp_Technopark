@@ -47,8 +47,8 @@ signals:
     void showDebug(QString);
 
     void requestUpdate();
-    void tuteStarted(Index);
-    void tuteFinished(Index);
+    void tuteStarted(int);
+    void tuteFinished(int);
 
 public:
     static const NetProcessor & get_self();

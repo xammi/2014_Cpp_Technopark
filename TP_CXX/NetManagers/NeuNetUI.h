@@ -55,8 +55,8 @@ public slots:
     void onShowDebug(QString);
 
     void onRequestUpdate();
-    void onTuteStarted(Index);
-    void onTuteFinished(Index);
+    void onTuteStarted(int);
+    void onTuteFinished(int);
 
 private slots:
     void onLimitsShow();
@@ -102,7 +102,7 @@ private:
 
 //-------------------------------------------------------------------------------------------------
 struct AlreadyTute : public Exception {
-    QString toString() { return QString("еть уже на обучении"); }
+    QString toString() { return "Cеть уже на обучении"; }
 };
 
 //-------------------------------------------------------------------------------------------------

@@ -89,8 +89,8 @@ void NetProcessor::connectUI() {
     connect(gui, SIGNAL(testNets(Ints, QStringList)), SLOT(onTestNets(Ints, QStringList)));
     connect(gui, SIGNAL(tuteNets(Ints, QStringList, TuteBoundaries)), SLOT(onTuteNets(Ints, QStringList, TuteBoundaries)));
 
-    connect(this, SIGNAL(tuteStarted(Index)), gui, SLOT(onTuteStarted(Index)));
-    connect(this, SIGNAL(tuteFinished(Index)), gui, SLOT(onTuteFinished(Index)));
+    connect(this, SIGNAL(tuteStarted(int)), gui, SLOT(onTuteStarted(int)));
+    connect(this, SIGNAL(tuteFinished(int)), gui, SLOT(onTuteFinished(int)));
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -186,7 +186,7 @@ void NetProcessor::onTuteNets(Ints indexes, QStringList keySet, TuteBoundaries b
             threadPool->start(module);
         }
 
-        clearTuteData(ttdata);
+        // TODO: clearTuteData(ttdata);
 
     } catch (Exception &exc) {
         emit showException(exc.toString());
@@ -199,9 +199,9 @@ TuteModule * NetProcessor::createTuteModule(Index index) {
     connect(module, SIGNAL(toException(QString)), this, SIGNAL(showException(QString)));
     connect(module, SIGNAL(toDebug(QString)), this, SIGNAL(showDebug(QString)));
 
-    connect(module, SIGNAL(started(Index)), this, SIGNAL(tuteStarted(Index)));
-    connect(module, SIGNAL(finished(Index)), this, SIGNAL(tuteFinished(Index)));
-    connect(module, SIGNAL(finished(Index)), this, SIGNAL(requestUpdate()));
+    connect(module, SIGNAL(started(int)), this, SIGNAL(tuteStarted(int)));
+    connect(module, SIGNAL(finished(int)), this, SIGNAL(tuteFinished(int)));
+    connect(module, SIGNAL(finished(int)), this, SIGNAL(requestUpdate()));
 
     return module;
 }

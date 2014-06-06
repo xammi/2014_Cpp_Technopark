@@ -8,6 +8,13 @@ namespace NetManagers {
 
 using NetTutors::TuteBoundaries;
 
+const int PROCESS_TIMER_STEP = 500;
+const int UI_NETS_PARAMS_CNT = 3;
+
+const QString PROCESS_FILL_WELCOME = ">> Process: ";
+const QString PROCESS_FILLER = "=";
+const int PROCESS_FILLER_CNT = 14;
+
 //-------------------------------------------------------------------------------------------------
 NeuNetUI::NeuNetUI(QWidget *parent) :
       QMainWindow(parent), ui(NULL), openDlg(NULL), createUi(NULL), createDlg(NULL),createValidator(NULL),
@@ -289,7 +296,6 @@ void NeuNetUI::onTuteNets() {
 
     addLimitsDlg->hide();
     emit tuteNets(netIds, keySet, tutitionLimits);
-    emit updateNets(ui->nets);
 }
 
 void NeuNetUI::onRefreshData() {
@@ -302,30 +308,31 @@ void NeuNetUI::onRequestUpdate() {
     this->updateUI();
 }
 //-------------------------------------------------------------------------------------------------
-void NeuNetUI::onTuteStarted(Index index) {
-    qDebug() << "tute started";
+void NeuNetUI::onTuteStarted(int index) {
 
     if (tuteNow.isEmpty()) {
-        processTimer = startTimer(500);
-        ui->process->setText(">> Process: ");
+        processTimer = startTimer(PROCESS_TIMER_STEP);
+        ui->process->setText(PROCESS_FILL_WELCOME);
     }
 
     tuteNow.insert(index);
+    onShowDebug("Started tute for: " + QString::number(index));
 
-    for (int I = 0; I < 3; ++I)
+    for (int I = 0; I < UI_NETS_PARAMS_CNT; ++I)
         ui->nets->item(index, I)->setBackgroundColor(Qt::yellow);
 }
 
-void NeuNetUI::onTuteFinished(Index index) {
-    qDebug() << "tute finished";
+void NeuNetUI::onTuteFinished(int index) {
 
     tuteNow.remove(index);
+    onShowDebug("Tute successfully finished: " + QString::number(index));
+
     if (tuteNow.isEmpty()) {
         killTimer(processTimer);
         ui->process->setText("");
     }
 
-    for (int I = 0; I < 3; ++I)
+    for (int I = 0; I < UI_NETS_PARAMS_CNT; ++I)
         ui->nets->item(index, I)->setBackgroundColor(Qt::white);
 }
 
@@ -333,12 +340,12 @@ void NeuNetUI::timerEvent(QTimerEvent *event) {
     if (event->timerId() == processTimer) {
         static int counter = 0;
 
-        if (counter == 14) {
+        if (counter == PROCESS_FILLER_CNT) {
             counter = 0;
-            ui->process->setText(">> Process: ");
+            ui->process->setText(PROCESS_FILL_WELCOME);
         }
 
-        ui->process->setText(ui->process->text() + "=");
+        ui->process->setText(ui->process->text() + PROCESS_FILLER);
         counter++;
     }
 }
