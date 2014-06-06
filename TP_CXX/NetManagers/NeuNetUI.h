@@ -82,7 +82,9 @@ public:
 private:
     void adjustUi();
     void setDefaultConf();
-    void updateUI();
+
+    enum struct UPD { ALL = 0, DATA, NETS };
+    void updateUI(UPD upd = UPD::ALL);
 
     void timerEvent(QTimerEvent *);
     void selectedNets(Ints &) const;

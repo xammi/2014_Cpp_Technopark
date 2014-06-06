@@ -156,6 +156,8 @@ void NetProcessor::onTestNets(Ints indexes, QStringList keySet) {
 
     try {
         Tester tester;
+        connect(&tester, SIGNAL(toDebug(QString)), this, SIGNAL(showDebug(QString)));
+
         InputDataSet inputSet;
         dataStore->loadFiles(inputSet, keySet);
 

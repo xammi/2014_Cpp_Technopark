@@ -29,7 +29,7 @@ NeuNetUI::NeuNetUI(QWidget *parent) :
     this->adjustUi();
     this->setWindowState(Qt::WindowMaximized);
 
-    this->updateUI();
+    updateUI(UPD::ALL);
 }
 
 void NeuNetUI::setDefaultConf() {
@@ -114,7 +114,8 @@ void NeuNetUI::onLoadNets(QStringList files) {
             msgBox.setText("You can only load .net files.");
             msgBox.exec();
         }
-    emit updateNets(ui->nets);
+
+    updateUI(UPD::NETS);
 }
 
 void NeuNetUI::onSaveNets() {
@@ -123,6 +124,8 @@ void NeuNetUI::onSaveNets() {
     for (QTableWidgetItem * item : ui->nets->selectedItems())
         if (item->column() == 0)
             emit saveNet(item->text() + ".net", item->row());
+
+    updateUI(UPD::NETS);
 }
 
 void NeuNetUI::onRemoveNets() {
@@ -137,7 +140,7 @@ void NeuNetUI::onRemoveNets() {
             items[I + 1] = NULL;
         }
 
-    emit updateNets(ui->nets);
+    updateUI(UPD::NETS);
 }
 
 
@@ -208,12 +211,19 @@ void NeuNetUI::onCreateNets() {
     emit createNets(name, funcName, neuronsCnt);
     createDlg->hide();
 
-    emit updateNets(ui->nets);
+    updateUI(UPD::NETS);
 }
 //-------------------------------------------------------------------------------------------------
-void NeuNetUI::updateUI() {
-    emit updateNets(ui->nets);
-    emit updateData(ui->data);
+void NeuNetUI::updateUI(UPD upd) {
+    if (upd == UPD::DATA || upd == UPD::ALL) {
+        emit updateData(ui->data);
+    }
+    if (upd == UPD::NETS || upd == UPD::ALL) {
+        emit updateNets(ui->nets);
+        for (Index index : tuteNow)
+            for (int I = 0; I < UI_NETS_PARAMS_CNT; ++I)
+                ui->nets->item(index, I)->setBackgroundColor(Qt::yellow);
+    }
 }
 
 void NeuNetUI::selectedNets(Ints & netIds) const {
@@ -263,7 +273,7 @@ void NeuNetUI::onTestNets() {
     }
 
     emit testNets(netIds, keySet);
-    emit updateNets(ui->nets);
+    updateUI(UPD::NETS);
 }
 
 void NeuNetUI::onTuteNets() {
@@ -296,16 +306,17 @@ void NeuNetUI::onTuteNets() {
 
     addLimitsDlg->hide();
     emit tuteNets(netIds, keySet, tutitionLimits);
+    updateUI(UPD::NETS);
 }
 
 void NeuNetUI::onRefreshData() {
     emit refreshData();
-    emit updateData(ui->data);
+    updateUI(UPD::DATA);
 }
 
 void NeuNetUI::onRequestUpdate() {
     this->onRefreshData();
-    this->updateUI();
+    updateUI(UPD::ALL);
 }
 //-------------------------------------------------------------------------------------------------
 void NeuNetUI::onTuteStarted(int index) {
@@ -317,9 +328,7 @@ void NeuNetUI::onTuteStarted(int index) {
 
     tuteNow.insert(index);
     onShowDebug("Started tute for: " + QString::number(index));
-
-    for (int I = 0; I < UI_NETS_PARAMS_CNT; ++I)
-        ui->nets->item(index, I)->setBackgroundColor(Qt::yellow);
+    updateUI(UPD::NETS);
 }
 
 void NeuNetUI::onTuteFinished(int index) {
@@ -331,9 +340,7 @@ void NeuNetUI::onTuteFinished(int index) {
         killTimer(processTimer);
         ui->process->setText("");
     }
-
-    for (int I = 0; I < UI_NETS_PARAMS_CNT; ++I)
-        ui->nets->item(index, I)->setBackgroundColor(Qt::white);
+    updateUI(UPD::NETS);
 }
 
 void NeuNetUI::timerEvent(QTimerEvent *event) {
