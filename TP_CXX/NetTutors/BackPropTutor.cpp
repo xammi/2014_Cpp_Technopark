@@ -47,7 +47,7 @@ void BackPropTutor::getMidLayerErrors(DataProcess::OutputData &oldErrors, DataPr
     }
 }
 
-void BackPropTutor::processImage(const InputDataSet &inputs, const OutputDataSet &outputs)
+void BackPropTutor::processImage(const InputDataSet &inputs, const OutputDataSet &outputs, int curImageIndex)
 {
     int iter = 0;
     int maxIter = tuteLimits.maxLayerIter;
@@ -75,9 +75,10 @@ void BackPropTutor::processImage(const InputDataSet &inputs, const OutputDataSet
             currentTester->test(input, output, curErrVec);
             neuResponseVec.values = curErrVec.values;
 
-            if(iter == 1){
+            if((iter % 100) == 0){
                 QString firstInput;
-                firstInput.sprintf("Первый запуск ошибок для образа");
+                firstInput.sprintf("Вывод ошибок на итерации %d \n для образа %d", iter, curImageIndex);
+                emit toDebug(firstInput);
                 for(double error: curErrVec.values){
                     firstInput.sprintf("%lf ", error);
                 }
@@ -158,7 +159,7 @@ bool BackPropTutor::start(const TuteData &data){
         for(int i = 0; i < data.inputs.size(); ++i){
             if(data.inputs[i].size() != data.outputs[i].size())
                 throw InputsOutputsCountMismatch();
-            processImage(data.inputs[i], data.outputs[i]);
+            processImage(data.inputs[i], data.outputs[i], i);
         }
         if( checkEveryImageError() == true ) // Если ошибки всех векторов сети - нормальные
             break;
