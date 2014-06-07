@@ -2,6 +2,8 @@
 #define IMAGEPROCESSOR_H
 
 #include "AbstractProcessor.h"
+#include <QBitArray>
+#include <QImage>
 
 namespace DataProcess {
 
@@ -12,17 +14,30 @@ class ImageProcessor : public AbstractProcessor {
 public:
     ImageProcessor();
 
-    void processData(InputData &, const QImage &) {}
+    InputData * prepareData(QImage &inImg);
+    int getSegm() {return segmentsCount;}
+    ~ImageProcessor();
 
 private:
     QImage iniImage;
+    int imgSize;
     QVector <QImage *> segments;
 
-    void binarize() {}
-    void segment() {}
-    void crop() {}
-    void resize() {}
+    int segmentsCount;
+    int xSize;
+    int ySize;
 
+    void binarize();
+    void segment();
+    void crop();
+    void resize();
+
+    void startSelectSegment(int , int , QBitArray*);
+    void selectSegment(int, int, QBitArray*);
+    void bitToImg(QBitArray *segm, QImage *segmImg);
+
+    int getMaxX(QBitArray *segm);
+    int getMaxY(QBitArray *segm);
 };
 //-------------------------------------------------------------------------------------------------
 } // namespace DataProcess
