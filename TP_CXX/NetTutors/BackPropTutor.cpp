@@ -75,7 +75,7 @@ void BackPropTutor::processImage(const InputDataSet &inputs, const OutputDataSet
             currentTester->test(input, output, curErrVec);
             neuResponseVec.values = curErrVec.values;
 
-            if((iter % 100) == 0){
+            if((iter % 300) == 0){
                 QString firstInput;
                 firstInput.sprintf("Вывод ошибок на итерации %d \n для образа %d", iter, curImageIndex);
                 emit toDebug(firstInput);
