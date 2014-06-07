@@ -327,7 +327,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QListWidget" name="lstProcess"/>
+         <widget class="QListWidget" name="lstProcess">
+          <property name="selectionMode">
+           <enum>QAbstractItemView::ExtendedSelection</enum>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -341,7 +345,7 @@
      <x>0</x>
      <y>0</y>
      <width>927</width>
-     <height>25</height>
+     <height>18</height>
     </rect>
    </property>
   </widget>

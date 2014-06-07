@@ -18,7 +18,7 @@ void FuncDisp::registri(Func * func) { funcs.append(func); }
 
 Func * FuncDisp::get_func(const QString & name) const {
     for (int I = 0; I < funcs.size(); ++I)
-        if (name.contains(funcs[I]->name()))
+        if (name == (funcs[I]->name()))
             return funcs[I];
 
     qDebug() << "Не найдена функция, соответствующая " << name;

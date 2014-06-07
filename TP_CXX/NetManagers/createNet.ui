@@ -124,6 +124,16 @@
        </item>
        <item>
         <property name="text">
+         <string>Sigmoid_0.1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Sigmoid_0.01</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
          <string>HypTan</string>
         </property>
        </item>
