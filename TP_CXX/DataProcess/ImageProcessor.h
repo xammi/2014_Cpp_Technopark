@@ -15,6 +15,7 @@ public:
     ImageProcessor();
 
     void prepareImg(InputData &, const QImage &inImg);
+    void prepareImgSet(InputDataSet &dataSet);
     int getSegm() {return segmentsCount;}
     ~ImageProcessor();
 
@@ -35,9 +36,11 @@ private:
     void startSelectSegment(int , int , QBitArray*);
     void selectSegment(int, int, QBitArray*);
     void bitToImg(QBitArray *segm, QImage *segmImg);
+    void toInputData(QImage &iniImage, InputData &data);
 
-    int getMaxX(QBitArray *segm);
-    int getMaxY(QBitArray *segm);
+
+    int getMaxX(QBitArray *segm, int &firstX);
+    int getMaxY(QBitArray *segm, int &firstY);
 };
 //-------------------------------------------------------------------------------------------------
 } // namespace DataProcess

@@ -1,22 +1,20 @@
 #include "NetManagers/NetProcessor.h"
+#include "DataProcess/ImageProcessor.h"
 #include <QApplication>
 #include <iostream>
 
-using NetManagers::NetProcessor;
+using namespace DataProcess;
 
 int main(int argc, char *argv[]) {
-    QApplication a(argc, argv);
+    QImage testImg("C:/Qt/2014_Cpp_Technopark/TP_CXX/Default\ store/test.bmp"/*, QImage::Format_RGB32*/);
+    ImageProcessor procObj;
+    InputData inData;
+    InputDataSet dataSet(4);
+    procObj.prepareImg(inData, testImg);
 
-    try {
-        NetProcessor::get_self();
-    } catch (std::bad_alloc & exc) {
-        std::cerr << "Problems with set of configuration\n" << exc.what();
-    } catch (Exception & exc) {
+    //procObj.prepareImgSet(dataSet);
+    return procObj.getSegm();
 
-        std::cerr << "Problems with adjustment of configuration\n" << exc.toString().toStdString();
-    }
-
-    return a.exec();
 }
 
 /*
