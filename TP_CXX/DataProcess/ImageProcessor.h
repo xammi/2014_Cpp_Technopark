@@ -15,7 +15,7 @@ public:
     ImageProcessor();
 
     void prepareImg(InputData &, const QImage &inImg);
-    void prepareImgSet(InputDataSet &dataSet);
+    void prepareImgSet(InputDataSet &dataSet, const QImage &inImg);
     int getSegm() {return segmentsCount;}
     ~ImageProcessor();
 
@@ -35,7 +35,7 @@ private:
 
     void startSelectSegment(int , int , QBitArray*);
     void selectSegment(int, int, QBitArray*);
-    void bitToImg(QBitArray *segm, QImage *segmImg);
+    void bitToImg(QBitArray *segm, QImage *&segmImg);
     void toInputData(QImage &iniImage, InputData &data);
 
 

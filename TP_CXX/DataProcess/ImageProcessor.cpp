@@ -25,13 +25,24 @@ void ImageProcessor::prepareImg(InputData &data, const QImage &inImg) {
 }
 
 
-void ImageProcessor::prepareImgSet(InputDataSet &dataSet)
+void ImageProcessor::prepareImgSet(InputDataSet &dataSet, const QImage &inImg)
 {
+    iniImage = inImg;
+
+    xSize = inImg.width();
+    ySize = inImg.height();
+    imgSize = (xSize*ySize);
+
+    binarize();
+    segment();
+    QImage newImg(*(segments[0]));
 
     dataSet.clear();
     dataSet.resize(segmentsCount);
     for(int  i = 0; i < segmentsCount; i++){
-        toInputData(*(segments[i]), *(dataSet[i]));
+        dataSet[i] = new InputData;
+
+        toInputData(*segments[i], *(dataSet[i]));
     }
 }
 
@@ -69,9 +80,13 @@ void ImageProcessor::startSelectSegment(int x, int y, QBitArray *checkedPixels)
     selectSegment(x, y - 1, checkedPixels);
 
 }
+bool inImg(int x, int y, int xSize, int ySize){
+    return ((y >= 0) && (y < ySize) && (x >= 0) && (x < xSize));
+}
+
 void ImageProcessor::selectSegment(int x, int y, QBitArray* checkedPixels)
 {
-    if((iniImage.pixel(x,y)==black) && !(*checkedPixels)[x + y*xSize]){
+    if((iniImage.pixel(x,y)==black) && !(*checkedPixels)[x + y*xSize] && inImg(x, y, xSize, ySize)){
         (*checkedPixels)[x + y*xSize] = true;
         selectSegment(x + 1, y, checkedPixels);
         selectSegment(x - 1, y, checkedPixels);
@@ -105,7 +120,7 @@ void ImageProcessor::segment()
 }
 
 
-void ImageProcessor::bitToImg(QBitArray *segm, QImage *segmImg)
+void ImageProcessor::bitToImg(QBitArray *segm, QImage *&segmImg)
 {
     int firstX, firstY;
     int xSegSize =  getMaxX(segm, firstX);
