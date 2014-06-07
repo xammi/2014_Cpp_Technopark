@@ -56,6 +56,7 @@ void MultiLayerFactory::parseFile(const QString &filename) {
     if(magicNumber != fileId)
         throw WrongFileFormat();
 
+    weights.clear();
     nnInfo.clear();
 
     nnInfo.funcName = stream.readLine();
@@ -83,6 +84,7 @@ void MultiLayerFactory::parseFile(const QString &filename) {
 
         for(int j = 0; j < cur * prev; ++j){
             stream >> bufArr[j];
+            double buf = bufArr[j];
 
             if(stream.atEnd())
                 throw WrongData();

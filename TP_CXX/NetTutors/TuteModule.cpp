@@ -28,6 +28,7 @@ void TuteModule::run() {
     }
     catch (Exception & exc) {
         emit toException(exc.toString());
+        emit finished(index);
     }
 }
 //-------------------------------------------------------------------------------------------------

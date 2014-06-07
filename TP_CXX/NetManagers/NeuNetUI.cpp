@@ -250,6 +250,8 @@ void NeuNetUI::onTestNets() {
         selectedNets(netIds);
     } catch (Exception &exc) {
         onShowException(exc.toString());
+        addLimitsDlg->hide();
+        return;
     }
 
     QStringList keySet;
@@ -284,6 +286,8 @@ void NeuNetUI::onTuteNets() {
         selectedNets(netIds);
     } catch (Exception &exc) {
         onShowException(exc.toString());
+        addLimitsDlg->hide();
+        return;
     }
 
     QStringList keySet;
@@ -334,7 +338,7 @@ void NeuNetUI::onTuteStarted(int index) {
 void NeuNetUI::onTuteFinished(int index) {
 
     tuteNow.remove(index);
-    onShowDebug("Tute successfully finished: " + QString::number(index));
+    onShowDebug("Tute finished: " + QString::number(index));
 
     if (tuteNow.isEmpty()) {
         killTimer(processTimer);

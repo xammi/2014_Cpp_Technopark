@@ -13,8 +13,10 @@ void BackPropTutor::setNet(AbstractNet *aNet) {
         throw WrongKindOfNet();
     }
 
-    if(! nNet)
+    if(! nNet){
+        aNet->setRecArea("");
         throw NetNotFound();
+    }
     currentNet = nNet;
 }
 
@@ -75,7 +77,10 @@ void BackPropTutor::processImage(const InputDataSet &inputs, const OutputDataSet
             currentTester->test(input, output, curErrVec);
             neuResponseVec.values = curErrVec.values;
 
-            if((iter % 300) == 0){
+            if(iter == 1){
+                addEveryImageError(curErrVec);
+            }
+            if((iter % 500) == 0){
                 QString firstInput;
                 firstInput.sprintf("Вывод ошибок на итерации %d \n для образа %d", iter, curImageIndex);
                 emit toDebug(firstInput);
@@ -83,7 +88,6 @@ void BackPropTutor::processImage(const InputDataSet &inputs, const OutputDataSet
                     firstInput.sprintf("%lf ", error);
                 }
                 emit toDebug(firstInput);
-                addEveryImageError(curErrVec);
             }
 
             NeuNets::Iterator from = currentNet->getOutLayer();

@@ -58,7 +58,7 @@ struct NotConfigured : public Exception {
 
 template <class Tutor>
 void TuteModule::configure(AbstractNet *_net, const TuteData & data, const TuteBoundaries & boundaries) {
-    if (! net)
+    if (! _net)
         throw TuteModuleExc::NetNotFound();
 
     net = _net;

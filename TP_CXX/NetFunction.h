@@ -42,7 +42,8 @@ private:
          *_REG_((1 / (1 + exp(-0.01 * X))), "Sigmoid"); - good for big nets
          */
 
-        _REG_((1 / (1 + exp(-0.01 * X))), "Sigmoid");
+//        _REG_((1 / (1 + exp(-0.01 * X))), "Sigmoid");
+        _REG_((1 / (1 + exp(-1 * X))), "Sigmoid");
         _REG_((tanh(X / 1)), "HypTan");
     }
 
