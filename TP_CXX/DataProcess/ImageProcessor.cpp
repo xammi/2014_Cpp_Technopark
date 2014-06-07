@@ -11,7 +11,7 @@ ImageProcessor::ImageProcessor():segments(50)
 {}
 
 
-InputData * ImageProcessor::prepareData(QImage &inImg) {
+void ImageProcessor::prepareImg(InputData & data, const QImage &inImg) {
     iniImage = inImg;
 
     xSize = inImg.width();
@@ -20,8 +20,9 @@ InputData * ImageProcessor::prepareData(QImage &inImg) {
 
 
     binarize();
-    segment();
+//    segment();
 
+//    data = toInputData(iniImage);
 }
 
 ImageProcessor::~ImageProcessor()
@@ -33,7 +34,6 @@ ImageProcessor::~ImageProcessor()
 
 void ImageProcessor::binarize()
 {
-
     double midVal = 0;
     double koef = 1/double(imgSize);
     for(int x = 0; x < xSize; x++)

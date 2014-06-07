@@ -14,7 +14,7 @@ class ImageProcessor : public AbstractProcessor {
 public:
     ImageProcessor();
 
-    InputData * prepareData(QImage &inImg);
+    void prepareImg(InputData &, const QImage &inImg);
     int getSegm() {return segmentsCount;}
     ~ImageProcessor();
 

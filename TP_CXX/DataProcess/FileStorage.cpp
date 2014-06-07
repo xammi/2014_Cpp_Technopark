@@ -106,11 +106,11 @@ void FileStorage::loadFile(InputData & input, const QString & file, const QStrin
 
     if (file.contains(".png")) {
         loadImage(image, filepath);
-        processor->processData(input, image);
+        processor->prepareImg(input, image);
 
     } else if (file.contains(".txt") || ! file.contains(".")) {
         loadText(text, filepath);
-        processor->processTxt(input, text);
+        processor->prepareTxt(input, text);
     }
 }
 
